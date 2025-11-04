@@ -3,30 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/04 13:14:46 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:54:37 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "../INCLUDE/cube.h"
+
+void	verif_param(int argc, char **argv)
+{
+	if (argc != 2)
+		return (printf("\x1b[38;5;196m[Error : Wrong number of arguments]\033[0m\n"), 1);
+
+	if (ft_strncmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4) != 0)
+		return (printf("\x1b[38;5;196m[Error : File map is not .cub]\033[0m\n"), 1);
+}
 
 int	main(int arc, char **arv)
 {
 	t_data	data;
-
-	if (arc != 2)
-	{
-		ft_printf(1, "Incorrect number of params\n");
-		return (0);
-	}
+	int 	i;
+	
+	i = 0;
+	verif_param(arc, arv);
 	check_file_format(arv[1]);
 	get_map(&data, arv[1]);
-	int i = 0;
 	while (data.map[i])
 	{
-		ft_printf(1, "%s\n", data.map[i]);
+		printf(1, "%s\n", data.map[i]);
 		i++;
 	}
 	return (0);

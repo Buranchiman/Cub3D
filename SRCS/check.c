@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/04 13:28:50 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/04 15:47:34 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "../INCLUDE/cube.h"
 
 void	read_all_file(char *file_name, t_data *data)
 {
@@ -37,14 +37,13 @@ void	check_borders(t_data *data, char **map)
 {
 	int				j;
 	int				i;
-	int				size;
 
 	if (!is_all_c(map[0], '1'))
 		ft_clean_exit(data, 1, "Missing outside wall");
 	j = 1;
 	while (map[j])
 	{
-		size = ft_strlen(map[j]);
+		ft_strlen(map[j]);
 		if (map[j][0] != '1' || map[j][ft_strlen(map[j]) - 1] != '1')
 			ft_clean_exit(data, 1, "Missing outside wall");
 		i = 0;

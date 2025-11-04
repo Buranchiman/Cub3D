@@ -5,7 +5,7 @@ NAME_BONUS	=	cub4d
 
 #####################################SRCS########################################
 
-PATH_SRCS	=	srcs/
+PATH_SRCS	=	SRCS/
 
 SRCS	+=	check.c
 SRCS	+=	utils.c
@@ -29,7 +29,7 @@ OBJS_BONUS	=	$(patsubst	%.c,	$(PATH_OBJS_BONUS)/%.o,	$(SRCS_BONUS))
 
 ################################COMPILATION####################################
 
-INCLUDE	=	-Ilibft/includes	-Iinclude -g
+INCLUDE	=	-Ilibft/includes	-IINCLUDE -g
 
 LIBFT	=	libft/libft.a
 
