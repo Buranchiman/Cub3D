@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:31:35 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:34:45 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ void	verif_param(int argc, char **argv)
 int	main(int arc, char **arv)
 {
 	t_data	data;
-	int 	i;
+	int		i;
 
 	i = 0;
 	verif_param(arc, arv);
 	check_file_format(arv[1]);
-	get_map(&data, arv[1]);
+	get_map(arv[1]);
+	i = 0;
 	while (data.map[i])
 	{
 		printf(1, "%s\n", data.map[i]);

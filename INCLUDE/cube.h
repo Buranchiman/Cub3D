@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:32:18 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/05 15:35:13 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,7 @@ typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
-	char			*no_text;
-	char			*so_text;
-	char			*we_text;
-	char			*ea_text;
+	char			*texture[6];
 }				t_data;
 
 int		is_all_c(char *string, char c);
