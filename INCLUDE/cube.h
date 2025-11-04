@@ -6,14 +6,14 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/04 15:01:32 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/04 15:48:13 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUBE_H
 # define CUBE_H
 
-# include "libft.h"
+# include "../libft/includes/libft.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
