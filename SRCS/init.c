@@ -6,11 +6,11 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/21 16:02:42 by manon             #+#    #+#             */
-/*   Updated: 2025/11/04 17:02:21 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/05 15:33:46 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../INCLUDE/cube.h"
+#include "../INCLUDE/cube.h"
 
 t_map	*init_map(void)
 {
@@ -19,15 +19,11 @@ t_map	*init_map(void)
 	map = calloc(1, sizeof(t_map));
 	if (!map)
 		return (NULL);
-	map->data = NULL;
-	map->width = 0;
-	map->height = 0;
-	map->count_fish = 0;
-	map->count_exit = 0;
-	map->count_fisherman = 0;
-	map->count_maelstrom = 0;
-	map->fisherman_pos.x = 0;
-	map->fisherman_pos.y = 0;
+	//map->data = NULL;
+	//map->width = 0;
+	//map->height = 0;
+	//map->player_pos.x = 0;
+	//map->player_pos.y = 0;
 	return (map);
 }
 
@@ -51,74 +47,57 @@ void	free_map(t_map *map)
 	}
 }
 
-static void	load_image(t_game *game, char *path, t_img *img)
+static void	load_image(t_data *data, char *path, t_img *img)
 {
-	img->ptr = mlx_xpm_file_to_image(game->mlx_ptr, path,
+	img->ptr = mlx_xpm_file_to_image(data->mlx_ptr, path,
 			&img->width, &img->height);
 	if (!img->ptr)
 		ft_printf("⚠️ [Chargement de %s impossible\n]", path);
 }
 
-static void	loader(t_game *game)
+static void	loader(t_data *data)
 {
-	load_image(game, IMG_FISHERMAN, &game->fisherman);
-	load_image(game, IMG_FISH, &game->fish);
-	load_image(game, IMG_MAELSTROM, &game->maelstrom);
-	load_image(game, IMG_BRIDGE, &game->bridge);
-	load_image(game, IMG_CORAL, &game->coral);
-	load_image(game, IMG_EDGE1, &game->edge1);
-	load_image(game, IMG_EDGE2, &game->edge2);
-	load_image(game, IMG_EDGE3, &game->edge3);
-	load_image(game, IMG_EDGE4, &game->edge4);
-	load_image(game, IMG_EDGE_CORNER1, &game->edge_corner1);
-	load_image(game, IMG_EDGE_CORNER2, &game->edge_corner2);
-	load_image(game, IMG_EDGE_CORNER3, &game->edge_corner3);
-	load_image(game, IMG_EDGE_CORNER4, &game->edge_corner4);
-	load_image(game, IMG_WATER, &game->water);
-	load_image(game, IMG_WAVES, &game->waves);
+	//load_image(data, IMG_PLAYER, &data->player);
 }
 
-int	init_images(t_game *game)
+int	init_images(t_data *data)
 {
-	game->mlx_ptr = mlx_init();
-	if (!game->mlx_ptr)
+	data->mlx_ptr = mlx_init();
+	if (!data->mlx_ptr)
 		return (0);
-	game->win_ptr = mlx_new_window(game->mlx_ptr,
-			game->map->width * IMG_SIZE,
-			game->map->height * IMG_SIZE, "So_long");
-	if (!game->win_ptr)
+	data->win_ptr = mlx_new_window(data->mlx_ptr,
+			data->map->width * IMG_SIZE,
+			data->map->height * IMG_SIZE, "Cub3D");
+	if (!data->win_ptr)
 		return (0);
-	song(game);
-	loader(game);
-	init_black_tile(game);
+	//song(data);
+	loader(data);
 	return (1);
 }
 
 int	main(int argc, char **argv)
 {
-	t_game	game;
+	t_game	data;
 
-	if (!check_args(argc, argv, &game))
+	if (!check_args(argc, argv, &data))
 		exit(1);
-	init_add_pos(&game);
-	init_struct_attributes(&game);
-	game.last_update = 0;
-	game.map = init_map();
-	if (!game.map)
+	data.last_update = 0;
+	data.map = init_map();
+	if (!data.map)
 		return (ft_printf("⚠️ [Allocation map échouée]\n"));
-	if (!get_map(argv[1], game.map))
-		quit_game(&game);
-	count(game.map);
-	if (check_shape(game.map) || check_wall(game.map) || check_other(game.map))
-		return (free_map(game.map), 1);
-	if (!validate_path(game.map))
-		return (free_map(game.map), ft_printf("⚠️ [Map non jouable]\n"), 1);
-	if (!init_images(&game))
-		return (free_map(game.map), ft_printf("⚠️ [Initialisa° images]\n"), 1);
-	render_map(&game);
-	mlx_key_hook(game.win_ptr, key_hook, &game);
-	mlx_hook(game.win_ptr, 17, 0L, close_window, &game);
-	mlx_loop_hook(game.mlx_ptr, loop_hook, &game);
-	mlx_loop(game.mlx_ptr);
-	free_map(game.map);
+	if (!get_map(argv[1], data.map))
+		quit_game(&data);
+	count(data.map);
+//	if (check_shape(data.map) || check_wall(data.map) || check_other(data.map))
+//		return (free_map(data.map), 1);
+//	if (!validate_path(data.map))
+//		return (free_map(data.map), ft_printf("⚠️ [Map non jouable]\n"), 1);
+	if (!init_images(&data))
+		return (free_map(data.map), ft_printf("⚠️ [Initialisa° images]\n"), 1);
+	render_map(&data);
+	mlx_key_hook(data.win_ptr, key_hook, &data);
+	mlx_hook(data.win_ptr, 17, 0L, quit_and_free, &data);
+	mlx_loop_hook(data.mlx_ptr, loop_hook, &data);
+	mlx_loop(data.mlx_ptr);
+	free_map(data.map);
 }

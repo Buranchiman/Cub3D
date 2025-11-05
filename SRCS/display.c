@@ -6,12 +6,11 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:52:52 by manon             #+#    #+#             */
-/*   Updated: 2025/11/04 17:03:21 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/05 15:33:53 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//#include "../INCLUDE/cube.h"
-
+#include "../INCLUDE/cube.h"
 
 char	**get_map(char *argv, t_map *map)
 {
@@ -28,9 +27,9 @@ char	**get_map(char *argv, t_map *map)
 	{
 		map->tmp = map->stash;
 		if (!map->stash)
-		map->stash = ft_strdup(map->line);
+			map->stash = ft_strdup(map->line);
 		else
-		map->stash = ft_strjoin(map->stash, map->line);
+			map->stash = ft_strjoin(map->stash, map->line);
 		free(map->tmp);
 		free(map->line);
 		map->line = get_next_line(fd);
@@ -42,67 +41,59 @@ char	**get_map(char *argv, t_map *map)
 }
 
 
-void	draw(t_game *game, int x, int y)
+void	draw(t_data *data, int x, int y)
 {
 	if (y == 0)
-		mlx_put_image_to_window(game->mlx_ptr, game->win_ptr,
-			game->edge1.ptr, x * IMG_SIZE, y * IMG_SIZE);
-	else if (y == game->map->height - 1)
-		mlx_put_image_to_window(game->mlx_ptr, game->win_ptr,
-			game->edge2.ptr, x * IMG_SIZE, y * IMG_SIZE);
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+			data->no_text.ptr, x * IMG_SIZE, y * IMG_SIZE);
+	else if (y == data->map->height - 1)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+			data->so_text.ptr, x * IMG_SIZE, y * IMG_SIZE);
 	else if (x == 0)
-		mlx_put_image_to_window(game->mlx_ptr, game->win_ptr,
-			game->edge3.ptr, x * IMG_SIZE, y * IMG_SIZE);
-	else if (x == game->map->width - 1)
-		mlx_put_image_to_window(game->mlx_ptr, game->win_ptr,
-			game->edge4.ptr, x * IMG_SIZE, y * IMG_SIZE);
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+			data->we_text.ptr, x * IMG_SIZE, y * IMG_SIZE);
+	else if (x == data->map->width - 1)
+		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+			data->ea_text.ptr, x * IMG_SIZE, y * IMG_SIZE);
 }
 
-void	render_map(t_game *game)
+void	render_map(t_data *data)
 {
 	int	x;
 	int	y;
 
 	y = 0;
-	while (game->map->data[y])
+	while (data->map->data[y])
 	{
 		x = 0;
-		while (game->map->data[y][x])
+		while (data->map->data[y][x])
 		{
-			draw_(game, x, y);
+			draw_(data, x, y);
 			x++;
 		}
 		y++;
 	}
-	display_moves(game);
+	display_moves(data);
 }
 
-void	supp_edge(t_game *game)
+void	quit_and_free(t_data *data)
 {
-	//system("pkill mpg123");
+	//system("pkill mpg123"); ->si ajout de musique
 	//system("stty sane");
-	if (game->edge_corner1.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge_corner1.ptr);
-	if (game->edge_corner2.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge_corner2.ptr);
-	if (game->edge_corner3.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge_corner3.ptr);
-	if (game->edge_corner4.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge_corner4.ptr);
-	if (game->edge1.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge1.ptr);
-	if (game->edge2.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge2.ptr);
-	if (game->edge3.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge3.ptr);
-	if (game->edge4.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->edge4.ptr);
-	if (game->black_tile.ptr)
-		mlx_destroy_image(game->mlx_ptr, game->black_tile.ptr);
-}
-
-int	close_window(t_game *game)
-{
-	quit_game(game);
-	return (1);
+	if (data->no_text.ptr)
+		mlx_destroy_image(data->mlx_ptr, data->no_text.ptr);
+	if (data->so_text.ptr)
+		mlx_destroy_image(data->mlx_ptr, data->so_text.ptr);
+	if (data->we_text.ptr)
+		mlx_destroy_image(data->mlx_ptr, data->we_text.ptr);
+	if (data->ea_text.ptr)
+		mlx_destroy_image(data->mlx_ptr, data->ea_text.ptr);
+	if (data->mlx_ptr && data->win_ptr)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	if (data->mlx_ptr)
+	{
+		mlx_destroy_display(data->mlx_ptr);
+		free(data->mlx_ptr);
+	}
+	exit(0);
 }

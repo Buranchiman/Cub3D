@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/04 17:22:54 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/05 15:34:11 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 
+# define IMG_SIZE 64
 
 typedef struct s_data
 {

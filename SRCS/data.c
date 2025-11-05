@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/04 16:51:25 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/04 17:35:33 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "../INCLUDE/cube.h"
 
 t_data	*get_data(void)
 {
@@ -25,7 +25,6 @@ void	init_data(void)
 
 	data->buffer = NULL;
 	data->map = NULL;
-	data->pcount = 0;
 	data->ea_text = NULL;
 	data->we_text = NULL;
 	data->so_text = NULL;
