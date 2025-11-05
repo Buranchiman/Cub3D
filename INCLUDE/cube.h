@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:35:30 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:46:54 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ typedef struct s_data
 	char			*texture[6];
 }				t_data;
 
-int		is_all_c(char *string, char c);
+int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 void	check_file_format(char *file);
 size_t	ft_tablen(char **tab);
@@ -56,5 +56,7 @@ void	get_map(char *file_name);
 
 void	init_data(void);
 t_data	*get_data(void);
+
+int		vertical_walls(char *line);
 
 #endif
