@@ -1,16 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   checkmap.c                                         :+:      :+:    :+:   */
+/*   check.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-<<<<<<<< HEAD:SRCS/check.c
-/*   Updated: 2025/11/04 15:47:34 by manon            ###   ########.fr       */
-========
-/*   Updated: 2025/11/04 17:08:50 by wivallee         ###   ########.fr       */
->>>>>>>> db04938 (transmission de la struct):SRCS/checkmap.c
+/*   Updated: 2025/11/05 15:48:04 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,10 +43,6 @@ void	check_borders(t_data *data, char **map, int pcount)
 	j = 1;
 	while (map[j])
 	{
-<<<<<<<< HEAD:SRCS/check.c
-		ft_strlen(map[j]);
-========
->>>>>>>> db04938 (transmission de la struct):SRCS/checkmap.c
 		if (map[j][0] != '1' || map[j][ft_strlen(map[j]) - 1] != '1')
 			ft_clean_exit(data, 1, "Missing outside wall");
 		i = 0;

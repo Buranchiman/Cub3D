@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:34:11 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/05 15:49:27 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,15 +37,18 @@ typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
-	char			*no_text;
-	char			*so_text;
-	char			*we_text;
-	char			*ea_text;
+	char			*texture[6];
 }				t_data;
 
 int		is_all_c(char *string, char c);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 void	check_file_format(char *file);
+size_t	ft_tablen(char **tab);
+
+int		import_texture(int index, int which, char *line);
+void	take_texture_out(char ***map, int end);
+int		get_textures(char *line);
+int		read_textures(char ***map);
 
 void	read_all_file(char *file_name, t_data *data);
 void	check_borders(t_data *data, char **map, int pcount);

@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/04 17:25:56 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/05 15:47:09 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,7 +80,7 @@ void	get_map(char *file_name)
 	read_all_file(file_name, data);
 	if (data->buffer && *data->buffer)
 		data->map = ft_split(data->buffer, '\n');
-	read_texture(data->map);
+	read_textures(&data->map);
 	if (!data->map)
 	{
 		// perror("Error\n");
