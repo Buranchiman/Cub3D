@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 14:09:28 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 15:21:11 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,17 +29,18 @@ void	verif_param(int argc, char **argv)
 
 int	main(int arc, char **arv)
 {
-	t_data	data;
+	t_data	*data;
 	int		i;
 
 	i = 0;
 	verif_param(arc, arv);
 	check_file_format(arv[1]);
 	get_map(arv[1]);
+	data = get_data();
 	i = 0;
-	while (data.map[i])
+	while (data->map[i])
 	{
-		ft_printf(1, "%s\n", data.map[i]);
+		ft_printf(1, "%s\n", data->map[i]);
 		i++;
 	}
 	display_window(&data);
@@ -47,5 +48,8 @@ int	main(int arc, char **arv)
 	//update_minimap(&data);
 	free_minimap(&data);
 	ft_clean_exit(&data, 0, NULL);
+		printf("%s\n", data->map[i]);
+		i++;
+	ft_clean_exit(data, 0, NULL);
 	return (0);
 }

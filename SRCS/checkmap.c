@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:47:09 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 15:21:01 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,18 +38,17 @@ void	check_borders(t_data *data, char **map, int pcount)
 	int				j;
 	int				i;
 
-	if (!is_all_c(map[0], '1'))
-		ft_clean_exit(data, 1, "Missing outside wall");
+	if (!is_all_space_n_ones(map[0]))
+		ft_clean_exit(data, 1, "Missing outside wall (top)");
 	j = 1;
 	while (map[j])
 	{
-		ft_strlen(map[j]);
-		if (map[j][0] != '1' || map[j][ft_strlen(map[j]) - 1] != '1')
-			ft_clean_exit(data, 1, "Missing outside wall");
+		if (vertical_walls(map[j]))
+			ft_clean_exit(data, 1, "Missing outside wall (vertical)");
 		i = 0;
 		while (map[j][i])
 		{
-			if (!ft_strchr("01NSWE", map[j][i]))
+			if (!ft_strchr("01NSWE ", map[j][i]))
 				ft_clean_exit(data, 1, "Map char unvalid");
 			if (ft_strchr("NSWE", map[j][i]))
 				pcount++;
@@ -57,8 +56,8 @@ void	check_borders(t_data *data, char **map, int pcount)
 		}
 		j++;
 	}
-	if (!is_all_c(map[j - 1], '1'))
-		ft_clean_exit(data, 1, "Missing outside wall");
+	if (!is_all_space_n_ones(map[j - 1]))
+		ft_clean_exit(data, 1, "Missing outside wall (bottom)");
 	if (pcount != 1)
 		ft_clean_exit(data, 1, "Incorrect number of player starting point");
 }

@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 14:25:55 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 15:20:52 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ typedef struct s_data
 	void			*win_ptr; //window pointer
 }               t_data;
 
-int		is_all_c(char *string, char c);
+int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 void	check_file_format(char *file);
 size_t	ft_tablen(char **tab);
@@ -68,9 +68,6 @@ void	get_map(char *file_name);
 void	init_data(void);
 t_data	*get_data(void);
 
-void	display_window(t_data *data);
-void	display_minimap(t_data *data);
-void	update_minimap(t_data *data);
-void	free_minimap(t_data *data);
+int		vertical_walls(char *line);
 
 #endif
