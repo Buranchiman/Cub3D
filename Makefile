@@ -7,7 +7,9 @@ NAME_BONUS	=	cub4d
 
 PATH_SRCS	=	SRCS/
 
-SRCS	+=	check.c
+SRCS	+=	checkmap.c
+SRCS	+=	checktexture.c
+SRCS	+=	data.c
 SRCS	+=	utils.c
 SRCS	+=	main.c
 
