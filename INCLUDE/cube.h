@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:49:27 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 14:25:55 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define CUBE_H
 
 # include "../libft/includes/libft.h"
+# include "../minilibx-linux/mlx.h"
 # include <stdio.h>
 # include <unistd.h>
 # include <stdlib.h>
@@ -33,12 +34,21 @@
 
 # define IMG_SIZE 64
 
+typedef struct s_texture
+{
+	char    *path;
+	void    *ptr;
+}               t_texture;
+
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
-	char			*texture[6];
-}				t_data;
+	t_texture       texture[6];
+	//void			*ptr; //pointer to the image
+	void			*mlx_ptr; //mlx pointer 
+	void			*win_ptr; //window pointer
+}               t_data;
 
 int		is_all_c(char *string, char c);
 void	ft_clean_exit(t_data *data, int option, char *msg);
@@ -57,5 +67,10 @@ void	get_map(char *file_name);
 
 void	init_data(void);
 t_data	*get_data(void);
+
+void	display_window(t_data *data);
+void	display_minimap(t_data *data);
+void	update_minimap(t_data *data);
+void	free_minimap(t_data *data);
 
 #endif

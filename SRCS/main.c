@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:48:23 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 14:09:28 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,13 @@ int	main(int arc, char **arv)
 	i = 0;
 	while (data.map[i])
 	{
-		printf(1, "%s\n", data.map[i]);
+		ft_printf(1, "%s\n", data.map[i]);
 		i++;
 	}
-
+	display_window(&data);
+	display_minimap(&data);
+	//update_minimap(&data);
+	free_minimap(&data);
+	ft_clean_exit(&data, 0, NULL);
 	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:35:46 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/06 14:09:17 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ void	check_file_format(char *file)
 		i++;
 	if (ft_strncmp(&file[i], ".cub", 5))
 	{
-		printf(2, "Error\nMap file is not a .cub\n");
+		ft_printf(2, "Error\nMap file is not a .cub\n");
 		exit(EXIT_FAILURE);
 	}
 }
@@ -75,16 +75,16 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		free(data->buffer);
 	//space for clearing images and other allocations
 	if (msg && option == 1)
-		printf(2, "Error\n%s\n", msg);
+		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
 	if (msg && option == 0)
-		printf(1, "\n%s\n", msg);
-	// if (data->win)
-	// 	mlx_destroy_window(data->mlx, data->win);
-	// if (data->mlx)
-	// {
-	// 	mlx_destroy_display(data->mlx);
-	// 	free(data->mlx);
-	// }
+		ft_printf(1, "\n%s\n", msg);
+	if (data->win_ptr)
+		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
+	if (data->mlx_ptr)
+	{
+		mlx_destroy_display(data->mlx_ptr);
+		free(data->mlx_ptr);
+	}
 	if (option == 1)
 		exit(EXIT_FAILURE);
 	exit(EXIT_SUCCESS);
