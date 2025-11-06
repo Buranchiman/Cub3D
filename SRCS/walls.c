@@ -6,11 +6,21 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:41:42 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 16:46:08 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:54:23 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
+
+int	leak_check(char **map, int x, int y)
+{
+	if (map[y][x] == ' ' && ((y > 0 && map[y - 1][x] == '0')
+		|| (map[y + 1] && map[y + 1][x] == '0')
+		|| (x > 0 && map[y][x - 1] == '0')
+		|| (map[y][x + 1] == '0')))
+		return (1);
+	return (0);
+}
 
 int	vertical_walls(char *line)
 {

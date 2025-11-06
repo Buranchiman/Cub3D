@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 16:46:54 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:51:59 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,5 +58,6 @@ void	init_data(void);
 t_data	*get_data(void);
 
 int		vertical_walls(char *line);
+int		leak_check(char **map, int x, int y);
 
 #endif

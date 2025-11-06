@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 16:50:07 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/06 17:53:41 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,6 +52,8 @@ void	check_borders(t_data *data, char **map, int pcount)
 				ft_clean_exit(data, 1, "Map char unvalid");
 			if (ft_strchr("NSWE", map[j][i]))
 				pcount++;
+			if (leak_check(map, i, j))
+				ft_clean_exit(data, 1, "Missing outside wall");
 			i++;
 		}
 		j++;
