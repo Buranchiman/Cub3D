@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 14:09:17 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 15:21:14 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,14 +52,14 @@ void	check_file_format(char *file)
 	}
 }
 
-int	is_all_c(char *string, char c)
+int	is_all_space_n_ones(char *string)
 {
 	int	i;
 
 	i = 0;
 	while (string[i])
 	{
-		if (string[i] != c)
+		if (string[i] != '1' && string[i] != ' ')
 			return (0);
 		i++;
 	}
