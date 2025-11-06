@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 15:01:30 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 15:55:12 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,9 @@ void	init_data(void)
 	data = get_data();
 	data->buffer = NULL;
 	data->map = NULL;
-	while(data->texture[i])
+	data->mlx_ptr = NULL;
+	data->win_ptr = NULL;
+	while(i <= 6)
 	{
 		data->texture[i].path = NULL;
 		data->texture[i].ptr = NULL;

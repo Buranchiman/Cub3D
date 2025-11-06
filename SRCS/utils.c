@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 15:21:14 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 17:38:48 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,15 +25,35 @@ size_t	ft_tablen(char **tab)
 	return (i);
 }
 
-void	empty_tab(char **tab, int size)
+void	delete_texture(t_texture *texture)
 {
-	int	i;
+	if (texture->path)
+	{
+		printf("texture path is %s\n", texture->path);
+		free(texture->path);
+	}
+	if (texture->ptr)
+		mlx_destroy_image(get_data()->mlx_ptr, texture->ptr);
+}
 
+void	del_text_wrapper(void *content)
+{
+	delete_texture((t_texture *)content);
+}
+
+void	empty_struct_array(void *array, int size, size_t elem_size,
+	void (*del)(void *))
+{
+	int		i;
+	char	*base;
+
+	if (!array || !del)
+		return ;
+	base = (char *)array;
 	i = 0;
 	while (i < size)
 	{
-		if (tab[i])
-			free(tab[i]);
+		del((void *)(base + i * elem_size));
 		i++;
 	}
 }
@@ -70,7 +90,7 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 {
 	if (data->map)
 		ft_clear_tab(data->map);
-	empty_tab(data->texture, 6);
+	empty_struct_array(data->texture, 6, sizeof(data->texture[0]), del_text_wrapper);
 	if (data->buffer)
 		free(data->buffer);
 	//space for clearing images and other allocations

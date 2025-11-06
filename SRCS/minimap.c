@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/06 14:25:50 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/06 16:07:14 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,21 +54,4 @@ void	update_minimap(t_data *data)
 {
 	mlx_clear_window(data->mlx_ptr, data->win_ptr);
 	display_minimap(data);
-}
-
-void	free_minimap(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (data->texture[i].path)
-	{
-		if (data->texture[i].ptr)
-			mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
-		i++;
-	}
-	if (data->mlx_ptr && data->win_ptr)
-		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-	if (data->mlx_ptr)
-		free(data->mlx_ptr);
 }
