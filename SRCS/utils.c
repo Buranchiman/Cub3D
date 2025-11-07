@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:35:46 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/05 16:50:41 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,19 +47,19 @@ void	check_file_format(char *file)
 		i++;
 	if (ft_strncmp(&file[i], ".cub", 5))
 	{
-		printf(2, "Error\nMap file is not a .cub\n");
+		printf("Error\nMap file is not a .cub\n"); //potentiellement sortir ca sur stderr
 		exit(EXIT_FAILURE);
 	}
 }
 
-int	is_all_c(char *string, char c)
+int	is_all_space_n_ones(char *string)
 {
 	int	i;
 
 	i = 0;
 	while (string[i])
 	{
-		if (string[i] != c)
+		if (string[i] != '1' && string[i] != ' ')
 			return (0);
 		i++;
 	}
@@ -75,9 +75,9 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		free(data->buffer);
 	//space for clearing images and other allocations
 	if (msg && option == 1)
-		printf(2, "Error\n%s\n", msg);
+		printf("Error\n%s\n", msg); //potentiellement sortir ca sur stderr
 	if (msg && option == 0)
-		printf(1, "\n%s\n", msg);
+		printf("\n%s\n", msg);
 	// if (data->win)
 	// 	mlx_destroy_window(data->mlx, data->win);
 	// if (data->mlx)

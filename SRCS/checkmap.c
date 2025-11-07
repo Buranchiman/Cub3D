@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:35:35 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:23:30 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,32 +33,47 @@ void	read_all_file(char *file_name, t_data *data)
 	}
 }
 
+int	get_player(char **map, int i, int j)
+{
+	t_data	*data;
+
+	data = get_data();
+	if (ft_strchr("NSWE", map[j][i]))
+	{
+		//printf("in get player coordinates are x:%d, y:%d\n", i, j);
+		data->player_pos.x = i;
+		data->player_pos.y = j;
+		return (1);
+	}
+	return (0);
+}
+
 void	check_borders(t_data *data, char **map, int pcount)
 {
 	int				j;
 	int				i;
 
-	if (!is_all_c(map[0], '1'))
-		ft_clean_exit(data, 1, "Missing outside wall");
+	if (!is_all_space_n_ones(map[0]))
+		ft_clean_exit(data, 1, "Missing outside wall (top)");
 	j = 1;
 	while (map[j])
 	{
-		ft_strlen(map[j]);
-		if (map[j][0] != '1' || map[j][ft_strlen(map[j]) - 1] != '1')
-			ft_clean_exit(data, 1, "Missing outside wall");
+		if (vertical_walls(map[j]))
+			ft_clean_exit(data, 1, "Missing outside wall (vertical)");
 		i = 0;
 		while (map[j][i])
 		{
-			if (!ft_strchr("01NSWE", map[j][i]))
+			if (!ft_strchr("01NSWE ", map[j][i]))
 				ft_clean_exit(data, 1, "Map char unvalid");
-			if (ft_strchr("NSWE", map[j][i]))
-				pcount++;
+			pcount += get_player(map, i, j);
+			if (leak_check(map, i, j))
+				ft_clean_exit(data, 1, "Missing outside wall");
 			i++;
 		}
 		j++;
 	}
-	if (!is_all_c(map[j - 1], '1'))
-		ft_clean_exit(data, 1, "Missing outside wall");
+	if (!is_all_space_n_ones(map[j - 1]))
+		ft_clean_exit(data, 1, "Missing outside wall (bottom)");
 	if (pcount != 1)
 		ft_clean_exit(data, 1, "Incorrect number of player starting point");
 }
@@ -80,13 +95,13 @@ void	get_map(char *file_name)
 	read_all_file(file_name, data);
 	if (data->buffer && *data->buffer)
 		data->map = ft_split(data->buffer, '\n');
-	read_textures(&data->map);
 	if (!data->map)
 	{
-		// perror("Error\n");
-		// ft
+		perror("Error\n");
 		free(data->buffer);
 		exit(EXIT_FAILURE);
 	}
+	read_textures(&data->map);
 	check_map(data, data->map);
+	//printf("player is at x:%f, y%f\n", data->player_pos.x, data->player_pos.y);
 }

@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:35:39 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:21:22 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	import_texture(int index, int which, char *line)
 		count ++;
 	if (line[count + index])
 	{
-		printf("Error\nTexture format incorrect\n");
+		ft_clean_exit(get_data(), 1, "Error\nTexture format incorrect\n");
 		return (1);
 	}
 	if (data->texture[which])
@@ -85,21 +85,23 @@ int	read_textures(char ***map)
 	int	i;
 
 	i = 0;
-	while ((*map)[i] && (*map)[i][1] != '1')
+	while ((*map)[i] && (*map)[i][0] != '1' && (*map)[i][0] != ' '
+		&& (*map)[i][0] != '0')
 	{
-		printf("line is %s\n", (*map)[i]);
+		//printf("line is %s\n", (*map)[i]);
 		if (get_textures((*map)[i]))
 			return (1);
 		i++;
 	}
-	printf("%d textures have been read\n", i);
+	//printf("%d textures have been read\n", i);
 	display_texture();
 	take_texture_out(map, i);
-	i = 0;
-	while (get_data()->map[i])
-	{
-		ft_printf(1, "%s\n", get_data()->map[i]);
-		i++;
-	}
+	// i = 0;
+	// printf("MAP IS :\n");
+	// while (get_data()->map[i])
+	// {
+	// 	ft_printf(1, "%s\n", get_data()->map[i]);
+	// 	i++;
+	// }
 	return (0);
 }

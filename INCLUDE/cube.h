@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 15:35:30 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/07 12:14:55 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,15 +31,27 @@
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 
+typedef struct s_point
+{
+	double	x;
+	double	y;
+}				t_point;
+
+typedef struct s_vector
+{
+	t_point	origin;
+	t_point	end;
+}				t_vector;
 
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
 	char			*texture[6];
+	t_point			player_pos;
 }				t_data;
 
-int		is_all_c(char *string, char c);
+int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 void	check_file_format(char *file);
 size_t	ft_tablen(char **tab);
@@ -56,5 +68,8 @@ void	get_map(char *file_name);
 
 void	init_data(void);
 t_data	*get_data(void);
+
+int		vertical_walls(char *line);
+int		leak_check(char **map, int x, int y);
 
 #endif
