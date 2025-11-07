@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 11:55:23 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/07 11:55:27 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,4 +32,7 @@ void	init_data(void)
 	data->texture[3] = NULL;
 	data->texture[4] = NULL;
 	data->texture[5] = NULL;
+	data->player_pos.x = -1;
+	data->player_pos.y = -1;
+
 }
