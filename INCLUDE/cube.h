@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 17:39:22 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/07 16:23:45 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@
 # include <stdlib.h>
 # include <math.h>
 # include <sys/time.h>
+
+// PATH TEXTURES
+# define GROUND_MINIMAP "./textures/ground.xpm"
+# define WALL_MINIMAP "./textures/wall_mp.xpm"
+# define PLAYER_MINIMAP "./textures/player_mp.xpm"
 
 // KEYBOARD_MOVES
 # define KEY_ESC 65307

@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 16:10:08 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/07 16:23:27 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	verif_param(int argc, char **argv)
 int	main(int arc, char **arv)
 {
 	t_data	*data;
-	//t_texture *texture;
 	int		i;
 
 	i = 0;
@@ -46,7 +45,7 @@ int	main(int arc, char **arv)
 	}
 	display_window(data);
 	sleep(2);
-	//display_minimap(data);
+	display_minimap(data);
 	//update_minimap(&data);
 	ft_clean_exit(data, 0, NULL);
 	return (0);

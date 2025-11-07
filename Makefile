@@ -14,6 +14,7 @@ SRCS	+=	utils.c
 SRCS	+=	walls.c
 SRCS	+=	main.c
 SRCS	+=	minimap.c
+SRCS	+=	load_textures.c
 
 vpath	%.c	$(PATH_SRCS)
 
