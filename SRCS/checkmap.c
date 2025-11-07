@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/07 12:23:30 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:52:17 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,14 @@ int	get_player(char **map, int i, int j)
 		//printf("in get player coordinates are x:%d, y:%d\n", i, j);
 		data->player_pos.x = i;
 		data->player_pos.y = j;
+		if (map[j][i] == 'N')
+			data->direction.y = 1;
+		else if (map[j][i] == 'S')
+			data->direction.y = -1;
+		else if (map[j][i] == 'E')
+			data->direction.x = 1;
+		else if (map[j][i] == 'O')
+			data->direction.x = -1;
 		return (1);
 	}
 	return (0);

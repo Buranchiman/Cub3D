@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/07 12:14:55 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/07 16:47:57 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,18 +37,14 @@ typedef struct s_point
 	double	y;
 }				t_point;
 
-typedef struct s_vector
-{
-	t_point	origin;
-	t_point	end;
-}				t_vector;
-
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
 	char			*texture[6];
 	t_point			player_pos;
+	t_point			cameraplane;
+	t_point			direction;
 }				t_data;
 
 int		is_all_space_n_ones(char *string);
