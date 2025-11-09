@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   checktexture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/07 12:02:21 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/08 18:33:40 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "../INCLUDE/cube.h"
 
 int	import_texture(int index, int which, char *line)
 {
@@ -29,7 +29,10 @@ int	import_texture(int index, int which, char *line)
 		return (1);
 	}
 	if (data->texture[which].path)
+	{
 		free(data->texture[which].path);
+		//data->texture[which].path = NULL;
+	}
 	data->texture[which].path = ft_substr(line, index, count);
 	return (0);
 }
@@ -66,27 +69,28 @@ void	take_texture_out(char ***map, int end)
 	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
 }
 
-void	display_texture() // fonction de debuggage
-{
-	int		i;
-	t_data	*data;
-
-	i = 0;
-	data = get_data();
-	while (i < 6)
-	{
-		printf("%s\n", data->texture[i].path);
-		i++;
-	}
-}
+//void	display_texture() // fonction de debuggage
+//{
+//	int		i;
+//	t_data	*data;
+//
+//	i = 0;
+//	data = get_data();
+//	while (i < 9)
+//	{
+//		printf("texture are: %s\n", data->texture[i].path);
+//		i++;
+//	}
+//}
 
 int	read_textures(char ***map)
 {
 	int	i;
 
 	i = 0;
-	while ((*map)[i] && (*map)[i][0] != '1' && (*map)[i][0] != ' '
-		&& (*map)[i][0] != '0')
+	//while ((*map)[i] && (*map)[i][0] != '1' && (*map)[i][0] != ' '
+	//	&& (*map)[i][0] != '0')
+	while ((*map)[i])
 	{
 		printf("line is %s\n", (*map)[i]);
 		if (get_textures((*map)[i]))
@@ -94,7 +98,7 @@ int	read_textures(char ***map)
 		i++;
 	}
 	printf("%d textures have been read\n", i);
-	display_texture();
+	//display_texture();
 	take_texture_out(map, i);
 	// i = 0;
 	// printf("MAP IS :\n");

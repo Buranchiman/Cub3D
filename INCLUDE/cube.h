@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/07 16:23:45 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/08 16:43:02 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@
 # include <sys/time.h>
 
 // PATH TEXTURES
-# define GROUND_MINIMAP "./textures/ground.xpm"
-# define WALL_MINIMAP "./textures/wall_mp.xpm"
-# define PLAYER_MINIMAP "./textures/player_mp.xpm"
+# define GROUND_MINIMAP "../TEXTURES/ground.xpm"
+# define WALL_MINIMAP "../TEXTURES/wall_mp.xpm"
+# define PLAYER_MINIMAP "../TEXTURES/player_mp.xpm"
 
 // KEYBOARD_MOVES
 # define KEY_ESC 65307
@@ -41,25 +41,29 @@
 
 typedef struct s_texture
 {
-	char    *path;
-	void    *ptr;
-}               t_texture;
+	char	*path;
+	int		height;
+	int		width;
+	void	*ptr;
+}				t_texture;
 
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
-	t_texture       texture[6];
+	t_texture		texture[9];
+	//t_texture		texture[6]; 6 map + 3 minimap + ? bonus_map
 	void			*mlx_ptr; //mlx pointer 
 	void			*win_ptr; //window pointer
-}               t_data;
+}				t_data;
 
 //utils.c
-void	empty_struct_array(void *array, int size, size_t elem_size, void (*del)(void *));
+//void	empty_struct_array(void *array, int size, size_t elem_size, void (*del)(void *));
 int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
-void	check_file_format(char *file);
+//void	check_file_format(char *file);
 size_t	ft_tablen(char **tab);
+int 	quit_with_int(t_data *data);
 
 //checktextures.c
 int		import_texture(int index, int which, char *line);
@@ -84,5 +88,8 @@ int		vertical_walls(char *line);
 void	display_window(t_data *data);
 void	display_minimap(t_data *data);
 void	update_minimap(t_data *data);
+
+//input.c
+int		key_hook(int keycode, t_data *data);
 
 #endif

@@ -1,4 +1,4 @@
-#####################################CUB3D#######################################
+#####################################PUSH_SWAP#####################################
 
 NAME	=	cub3d
 NAME_BONUS	=	cub4d
@@ -14,7 +14,7 @@ SRCS	+=	utils.c
 SRCS	+=	walls.c
 SRCS	+=	main.c
 SRCS	+=	minimap.c
-SRCS	+=	load_textures.c
+SRCS	+=	input.c
 
 vpath	%.c	$(PATH_SRCS)
 
@@ -34,24 +34,29 @@ OBJS_BONUS	=	$(patsubst	%.c,	$(PATH_OBJS_BONUS)/%.o,	$(SRCS_BONUS))
 
 ################################COMPILATION####################################
 
-INCLUDE	=	-Ilibft/includes	-IINCLUDE	-Iminilibx-linux
+INCLUDE	=	-Ilibft/includes	-IINCLUDE -g
 
 LIBFT	=	libft/libft.a
 
-CFLAGS	=	-Wall	-Wextra	-Werror	-g
+MLX_PATH = minilibx-linux
+MLX = $(MLX_PATH)/libmlx_Linux.a
+MLX_FLAGS = -L$(MLX_PATH) -lmlx -lXext -lX11 -lm -lz
 
-MLX_LIB	=	-Lminilibx-linux -lmlx -lXext -lX11 -lm
+CFLAGS	=	-Wall	-Wextra	-Werror
 
 ##################################RULES#######################################
 
 all:		$(NAME)
 
 
-$(NAME): $(LIBFT)	$(OBJS)	$(MAIN)
-	$(CC)	$(CFLAGS) $(OBJS)	-o	$(NAME)	$(INCLUDE)	$(LIBFT) $(MLX_LIB)
+$(NAME): $(LIBFT) $(MLX) $(OBJS) $(MAIN)
+	$(CC)	$(CFLAGS) $(OBJS)	-o	$(NAME)	$(INCLUDE)	$(LIBFT)	$(MLX) $(MLX_FLAGS)
 
 $(LIBFT):
 	${MAKE}	-sC	libft
+
+$(MLX):
+	${MAKE} -sC $(MLX_PATH)
 
 $(MAIN): srcs/main.c
 	$(CC)	$(CFLAGS)	-c	$<	-o	$@	$(INCLUDE)
@@ -63,7 +68,7 @@ $(OBJS):	$(PATH_OBJS)/%.o:%.c Makefile
 bonus:	$(NAME_BONUS)
 
 $(NAME_BONUS):	$(OBJS)	$(OBJS_BONUS)
-	$(CC)	$(CFLAGS)	$(OBJS)	$(OBJS_BONUS) -o	$(NAME_BONUS) $(INCLUDE)	$(LIBFT) $(MLX_LIB)
+	$(CC)	$(CFLAGS)	$(OBJS)	$(OBJS_BONUS) -o	$(NAME_BONUS) $(INCLUDE)	$(LIBFT)	 $(MLX) $(MLX_FLAGS)
 
 $(OBJS_BONUS):	$(PATH_OBJS_BONUS)/%.o:%.c Makefile
 	mkdir	-p	$(PATH_OBJS_BONUS)
