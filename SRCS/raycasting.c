@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 14:19:53 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/10 16:18:49 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ int	raycasting(t_data *data)
 	double	rayDirY;
 	int		h = 1070;
 
-	w = ft_tablen(data->map);
+	w = 1900;
 	while (1)
 	{
 		x = 0;
@@ -40,8 +40,8 @@ int	raycasting(t_data *data)
 			double sideDistY;
 
 			 //length of ray from one x or y-side to next x or y-side
-			double deltaDistX = (rayDirX == 0) ? 1e30 : abs(1 / rayDirX);
-			double deltaDistY = (rayDirY == 0) ? 1e30 : abs(1 / rayDirY);
+			double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
+			double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
 			double perpWallDist;
 
 			 //what direction to step in x or y-direction (either +1 or -1)
@@ -89,7 +89,7 @@ int	raycasting(t_data *data)
 					side = 1;
 				}
 				//Check if ray has hit a wall
-				if(data->map[mapX][mapY] != '0')
+				if(data->map[mapY][mapX] != '0')
 					hit = 1;
 			}
 

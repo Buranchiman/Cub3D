@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 15:18:08 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/10 15:23:10 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	read_textures(char ***map)
 		i++;
 	}
 	//printf("%d textures have been read\n", i);
-	display_texture();
+	// display_texture();
 	take_texture_out(map, i);
 	// i = 0;
 	// printf("MAP IS :\n");
