@@ -6,11 +6,11 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/07 12:21:22 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/10 15:18:08 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "cube.h"
+#include "../INCLUDE/cube.h"
 
 int	import_texture(int index, int which, char *line)
 {
@@ -28,9 +28,12 @@ int	import_texture(int index, int which, char *line)
 		ft_clean_exit(get_data(), 1, "Error\nTexture format incorrect\n");
 		return (1);
 	}
-	if (data->texture[which])
-		free(data->texture[which]);
-	data->texture[which] = ft_substr(line, index, count);
+	if (data->texture[which].path)
+	{
+		free(data->texture[which].path);
+		//data->texture[which].path = NULL;
+	}
+	data->texture[which].path = ft_substr(line, index, count);
 	return (0);
 }
 
@@ -66,19 +69,19 @@ void	take_texture_out(char ***map, int end)
 	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
 }
 
-void	display_texture() // fonction de debuggage
-{
-	int		i;
-	t_data	*data;
-
-	i = 0;
-	data = get_data();
-	while (i < 6)
-	{
-		printf("%s\n", data->texture[i]);
-		i++;
-	}
-}
+//void	display_texture() // fonction de debuggage
+//{
+//	int		i;
+//	t_data	*data;
+//
+//	i = 0;
+//	data = get_data();
+//	while (i < 9)
+//	{
+//		printf("texture are: %s\n", data->texture[i].path);
+//		i++;
+//	}
+//}
 
 int	read_textures(char ***map)
 {

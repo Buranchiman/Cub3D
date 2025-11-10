@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/05 16:52:57 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/10 15:19:43 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,10 +15,32 @@
 void	verif_param(int argc, char **argv)
 {
 	if (argc != 2)
-		printf("\x1b[38;5;196m[Error : Wrong number of arguments]\033[0m\n");
-	else if (ft_strncmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4) != 0)
-		printf("\x1b[38;5;196m[Error : File map is not .cub]\033[0m\n");
+	{
+		printf("Wrong number of arguments");
+		exit(1);
+	}
+
+	if (ft_strncmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4) != 0)
+	{
+		printf("File map is not .cub");
+		exit(1);
+	}
 }
+
+//int	loop_hook(t_data *data)
+//{
+//	//unsigned long	current;
+//
+//	//current = get_time();
+//	//if (current - data->last_update >= 500)
+//	{
+//		render_map(data);
+//		//data->last_update = current;
+//		if (data->held_key)
+//			key_hook(data->held_key, data);
+//	}
+//	return (0);
+//}
 
 int	main(int arc, char **arv)
 {
@@ -27,15 +49,21 @@ int	main(int arc, char **arv)
 
 	i = 0;
 	verif_param(arc, arv);
-	check_file_format(arv[1]);
+	//check_file_format(arv[1]);
 	get_map(arv[1]);
 	data = get_data();
-	i = 0;
 	while (data->map[i])
 	{
-		printf("%s\n", data->map[i]);
+		ft_printf(1, "%s\n", data->map[i]);
 		i++;
 	}
+	display_window(data);
+	display_minimap(data);
+	//update_minimap(&data);
+	mlx_key_hook(data->win_ptr, key_hook, &data); //input
+	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, &data);
+	//mlx_loop_hook(data->mlx_ptr, loop_hook, &data);
+	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);
 	return (0);
 }

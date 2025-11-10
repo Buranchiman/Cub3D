@@ -1,0 +1,37 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   input.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/08 11:53:01 by mlemerci          #+#    #+#             */
+/*   Updated: 2025/11/08 13:02:35 by mlemerci         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../INCLUDE/cube.h"
+
+int	key_hook(int keycode, t_data *data)
+{
+	//t_point			new_pos;
+
+	if (keycode == KEY_ESC)
+		ft_clean_exit(data, 1, "\x1b[38;5;55m[See you soon👋]\033[0m\n");
+	//data->held_key = keycode;
+	//new_pos = data->map->fisherman_pos;
+	//if ((keycode == KEY_W) || (keycode == KEY_UP))
+	//	new_pos.y -= 1;
+	//else if ((keycode == KEY_S) || (keycode == KEY_DOWN))
+	//	new_pos.y += 1;
+	//else if ((keycode == KEY_A) || (keycode == KEY_LEFT))
+	//	new_pos.x -= 1;
+	//else if ((keycode == KEY_D) || (keycode == KEY_RIGHT))
+	//	new_pos.x += 1;
+	//if (check_moves(data, new_pos))
+	//{
+	//	mlx_clear_window(data->mlx_ptr, data->win_ptr);
+	//	render_map(data);
+	//}
+	return (0);
+}
