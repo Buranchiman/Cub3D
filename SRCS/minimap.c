@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/08 16:28:29 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:26:06 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,10 +36,13 @@ void	display_window(t_data *data)
 	fil_textures_tab(data);
 	while(i < 3)
 	{
+		//printf("path: %s width: %d height: %d", data->texture[i].path, data->texture[i].width, data->texture[i].height);
+		//data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,
+		//	data->texture[i].path, &data->texture[i].width, 
+		//	&data->texture[i].height);
+		int j = 32;
 		data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,
-			data->texture[i].path, &data->texture[i].width, 
-			&data->texture[i].height
-		);
+			data->texture[i].path, &j, &j);
 		if (!data->texture[i].ptr)
 			ft_clean_exit(data, 1, "Failed to load minimap texture\n");
 		i++;

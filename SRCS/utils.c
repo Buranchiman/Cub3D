@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/08 18:09:51 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:26:59 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,14 +97,15 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 	//empty_struct_array(data->texture, 9, sizeof(data->texture[0]), del_text_wrapper);
 	if (data->buffer)
 		free(data->buffer);
-	while (&data->texture[i])
-	{
-		if (data->texture[i].ptr)	
-			mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
-		//if (data->texture[i].path)	
-		//	free(data->texture->path);
-		i++;
-	}
+	//to modified
+	//while (&data->texture[i])
+	//{
+	//	if (data->texture[i].ptr)	
+	//		mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
+	//	//if (data->texture[i].path)	
+	//	//	free(data->texture->path);
+	//	i++;
+	//}
 	if (msg && option == 1)
 		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
 	if (msg && option == 0)

@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/08 16:16:25 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:23:19 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ void	init_data(void)
 	{
 		data->texture[i].path = NULL;
 		data->texture[i].ptr = NULL;
+		//data->texture[i].width = 32;
+		//data->texture[i].height = 32;
 		i++;
 	}
 }
