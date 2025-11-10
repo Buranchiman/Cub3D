@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 12:45:11 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:19:53 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ int	raycasting(t_data *data)
 	int		x;
 	double	rayDirX;
 	double	rayDirY;
+	int		h = 1070;
 
 	w = ft_tablen(data->map);
 	while (1)
@@ -88,7 +89,7 @@ int	raycasting(t_data *data)
 					side = 1;
 				}
 				//Check if ray has hit a wall
-				if(worldMap[mapX][mapY] > 0)
+				if(data->map[mapX][mapY] != '0')
 					hit = 1;
 			}
 
@@ -113,37 +114,37 @@ int	raycasting(t_data *data)
 				drawEnd = h - 1;
 
 			 //texturing calculations
-			int texNum = worldMap[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+			int texNum = data->map[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
 
 			 //calculate value of wallX
 			double wallX; //where exactly the wall was hit
 			if (side == 0)
-				wallX = posY + perpWallDist * rayDirY;
+				wallX = data->player_pos.y + perpWallDist * rayDirY;
 			else
-				wallX = posX + perpWallDist * rayDirX;
+				wallX = data->player_pos.x + perpWallDist * rayDirX;
 			wallX -= floor((wallX));
 
 			 //x coordinate on the texture
-			int texX = int(wallX * double(texWidth));
+			int texX = (int)(wallX * (double)TEXWIDTH);
 			if(side == 0 && rayDirX > 0)
-				texX = texWidth - texX - 1;
+				texX = TEXWIDTH - texX - 1;
 			if(side == 1 && rayDirY < 0)
-				texX = texWidth - texX - 1;
+				texX = TEXWIDTH - texX - 1;
 
 			 // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
 			// How much to increase the texture coordinate per screen pixel
-			double step = 1.0 * texHeight / lineHeight;
+			double step = 1.0 * TEXHEIGHT / lineHeight;
 			// Starting texture coordinate
 			double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
 			for(int y = drawStart; y < drawEnd; y++)
 			{
-				// Cast the texture coordinate to integer, and mask with (texHeight - 1) in case of overflow
-				int texY = (int)texPos & (texHeight - 1);
+				// Cast the texture coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
+				int texY = (int)texPos & (TEXHEIGHT - 1);
 				texPos += step;
-				Uint32 color = texture[texNum][texHeight * texY + texX];
+				Uint32 color = data->texture[texNum][TEXHEIGHT * texY + texX];
 				//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 				if(side == 1) color = (color >> 1) & 8355711;
-				buffer[y][x] = color;
+					buffer[y][x] = color;
 			}
 			x++;
 		}

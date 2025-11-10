@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/07 16:47:57 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/10 14:22:39 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,10 @@
 # define KEY_DOWN 65364
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
+
+//	WINDOW_DIMENSIONS
+# define TEXWIDTH 64
+# define TEXHEIGHT 64
 
 typedef struct s_point
 {
@@ -67,5 +71,7 @@ t_data	*get_data(void);
 
 int		vertical_walls(char *line);
 int		leak_check(char **map, int x, int y);
+
+int		raycasting(t_data *data);
 
 #endif
