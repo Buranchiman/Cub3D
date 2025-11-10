@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 14:07:37 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:35:12 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ int	main(int arc, char **arv)
 	display_window(data);
 	display_minimap(data);
 	//update_minimap(&data);
-	mlx_key_hook(data->win_ptr, key_hook, &data); //input
-	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, &data);
+	mlx_key_hook(data->win_ptr, key_hook, data); //input
+	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	//mlx_loop_hook(data->mlx_ptr, loop_hook, &data);
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);

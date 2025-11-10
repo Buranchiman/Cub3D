@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 14:09:33 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:46:34 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ int	import_texture(int index, int which, char *line)
 {
 	int		count;
 	t_data	*data;
+	char *	s;
 
 	count = 0;
 	data = get_data();
@@ -33,7 +34,9 @@ int	import_texture(int index, int which, char *line)
 		free(data->texture[which].path);
 		//data->texture[which].path = NULL;
 	}
-	data->texture[which].path = ft_substr(line, index, count);
+	s = ft_substr(line, index, count);
+	data->texture[which].path = s;
+	free(s);
 	return (0);
 }
 
@@ -68,20 +71,6 @@ void	take_texture_out(char ***map, int end)
 	}
 	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
 }
-
-//void	display_texture() // fonction de debuggage
-//{
-//	int		i;
-//	t_data	*data;
-//
-//	i = 0;
-//	data = get_data();
-//	while (i < 9)
-//	{
-//		printf("texture are: %s\n", data->texture[i].path);
-//		i++;
-//	}
-//}
 
 int	read_textures(char ***map)
 {

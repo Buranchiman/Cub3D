@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 14:26:59 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:43:57 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,21 +58,6 @@ size_t	ft_tablen(char **tab)
 //	}
 //}
 
-//deja dans verif param🔅👇
-//void	check_file_format(char *file)
-//{
-//	int	i;
-//
-//	i = 0;
-//	while (file[i] && file[i] != '.')
-//		i++;
-//	if (ft_strncmp(&file[i], ".cub", 5))
-//	{
-//		ft_printf(2, "Error\nMap file is not a .cub\n");
-//		exit(EXIT_FAILURE);
-//	}
-//}
-
 int	is_all_space_n_ones(char *string)
 {
 	int	i;
@@ -98,14 +83,14 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 	if (data->buffer)
 		free(data->buffer);
 	//to modified
-	//while (&data->texture[i])
-	//{
-	//	if (data->texture[i].ptr)	
-	//		mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
-	//	//if (data->texture[i].path)	
-	//	//	free(data->texture->path);
-	//	i++;
-	//}
+	while (i < 9)
+	{
+		if (data->texture[i].ptr)	
+			mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
+		//if (data->texture[i].path)	
+		//	free(data->texture->path);
+		i++;
+	}
 	if (msg && option == 1)
 		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
 	if (msg && option == 0)

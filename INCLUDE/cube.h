@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/08 16:43:02 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/10 17:51:46 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@
 # include <math.h>
 # include <sys/time.h>
 
+# define NBR_TEXTURES 9
 // PATH TEXTURES
-# define GROUND_MINIMAP "../TEXTURES/ground.xpm"
+# define GROUND_MINIMAP "../TEXTURES/ground_mp.xpm"
 # define WALL_MINIMAP "../TEXTURES/wall_mp.xpm"
 # define PLAYER_MINIMAP "../TEXTURES/player_mp.xpm"
 
@@ -51,7 +52,7 @@ typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
-	t_texture		texture[9];
+	t_texture		texture[NBR_TEXTURES];
 	//t_texture		texture[6]; 6 map + 3 minimap + ? bonus_map
 	void			*mlx_ptr; //mlx pointer 
 	void			*win_ptr; //window pointer
