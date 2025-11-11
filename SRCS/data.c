@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 17:46:15 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:05:10 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ t_data	*get_data(void)
 void	init_data(void)
 {
 	t_data	*data;
-	int i;
+	int		i;
 
 	i = 0;
 	data = get_data();
@@ -34,8 +34,6 @@ void	init_data(void)
 	{
 		data->texture[i].path = NULL;
 		data->texture[i].ptr = NULL;
-		data->texture[i].width = 32;
-		data->texture[i].height = 32;
 		i++;
 	}
 }

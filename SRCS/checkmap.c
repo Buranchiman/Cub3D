@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkmap.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/06 15:21:01 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/11 16:45:16 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ void	read_all_file(char *file_name, t_data *data)
 
 void	check_borders(t_data *data, char **map, int pcount)
 {
-	int				j;
-	int				i;
+	int	j;
+	int	i;
 
 	if (!is_all_space_n_ones(map[0]))
 		ft_clean_exit(data, 1, "Missing outside wall (top)");

@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:53:01 by mlemerci          #+#    #+#             */
-/*   Updated: 2025/11/08 13:02:35 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:54:30 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,9 @@ int	key_hook(int keycode, t_data *data)
 	//t_point			new_pos;
 
 	if (keycode == KEY_ESC)
-		ft_clean_exit(data, 1, "\x1b[38;5;55m[See you soon👋]\033[0m\n");
+		ft_clean_exit(data, 0, "See you soon👋");
 	//data->held_key = keycode;
-	//new_pos = data->map->fisherman_pos;
+	//new_pos = data->map->player_pos;
 	//if ((keycode == KEY_W) || (keycode == KEY_UP))
 	//	new_pos.y -= 1;
 	//else if ((keycode == KEY_S) || (keycode == KEY_DOWN))

@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 17:51:46 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/11 16:46:48 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,11 +21,15 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 9
+# define NBR_TEXTURES 7
 // PATH TEXTURES
-# define GROUND_MINIMAP "../TEXTURES/ground_mp.xpm"
-# define WALL_MINIMAP "../TEXTURES/wall_mp.xpm"
-# define PLAYER_MINIMAP "../TEXTURES/player_mp.xpm"
+# define GROUND_MINIMAP "TEXTURES/ground_mp.xpm"
+# define WALL_MINIMAP "TEXTURES/wall_mp.xpm"
+# define PLAYER_MINIMAP "TEXTURES/player_mp.xpm"
+# define EAST "TEXTURES/east.xpm"
+# define NORTH "TEXTURES/north.xpm"
+# define SOUTH "TEXTURES/south.xpm"
+# define WEST "TEXTURES/west.xpm"
 
 // KEYBOARD_MOVES
 # define KEY_ESC 65307
@@ -43,8 +47,6 @@
 typedef struct s_texture
 {
 	char	*path;
-	int		height;
-	int		width;
 	void	*ptr;
 }				t_texture;
 
@@ -53,16 +55,13 @@ typedef struct s_data
 	char			**map;
 	char			*buffer;
 	t_texture		texture[NBR_TEXTURES];
-	//t_texture		texture[6]; 6 map + 3 minimap + ? bonus_map
-	void			*mlx_ptr; //mlx pointer 
-	void			*win_ptr; //window pointer
+	void			*mlx_ptr;
+	void			*win_ptr;
 }				t_data;
 
 //utils.c
-//void	empty_struct_array(void *array, int size, size_t elem_size, void (*del)(void *));
 int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
-//void	check_file_format(char *file);
 size_t	ft_tablen(char **tab);
 int 	quit_with_int(t_data *data);
 

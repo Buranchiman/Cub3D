@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 17:35:12 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/11 17:51:04 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,18 +45,10 @@ void	verif_param(int argc, char **argv)
 int	main(int arc, char **arv)
 {
 	t_data	*data;
-	int		i;
 
-	i = 0;
 	verif_param(arc, arv);
-	//check_file_format(arv[1]);
 	get_map(arv[1]);
 	data = get_data();
-	while (data->map[i])
-	{
-		ft_printf(1, "%s\n", data->map[i]);
-		i++;
-	}
 	display_window(data);
 	display_minimap(data);
 	//update_minimap(&data);

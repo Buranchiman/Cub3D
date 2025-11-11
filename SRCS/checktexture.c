@@ -6,7 +6,7 @@
 /*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 17:46:34 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/11 14:26:45 by mlemerci         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,20 +81,12 @@ int	read_textures(char ***map)
 		&& (*map)[i][0] != '0')
 	//while ((*map)[i])
 	{
-		printf("line is %s\n", (*map)[i]);
+		//printf("line is %s\n", (*map)[i]);
 		if (get_textures((*map)[i]))
 			return (1);
 		i++;
 	}
-	printf("%d textures have been read\n", i);
-	//display_texture();
+	//printf("%d textures have been read\n", i);
 	take_texture_out(map, i);
-	// i = 0;
-	// printf("MAP IS :\n");
-	// while (get_data()->map[i])
-	// {
-	// 	ft_printf(1, "%s\n", get_data()->map[i]);
-	// 	i++;
-	// }
 	return (0);
 }
