@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/08 11:53:01 by mlemerci          #+#    #+#             */
-/*   Updated: 2025/11/11 17:54:30 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/12 19:28:07 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,12 @@ int	key_hook(int keycode, t_data *data)
 	//	new_pos.x -= 1;
 	//else if ((keycode == KEY_D) || (keycode == KEY_RIGHT))
 	//	new_pos.x += 1;
-	//if (check_moves(data, new_pos))
+	////if (check_moves(data, new_pos))
+	//if (data->map->player_pos[new_pos.y][new_pos.x] != '1')
 	//{
+	//	data->map->player_pos = new_pos;
 	//	mlx_clear_window(data->mlx_ptr, data->win_ptr);
-	//	render_map(data);
+		update_minimap(data);
 	//}
 	return (0);
 }

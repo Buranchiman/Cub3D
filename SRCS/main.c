@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/11 17:51:04 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/12 19:27:47 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,20 +27,20 @@ void	verif_param(int argc, char **argv)
 	}
 }
 
-//int	loop_hook(t_data *data)
-//{
-//	//unsigned long	current;
-//
-//	//current = get_time();
-//	//if (current - data->last_update >= 500)
-//	{
-//		render_map(data);
-//		//data->last_update = current;
-//		if (data->held_key)
-//			key_hook(data->held_key, data);
-//	}
-//	return (0);
-//}
+int	loop_hook(t_data *data)
+{
+	//unsigned long	current;
+
+	//current = get_time();
+	//if (current - data->last_update >= 500)
+	//{
+		//render_map(data);
+		//data->last_update = current;
+	if (data->held_key)
+		key_hook(data->held_key, data);
+	//}
+	return (0);
+}
 
 int	main(int arc, char **arv)
 {
@@ -51,10 +51,9 @@ int	main(int arc, char **arv)
 	data = get_data();
 	display_window(data);
 	display_minimap(data);
-	//update_minimap(&data);
 	mlx_key_hook(data->win_ptr, key_hook, data); //input
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
-	//mlx_loop_hook(data->mlx_ptr, loop_hook, &data);
+	mlx_loop_hook(data->mlx_ptr, loop_hook, data);
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);
 	return (0);
