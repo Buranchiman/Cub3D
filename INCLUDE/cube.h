@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/11 16:46:48 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/12 20:23:18 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,11 +50,22 @@ typedef struct s_texture
 	void	*ptr;
 }				t_texture;
 
+
+typedef struct s_point
+{
+	double	x;
+	double	y;
+}				t_point;
+
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
+	int				held_key;
 	t_texture		texture[NBR_TEXTURES];
+	t_point			player_pos;
+	t_point			cameraplane;
+	t_point			direction;
 	void			*mlx_ptr;
 	void			*win_ptr;
 }				t_data;

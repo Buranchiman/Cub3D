@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checktexture.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/11 14:26:45 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/12 20:38:00 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ int	import_texture(int index, int which, char *line)
 {
 	int		count;
 	t_data	*data;
-	char *	s;
 
 	count = 0;
 	data = get_data();
@@ -34,9 +33,7 @@ int	import_texture(int index, int which, char *line)
 		free(data->texture[which].path);
 		//data->texture[which].path = NULL;
 	}
-	s = ft_substr(line, index, count);
-	data->texture[which].path = s;
-	free(s);
+	data->texture[which].path = ft_substr(line, index, count);
 	return (0);
 }
 

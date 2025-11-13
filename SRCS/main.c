@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 19:27:47 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/12 20:38:26 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int	main(int arc, char **arv)
 	data = get_data();
 	display_window(data);
 	display_minimap(data);
-	mlx_key_hook(data->win_ptr, key_hook, data); //input
+	mlx_key_hook(data->win_ptr, key_hook, data);
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	mlx_loop_hook(data->mlx_ptr, loop_hook, data);
 	mlx_loop(data->mlx_ptr);

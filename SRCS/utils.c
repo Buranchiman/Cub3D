@@ -52,8 +52,11 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 	{
 		if (data->texture[i].ptr)	
 			mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
-		//if (data->texture[i].path)	
-		//	free(data->texture->path);
+		if (data->texture[i].path)
+		{
+			free(data->texture[i].path);
+			data->texture[i].path = NULL;
+		}
 		i++;
 	}
 	if (msg && option == 1)
