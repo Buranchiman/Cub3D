@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 15:19:43 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:32:49 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,8 @@ int	main(int arc, char **arv)
 	}
 	display_window(data);
 	display_minimap(data);
+	data->mlx_img-> img = mlx_new_image(data->mlx_img, SCREENWIDTH, SCREENHEIGHT);
+	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);
 	//update_minimap(&data);
 	mlx_key_hook(data->win_ptr, key_hook, &data); //input
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, &data);

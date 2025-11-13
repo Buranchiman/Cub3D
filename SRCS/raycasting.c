@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 16:18:49 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:09:58 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ int	raycasting(t_data *data)
 	int		x;
 	double	rayDirX;
 	double	rayDirY;
-	int		h = 1070;
+	int		h;
 
-	w = 1900;
+	h = SCREENHEIGHT;
+	w = SCREENWIDTH;
 	while (1)
 	{
 		x = 0;
@@ -28,8 +29,8 @@ int	raycasting(t_data *data)
 		{
 			//calculate ray position and direction
 			double cameraX = 2 * x / (double)w - 1; //x-coordinate in camera space
-			rayDirX = data->direction.x + data->cameraplane.x * (2 * x / (double)w - 1);
-			rayDirY = data->direction.y + data->cameraplane.y * (2 * x / (double)w - 1);
+			rayDirX = data->direction.x + data->cameraplane.x * cameraX;
+			rayDirY = data->direction.y + data->cameraplane.y * cameraX;
 
 			//which box of the map we're in
 			int mapX = (int)data->player_pos.x;
@@ -40,8 +41,8 @@ int	raycasting(t_data *data)
 			double sideDistY;
 
 			 //length of ray from one x or y-side to next x or y-side
-			double deltaDistX = (rayDirX == 0) ? 1e30 : fabs(1 / rayDirX);
-			double deltaDistY = (rayDirY == 0) ? 1e30 : fabs(1 / rayDirY);
+			double deltaDistX = (rayDirX == 0) ? HUGE_VAL : fabs(1 / rayDirX);
+			double deltaDistY = (rayDirY == 0) ? HUGE_VAL : fabs(1 / rayDirY);
 			double perpWallDist;
 
 			 //what direction to step in x or y-direction (either +1 or -1)
@@ -94,12 +95,14 @@ int	raycasting(t_data *data)
 			}
 
 			 //Calculate distance of perpendicular ray (Euclidean distance would give fisheye effect!)
-			if(side == 0)
+			if (side == 0)
 				perpWallDist = (sideDistX - deltaDistX);
 			else
 				perpWallDist = (sideDistY - deltaDistY);
 
 			 //Calculate height of line to draw on screen
+			 if (perpWallDist < 1e-6)
+			 	perpWallDist = 1e-6;
 			int lineHeight = (int)(h / perpWallDist);
 
 
@@ -114,7 +117,7 @@ int	raycasting(t_data *data)
 				drawEnd = h - 1;
 
 			 //texturing calculations
-			int texNum = data->map[mapX][mapY] - 1; //1 subtracted from it so that texture 0 can be used!
+			int texNum = /*data->map[mapX][mapY]*/ 0 ; //1 subtracted from it so that texture 0 can be used!
 
 			 //calculate value of wallX
 			double wallX; //where exactly the wall was hit
@@ -141,7 +144,7 @@ int	raycasting(t_data *data)
 				// Cast the texture coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
 				int texY = (int)texPos & (TEXHEIGHT - 1);
 				texPos += step;
-				Uint32 color = data->texture[texNum][TEXHEIGHT * texY + texX];
+				Uint32 color = data->texture[texNum][TEXWIDTH * texY + texX];
 				//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 				if(side == 1) color = (color >> 1) & 8355711;
 					buffer[y][x] = color;

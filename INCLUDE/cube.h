@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/10 15:16:31 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/12 14:22:21 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,11 @@
 # define KEY_LEFT 65361
 # define KEY_RIGHT 65363
 
-//	WINDOW_DIMENSIONS
+//	DIMENSIONS
 # define TEXWIDTH 64
 # define TEXHEIGHT 64
+# define SCREENWIDTH 1900
+# define SCREENHEIGHT 1060
 
 typedef struct s_point
 {
@@ -57,6 +59,14 @@ typedef struct s_texture
 	void	*ptr;
 }				t_texture;
 
+typedef struct s_img {
+    void *img;      // MLX image handle
+    char *addr;     // pointer to pixel data
+    int   bpp;      // bits per pixel (usually 32)
+    int   line_len; // bytes per row
+    int   endian;   // byte order flag (0 or 1)
+} t_img;
+
 typedef struct s_data
 {
 	char			**map;
@@ -67,6 +77,7 @@ typedef struct s_data
 	t_point			direction;
 	void			*mlx_ptr; //mlx pointer
 	void			*win_ptr; //window pointer
+	s_img			*mlx_img; //img dans laquelle on va put_px
 }				t_data;
 
 //utils.c
