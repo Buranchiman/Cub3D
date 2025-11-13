@@ -6,13 +6,13 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/13 16:45:00 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:33:18 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-void fil_textures_tab(t_data *data)
+void	fil_textures_tab(t_data *data)
 {
 	if (data->texture[0].path)
 		free(data->texture[0].path);
@@ -37,6 +37,17 @@ void fil_textures_tab(t_data *data)
 	data->texture[6].path = ft_strdup(WEST);
 }
 
+int		init_pixels(t_texture *tex)
+{
+	for (int y = 0; y < tex->height; y++)
+	{
+    	memcpy(&tex->pixels[y * tex->width],
+        	tex->ptr->addr + y * tex->ptr->line_len,
+        	tex->width * 4);
+	}
+	return (0);
+}
+
 void	display_window(t_data *data)
 {
 	int i;
@@ -58,9 +69,9 @@ void	display_window(t_data *data)
 		//	data->texture[i].path, &data->texture[i].width,
 		//	&data->texture[i].height);
 		data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,	data->texture[i].path, &n, &n);
-		open(data->texture[i].path, O_RDONLY);
 		if (!data->texture[i].ptr)
 			ft_clean_exit(data, 1, "Failed to load minimap texture");
+		data->texture[i].ptr->addr = mlx_get_data_addr(data->texture[i].ptr, &data->texture[i].ptr->bpp, &data->texture[i].ptr->line_len, &data->texture[i].ptr->endian);
 		i++;
 	}
 

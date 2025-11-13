@@ -3,17 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-<<<<<<< HEAD
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:38:22 by wivallee         ###   ########.fr       */
-=======
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 20:38:26 by manon            ###   ########.fr       */
->>>>>>> getting_textures
+/*   Updated: 2025/11/13 17:33:59 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,9 +50,9 @@ int	main(int arc, char **arv)
 	get_map(arv[1]);
 	data = get_data();
 	display_window(data);
-	display_minimap(data);
-	data->mlx_img-> img = mlx_new_image(data->mlx_img, SCREENWIDTH, SCREENHEIGHT);
-	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);
+	//display_minimap(data);
+	data->mlx_img->img = mlx_new_image(data->mlx_ptr, SCREENWIDTH, SCREENHEIGHT);
+	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);
 	//update_minimap(&data);
 	mlx_loop_hook(data->mlx_ptr, render_frame, data);
 	mlx_key_hook(data->win_ptr, key_hook, data);

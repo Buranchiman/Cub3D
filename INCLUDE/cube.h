@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:43:24 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:31:56 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,12 +48,6 @@
 # define SCREENWIDTH 1900
 # define SCREENHEIGHT 1060
 
-typedef struct s_point
-{
-	double	x;
-	double	y;
-}				t_point;
-
 # define IMG_SIZE 64
 
 typedef struct s_img {
@@ -89,6 +83,7 @@ typedef struct s_data
 	t_point			player_pos;
 	t_point			cameraplane;
 	t_point			direction;
+	t_img			*mlx_img;
 	void			*mlx_ptr;
 	void			*win_ptr;
 }				t_data;
