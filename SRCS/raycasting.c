@@ -3,14 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 14:09:58 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/13 16:38:26 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
+
+
+static inline void put_px(t_data *d, int x, int y, unsigned int argb)
+{
+	if ((unsigned)x >= (unsigned)SCREENWIDTH || (unsigned)y >= (unsigned)SCREENHEIGHT)
+		return;
+	char *p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
+	*(unsigned int *)p = argb;
+}
 
 int	raycasting(t_data *data)
 {
@@ -144,12 +153,22 @@ int	raycasting(t_data *data)
 				// Cast the texture coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
 				int texY = (int)texPos & (TEXHEIGHT - 1);
 				texPos += step;
-				Uint32 color = data->texture[texNum][TEXWIDTH * texY + texX];
+				unsigned int color = data->texture[texNum]->ptr[TEXWIDTH * texY + texX];
 				//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 				if(side == 1) color = (color >> 1) & 8355711;
-					buffer[y][x] = color;
+					put_px(data, x, y, color | 0xFF000000);
 			}
 			x++;
 		}
 	}
+}
+
+int	render_frame(void *param)
+{
+	t_data *data;
+
+	data = get_data();
+	raycasting(data);
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img, 0, 0);
+	return (0);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 14:30:13 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/13 12:59:18 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,7 @@ t_img	*init_img()
 	img->bpp = 0;
 	img->line_len = 0;
 	img->endian = 0;
+	return (img);
 }
 
 void	init_data(void)

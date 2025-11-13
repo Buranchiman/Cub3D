@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 14:32:49 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/13 16:38:22 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,7 @@ int	main(int arc, char **arv)
 	//update_minimap(&data);
 	mlx_key_hook(data->win_ptr, key_hook, &data); //input
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, &data);
+	mlx_loop_hook(data->mlx, render_frame, data);
 	//mlx_loop_hook(data->mlx_ptr, loop_hook, &data);
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);

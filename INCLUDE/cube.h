@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 14:22:21 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/13 16:38:35 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,21 +51,22 @@ typedef struct s_point
 
 # define IMG_SIZE 64
 
+typedef struct s_img {
+	void	*img;      // MLX image handle
+	char	*addr;     // pointer to pixel data
+	int		bpp;      // bits per pixel (usually 32)
+	int		line_len; // bytes per row
+	int		endian;   // byte order flag (0 or 1)
+} t_img;
+
 typedef struct s_texture
 {
-	char	*path;
-	int		height;
-	int		width;
-	void	*ptr;
+	char		*path;
+	int			height;
+	int			width;
+	t_img		*ptr;
+	uint64_t	*pixels;
 }				t_texture;
-
-typedef struct s_img {
-    void *img;      // MLX image handle
-    char *addr;     // pointer to pixel data
-    int   bpp;      // bits per pixel (usually 32)
-    int   line_len; // bytes per row
-    int   endian;   // byte order flag (0 or 1)
-} t_img;
 
 typedef struct s_data
 {
@@ -77,7 +78,7 @@ typedef struct s_data
 	t_point			direction;
 	void			*mlx_ptr; //mlx pointer
 	void			*win_ptr; //window pointer
-	s_img			*mlx_img; //img dans laquelle on va put_px
+	t_img			*mlx_img; //img dans laquelle on va put_px
 }				t_data;
 
 //utils.c
@@ -106,6 +107,8 @@ t_data	*get_data(void);
 
 //raycasting.c
 int		raycasting(t_data *data);
+int		render_frame(void *param);
+
 //walls.c
 int		vertical_walls(char *line);
 int		leak_check(char **map, int x, int y);
