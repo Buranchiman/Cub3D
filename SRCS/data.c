@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 12:59:18 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:43:30 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,10 +34,8 @@ t_img	*init_img()
 
 void	init_data(void)
 {
-	static t_data	*data;
-	int i;
+	t_data	*data;
 
-	i = 0;
 	data = get_data();
 	data->buffer = NULL;
 	data->map = NULL;
@@ -59,4 +57,5 @@ void	init_data(void)
 		//data->texture[i].height = 32;
 		i++;
 	}
+	ft_bzero(data, sizeof(t_data));
 }

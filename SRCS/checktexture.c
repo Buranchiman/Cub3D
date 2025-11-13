@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:38:32 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:42:42 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,6 @@ void	take_texture_out(char ***map, int end)
 	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
 }
 
-//void	display_texture() // fonction de debuggage
-//{
-//	int		i;
-//	t_data	*data;
-//
-//	i = 0;
-//	data = get_data();
-//	while (i < 9)
-//	{
-//		printf("texture are: %s\n", data->texture[i].path);
-//		i++;
-//	}
-//}
-
 int	read_textures(char ***map)
 {
 	int	i;
@@ -99,12 +85,5 @@ int	read_textures(char ***map)
 	//printf("%d textures have been read\n", i);
 	// display_texture();
 	take_texture_out(map, i);
-	// i = 0;
-	// printf("MAP IS :\n");
-	// while (get_data()->map[i])
-	// {
-	// 	ft_printf(1, "%s\n", get_data()->map[i]);
-	// 	i++;
-	// }
 	return (0);
 }

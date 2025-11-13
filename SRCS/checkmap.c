@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:38:33 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/13 16:42:14 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,8 @@ int	get_player(char **map, int i, int j)
 
 void	check_borders(t_data *data, char **map, int pcount)
 {
-	int				j;
-	int				i;
+	int	j;
+	int	i;
 
 	if (!is_all_space_n_ones(map[0]))
 		ft_clean_exit(data, 1, "Missing outside wall (top)");
