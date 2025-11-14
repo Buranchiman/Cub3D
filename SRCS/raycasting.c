@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 17:17:52 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/14 15:59:30 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ int	raycasting(t_data *data)
 				side = 1;
 			}
 			//Check if ray has hit a wall
-			if(data->map[mapY][mapX] != '0')
+			if(data->map[mapY][mapX] == '1')
 				hit = 1;
 		}
 
@@ -135,31 +135,59 @@ int	raycasting(t_data *data)
 		wallX -= floor((wallX));
 
 		 //x coordinate on the texture
-		int texX = (int)(wallX * (double)TEXWIDTH);
+		int texX = (int)(wallX * (double)data->texture[texNum].width);
 		if(side == 0 && rayDirX > 0)
-			texX = TEXWIDTH - texX - 1;
+			texX = data->texture[texNum].width - texX - 1;
 		if(side == 1 && rayDirY < 0)
-			texX = TEXWIDTH - texX - 1;
+			texX = data->texture[texNum].width - texX - 1;
 
 		 // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
 		// How much to increase the texture coordinate per screen pixel
-		double step = 1.0 * TEXHEIGHT / lineHeight;
+		double step = 1.0 * data->texture[texNum].height / lineHeight;
 		// Starting texture coordinate
 		double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
 		for(int y = drawStart; y < drawEnd; y++)
 		{
+			//ft_printf(1, "WTHHHHHH OHMAGAAAD Also texture path is %s\n", data->texture[texNum].path);
 			// Cast the texture coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
-			int texY = (int)texPos & (TEXHEIGHT - 1);
+			int texY = (int)texPos & (data->texture[texNum].height - 1);
 			texPos += step;
-			unsigned int color = data->texture[texNum].pixels[texY * TEXWIDTH + texX];
+			unsigned int color = data->texture[texNum].pixels[texY * data->texture[texNum].width + texX];
+			// unsigned int color = 0xFF0000FF;
 			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			if(side == 1) color = (color >> 1) & 8355711;
-				put_px(data, x, y, color | 0xFF000000);
+			// if(side == 1) color = (color >> 1) & 8355711;
+			put_px(data, x, y, color | 0xFF000000);
 		}
 		x++;
 	}
 	return (0);
 }
+
+// int	render_frame(void *param) ----->GRADIENT pour verifier que put_px marche
+// {
+//     t_data *d = get_data();
+
+//     // simple gradient to test drawing
+// 	(void)param;
+//     for (int y = 0; y < SCREENHEIGHT; ++y)
+//     {
+//         for (int x = 0; x < SCREENWIDTH; ++x)
+//         {
+//             unsigned int r = (x * 255) / SCREENWIDTH;
+//             unsigned int g = (y * 255) / SCREENHEIGHT;
+//             unsigned int b = 128;
+//             unsigned int color = (r << 16) | (g << 8) | b;
+
+//             // add opaque alpha in case your MLX uses ARGB
+//             color |= 0xFF000000;
+
+//             put_px(d, x, y, color);
+//         }
+//     }
+
+//     mlx_put_image_to_window(d->mlx_ptr, d->win_ptr, d->mlx_img->img, 0, 0);
+//     return 0;
+// }
 
 int	render_frame(void *param)
 {
@@ -168,6 +196,7 @@ int	render_frame(void *param)
 	(void)param;
 	data = get_data();
 	raycasting(data);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img, 0, 0);
+	ft_printf(1, "put image to window reached\n");
+	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img->img, 0, 0);
 	return (0);
 }

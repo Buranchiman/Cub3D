@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:42:14 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/14 16:06:21 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,21 +36,42 @@ void	read_all_file(char *file_name, t_data *data)
 int	get_player(char **map, int i, int j)
 {
 	t_data	*data;
+	char	c;
 
 	data = get_data();
-	if (ft_strchr("NSWE", map[j][i]))
+	c = map[j][i];
+	if (ft_strchr("NSWE", c))
 	{
-		//printf("in get player coordinates are x:%d, y:%d\n", i, j);
-		data->player_pos.x = i;
-		data->player_pos.y = j;
-		if (map[j][i] == 'N')
-			data->direction.y = 1;
-		else if (map[j][i] == 'S')
-			data->direction.y = -1;
-		else if (map[j][i] == 'E')
-			data->direction.x = 1;
-		else if (map[j][i] == 'O')
-			data->direction.x = -1;
+		data->player_pos.x = i + 0.5;
+		data->player_pos.y = j + 0.5;
+		if (c == 'N')
+		{
+			data->direction.x   = 0.0;
+			data->direction.y   = -1.0;
+			data->cameraplane.x = 0.66;
+			data->cameraplane.y = 0.0;
+		}
+		else if (c == 'S')
+		{
+			data->direction.x   = 0.0;
+			data->direction.y   = 1.0;
+			data->cameraplane.x = -0.66;
+			data->cameraplane.y = 0.0;
+		}
+		else if (c == 'E')
+		{
+			data->direction.x   = 1.0;
+			data->direction.y   = 0.0;
+			data->cameraplane.x = 0.0;
+			data->cameraplane.y = 0.66;
+		}
+		else if (c == 'W')
+		{
+			data->direction.x   = -1.0;
+			data->direction.y   = 0.0;
+			data->cameraplane.x = 0.0;
+			data->cameraplane.y = -0.66;
+		}
 		return (1);
 	}
 	return (0);

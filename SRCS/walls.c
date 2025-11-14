@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:41:42 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:38:30 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/14 12:34:17 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ int	leak_check(char **map, int x, int y)
 		|| (map[y + 1] && map[y + 1][x] == '0')
 		|| (x > 0 && map[y][x - 1] == '0')
 		|| (map[y][x + 1] == '0')))
-		return (1);
+		return (ft_printf(2, "Hole is at x:%d, y:%d\n", x, y), 1);
 	return (0);
 }
 

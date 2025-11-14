@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 17:33:59 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/14 16:48:59 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,18 +27,30 @@ void	verif_param(int argc, char **argv)
 	}
 }
 
-int	loop_hook(t_data *data)
+void	moving(int keycode, t_data *data)
 {
-	//unsigned long	current;
+	double	movex;
+	double	movey;
 
-	//current = get_time();
-	//if (current - data->last_update >= 500)
-	//{
-		//render_map(data);
-		//data->last_update = current;
-	if (data->held_key)
-		key_hook(data->held_key, data);
-	//}
+	movex = 0;
+	movey = 0;
+	if (keycode == KEY_W && data->map[(int)data->player_pos.y - 1][(int)data->player_pos.x] != '1')
+		movey -= 0.2;
+	if (keycode == KEY_A && data->map[(int)data->player_pos.y][(int)data->player_pos.x - 1] != '1')
+		movex -= 0.2;
+	if (keycode == KEY_S && data->map[(int)data->player_pos.y + 1][(int)data->player_pos.x] != '1')
+		movey += 0.2;
+	if (keycode == KEY_D && data->map[(int)data->player_pos.y][(int)data->player_pos.x + 1] != '1')
+		movex += 0.2;
+	data->player_pos.x += movex;
+	data->player_pos.y += movey;
+}
+
+int	key_hook(int keycode, t_data *data)
+{
+	moving(keycode, data);
+	if (keycode == KEY_ESC)
+		exit(0);
 	return (0);
 }
 
@@ -56,8 +68,8 @@ int	main(int arc, char **arv)
 	//update_minimap(&data);
 	mlx_loop_hook(data->mlx_ptr, render_frame, data);
 	mlx_key_hook(data->win_ptr, key_hook, data);
-	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
-	mlx_loop_hook(data->mlx_ptr, loop_hook, data);
+	//mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
+	// mlx_loop_hook(data->mlx_ptr, loop_hook, data);
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);
 	return (0);
