@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkmap.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/11 16:45:16 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/13 17:05:34 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,29 @@ void	read_all_file(char *file_name, t_data *data)
 	}
 }
 
+int	get_player(char **map, int i, int j)
+{
+	t_data	*data;
+
+	data = get_data();
+	if (ft_strchr("NSWE", map[j][i]))
+	{
+		//printf("in get player coordinates are x:%d, y:%d\n", i, j);
+		data->player_pos.x = i;
+		data->player_pos.y = j;
+		if (map[j][i] == 'N')
+			data->direction.y = 1;
+		else if (map[j][i] == 'S')
+			data->direction.y = -1;
+		else if (map[j][i] == 'E')
+			data->direction.x = 1;
+		else if (map[j][i] == 'O')
+			data->direction.x = -1;
+		return (1);
+	}
+	return (0);
+}
+
 void	check_borders(t_data *data, char **map, int pcount)
 {
 	int	j;
@@ -51,7 +74,7 @@ void	check_borders(t_data *data, char **map, int pcount)
 			if (!ft_strchr("01NSWE ", map[j][i]))
 				ft_clean_exit(data, 1, "Map char unvalid");
 			if (ft_strchr("NSWE", map[j][i]))
-				pcount++;
+				pcount += get_player(map, i, j);
 			i++;
 		}
 		j++;

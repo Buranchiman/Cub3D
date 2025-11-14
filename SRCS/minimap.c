@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/12 20:49:14 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/14 16:30:12 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,6 @@ void	display_window(t_data *data)
 		//	data->texture[i].path, &data->texture[i].width, 
 		//	&data->texture[i].height);
 		data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,	data->texture[i].path, &n, &n);
-		open(data->texture[i].path, O_RDONLY);
 		if (!data->texture[i].ptr)
 			ft_clean_exit(data, 1, "Failed to load minimap texture");
 		i++;
@@ -84,12 +83,13 @@ void	display_minimap(t_data *data)
 			if (data->map[y][x] == '1')	
 				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
 					data->texture[0].ptr, x * IMG_SIZE/8, y * IMG_SIZE/8);
-			else if (data->map[y][x] == '0')
+			else if (data->map[y][x] == '0' || ft_strchr("NSWE", data->map[y][x]))
 				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
 					data->texture[1].ptr, x * IMG_SIZE/8, y * IMG_SIZE/8);
-			else if (ft_strchr("NSWE", data->map[y][x]))
+			if (y == (int)data->player_pos.y && x == (int)data->player_pos.x)
 				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
 					data->texture[2].ptr, x * IMG_SIZE/8, y * IMG_SIZE/8);
+			//draw_player_on_minimap(data, x, y);
 			x++;
 		}
 		y++;

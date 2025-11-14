@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 20:23:18 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/14 17:50:26 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int		read_textures(char ***map);
 
 //checkmap.c
 void	read_all_file(char *file_name, t_data *data);
+int		get_player(char **map, int i, int j);
 void	check_borders(t_data *data, char **map, int pcount);
 void	check_map(t_data *data, char **map);
 void	get_map(char *file_name);

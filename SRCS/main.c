@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/12 20:38:26 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/14 17:05:57 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,17 @@ void	verif_param(int argc, char **argv)
 int	loop_hook(t_data *data)
 {
 	//unsigned long	current;
-
-	//current = get_time();
+	//struct timeval	tv;
+//
+	//gettimeofday(&tv, NULL);
+	//current = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
 	//if (current - data->last_update >= 500)
 	//{
 		//render_map(data);
 		//data->last_update = current;
-	if (data->held_key)
-		key_hook(data->held_key, data);
+		if (data->held_key)
+			key_hook(data->held_key, data);
+	//	data->last_update = current;
 	//}
 	return (0);
 }
@@ -51,6 +54,7 @@ int	main(int arc, char **arv)
 	data = get_data();
 	display_window(data);
 	display_minimap(data);
+	//system("mpg123 --loop -1 -q musique1.mp3 &"); //add music
 	mlx_key_hook(data->win_ptr, key_hook, data);
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	mlx_loop_hook(data->mlx_ptr, loop_hook, data);

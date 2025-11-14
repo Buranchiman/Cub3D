@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlemerci <mlemerci@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/11 14:07:48 by mlemerci         ###   ########.fr       */
+/*   Updated: 2025/11/14 16:38:15 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,15 +39,11 @@ int	is_all_space_n_ones(char *string)
 	return (1);
 }
 
-void	ft_clean_exit(t_data *data, int option, char *msg)
+void 	clean_textures(t_data *data)
 {
 	int i;
 
 	i = 0;
-	if (data->map)
-		ft_clear_tab(data->map);
-	if (data->buffer)
-		free(data->buffer);
 	while (i < NBR_TEXTURES)
 	{
 		if (data->texture[i].ptr)	
@@ -59,6 +55,15 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		}
 		i++;
 	}
+}
+
+void	ft_clean_exit(t_data *data, int option, char *msg)
+{
+	if (data->map)
+		ft_clear_tab(data->map);
+	if (data->buffer)
+		free(data->buffer);
+	clean_textures(data);
 	if (msg && option == 1)
 		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
 	if (msg && option == 0)
@@ -70,6 +75,8 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		mlx_destroy_display(data->mlx_ptr);
 		free(data->mlx_ptr);
 	}
+	//system("pkill mpg123"); //clean music
+	//system("stty sane");
 	if (option == 1)
 		exit(EXIT_FAILURE);
 	exit(EXIT_SUCCESS);
