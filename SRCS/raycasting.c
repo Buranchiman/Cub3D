@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 15:59:30 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/17 12:54:53 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,44 @@ static inline void put_px(t_data *d, int x, int y, unsigned int argb)
 	*(unsigned int *)p = argb;
 }
 
+void    update_player(t_data *d)
+{
+    double rotSpeed = 0.15; // radians per frame (tune this)
+
+    // rotate right
+    if (d->keys.right)
+    {
+        double oldDirX = d->direction.x;
+        d->direction.x = d->direction.x * cos(-rotSpeed)
+                       - d->direction.y * sin(-rotSpeed);
+        d->direction.y = oldDirX * sin(-rotSpeed)
+                       + d->direction.y * cos(-rotSpeed);
+
+        double oldPlaneX = d->cameraplane.x;
+        d->cameraplane.x = d->cameraplane.x * cos(-rotSpeed)
+                         - d->cameraplane.y * sin(-rotSpeed);
+        d->cameraplane.y = oldPlaneX * sin(-rotSpeed)
+                         + d->cameraplane.y * cos(-rotSpeed);
+    }
+    // rotate left
+    if (d->keys.left)
+    {
+        double oldDirX = d->direction.x;
+        d->direction.x = d->direction.x * cos(rotSpeed)
+                       - d->direction.y * sin(rotSpeed);
+        d->direction.y = oldDirX * sin(rotSpeed)
+                       + d->direction.y * cos(rotSpeed);
+
+        double oldPlaneX = d->cameraplane.x;
+        d->cameraplane.x = d->cameraplane.x * cos(rotSpeed)
+                         - d->cameraplane.y * sin(rotSpeed);
+        d->cameraplane.y = oldPlaneX * sin(rotSpeed)
+                         + d->cameraplane.y * cos(rotSpeed);
+    }
+
+    // (here you can also handle W/S/A/D movement)
+}
+
 int	raycasting(t_data *data)
 {
 	int		w;
@@ -32,6 +70,9 @@ int	raycasting(t_data *data)
 	h = SCREENHEIGHT;
 	w = SCREENWIDTH;
 	x = 0;
+	unsigned int ceiling_color = 0xFF87CEEB;  // sky
+	unsigned int floor_color   = 0xFF444444;  // floor
+
 	while (x < w)
 	{
 		//calculate ray position and direction
@@ -123,6 +164,8 @@ int	raycasting(t_data *data)
 		if (drawEnd >= h)
 			drawEnd = h - 1;
 
+		for (int y = 0; y < drawStart; ++y)
+    		put_px(data, x, y, ceiling_color);
 		 //texturing calculations
 		int texNum = /*data->map[mapX][mapY]*/ 0 ; //1 subtracted from it so that texture 0 can be used!
 
@@ -158,6 +201,8 @@ int	raycasting(t_data *data)
 			// if(side == 1) color = (color >> 1) & 8355711;
 			put_px(data, x, y, color | 0xFF000000);
 		}
+		for (int y = drawEnd; y < h; ++y)
+    		put_px(data, x, y, floor_color);
 		x++;
 	}
 	return (0);
@@ -195,8 +240,9 @@ int	render_frame(void *param)
 
 	(void)param;
 	data = get_data();
+	update_player(data);
 	raycasting(data);
-	ft_printf(1, "put image to window reached\n");
+	//ft_printf(1, "put image to window reached\n");
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img->img, 0, 0);
 	return (0);
 }

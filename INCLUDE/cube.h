@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 16:35:37 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/17 12:35:56 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,15 @@
 
 # define IMG_SIZE 64
 
+typedef struct s_keys {
+	int left;
+	int right;
+	int w;
+	int s;
+	int a;
+	int d;
+}				t_keys;
+
 typedef struct s_img {
 	void	*img;      // MLX image handle
 	char	*addr;     // pointer to pixel data
@@ -84,6 +93,7 @@ typedef struct s_data
 	t_point			cameraplane;
 	t_point			direction;
 	t_img			*mlx_img;
+	t_keys			keys;
 	void			*mlx_ptr;
 	void			*win_ptr;
 }				t_data;
@@ -107,6 +117,7 @@ void	check_map(t_data *data, char **map);
 void	get_map(char *file_name);
 
 //data.c
+t_img	*init_img();
 void	init_data(void);
 t_data	*get_data(void);
 

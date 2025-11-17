@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/14 13:52:02 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/17 12:35:29 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,10 +64,12 @@ void	display_window(t_data *data)
 	data->mlx_ptr = mlx_init();
 	if (!data->mlx_ptr)
 		ft_clean_exit(data, 1, "MLX init failed\n");
+	printf("after mlx_init: %p\n", data->mlx_ptr);
 	// data->win_ptr = mlx_new_window(data->mlx_ptr,
 	// 		(ft_strlen(data->map[0]) * IMG_SIZE),
 	// 		(ft_tablen(data->map) * IMG_SIZE), "Minimap");
 	data->win_ptr = mlx_new_window(data->mlx_ptr, SCREENWIDTH, SCREENHEIGHT, "Minimap");
+	printf("after mlx_new_window: %p\n", data->win_ptr);
 	if (!data->win_ptr)
 		ft_clean_exit(data, 1, "Window creation failed\n");
 	fil_textures_tab(data);
@@ -76,11 +78,12 @@ void	display_window(t_data *data)
 	{
 		//data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,
 		//	data->texture[i].path, &data->texture[i].width,
-		//	&data->texture[i].height);
-		data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,	data->texture[i].path, &data->texture[i].width, &data->texture[i].height);
-		if (!data->texture[i].ptr)
+		//	&data->texture[i].height)
+		data->texture[i].ptr = init_img();
+		data->texture[i].ptr->img = mlx_xpm_file_to_image(data->mlx_ptr,	data->texture[i].path, &data->texture[i].width, &data->texture[i].height);
+		if (!data->texture[i].ptr->img)
 			ft_clean_exit(data, 1, "Failed to load minimap texture");
-		data->texture[i].ptr->addr = mlx_get_data_addr(data->texture[i].ptr, &data->texture[i].ptr->bpp, &data->texture[i].ptr->line_len, &data->texture[i].ptr->endian);
+		data->texture[i].ptr->addr = mlx_get_data_addr(data->texture[i].ptr->img, &data->texture[i].ptr->bpp, &data->texture[i].ptr->line_len, &data->texture[i].ptr->endian);
 		init_pixels(&data->texture[i]);
 		i++;
 	}

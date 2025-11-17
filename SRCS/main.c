@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 16:48:59 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/17 12:45:12 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,32 +27,30 @@ void	verif_param(int argc, char **argv)
 	}
 }
 
-void	moving(int keycode, t_data *data)
+int on_keydown(int keycode, void *param)
 {
-	double	movex;
-	double	movey;
+    t_data *d = param;
 
-	movex = 0;
-	movey = 0;
-	if (keycode == KEY_W && data->map[(int)data->player_pos.y - 1][(int)data->player_pos.x] != '1')
-		movey -= 0.2;
-	if (keycode == KEY_A && data->map[(int)data->player_pos.y][(int)data->player_pos.x - 1] != '1')
-		movex -= 0.2;
-	if (keycode == KEY_S && data->map[(int)data->player_pos.y + 1][(int)data->player_pos.x] != '1')
-		movey += 0.2;
-	if (keycode == KEY_D && data->map[(int)data->player_pos.y][(int)data->player_pos.x + 1] != '1')
-		movex += 0.2;
-	data->player_pos.x += movex;
-	data->player_pos.y += movey;
+	//printf("PRESSED KEY\n");
+    if (keycode == KEY_LEFT)
+        d->keys.left = 1;
+    if (keycode == KEY_RIGHT)
+        d->keys.right = 1;
+    // ... W/S/A/D etc.
+    return 0;
 }
 
-int	key_hook(int keycode, t_data *data)
+int on_keyup(int keycode, void *param)
 {
-	moving(keycode, data);
-	if (keycode == KEY_ESC)
-		exit(0);
-	return (0);
+    t_data *d = param;
+
+    if (keycode == KEY_LEFT)
+        d->keys.left = 0;
+    if (keycode == KEY_RIGHT)
+        d->keys.right = 0;
+    return 0;
 }
+
 
 int	main(int arc, char **arv)
 {
@@ -66,8 +64,10 @@ int	main(int arc, char **arv)
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr, SCREENWIDTH, SCREENHEIGHT);
 	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);
 	//update_minimap(&data);
+	mlx_hook(data->win_ptr, 2, 1L<<0, on_keydown, data);
+	mlx_hook(data->win_ptr, 3, 1L<<1, on_keyup, data);
 	mlx_loop_hook(data->mlx_ptr, render_frame, data);
-	mlx_key_hook(data->win_ptr, key_hook, data);
+	///mlx_key_hook(data->win_ptr, key_hook, data);
 	//mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	// mlx_loop_hook(data->mlx_ptr, loop_hook, data);
 	mlx_loop(data->mlx_ptr);
