@@ -15,6 +15,9 @@ SRCS	+=	walls.c
 SRCS	+=	main.c
 SRCS	+=	minimap.c
 SRCS	+=	input.c
+SRCS	+=	raycasting.c
+SRCS	+=	bonus_monsters.c
+SRCS	+=	bonus_doors.c
 
 vpath	%.c	$(PATH_SRCS)
 

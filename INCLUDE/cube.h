@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 17:50:26 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/18 15:01:56 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@
 # include <sys/time.h>
 
 # define NBR_TEXTURES 7
+# define NBR_TEXTURES_BONUS 3
+
 // PATH TEXTURES
 # define GROUND_MINIMAP "TEXTURES/ground_mp.xpm"
 # define WALL_MINIMAP "TEXTURES/wall_mp.xpm"
@@ -30,6 +32,11 @@
 # define NORTH "TEXTURES/north.xpm"
 # define SOUTH "TEXTURES/south.xpm"
 # define WEST "TEXTURES/west.xpm"
+
+// BONUS TEXTURES
+# define MONSTER "TEXTURES/monsters.xpm"
+# define DOOR_CLOSED "TEXTURES/door_close.xpm"
+# define DOOR_OPEN "TEXTURES/door_open.xpm"
 
 // KEYBOARD_MOVES
 # define KEY_ESC 65307
@@ -50,24 +57,46 @@ typedef struct s_texture
 	void	*ptr;
 }				t_texture;
 
-
 typedef struct s_point
 {
 	double	x;
 	double	y;
 }				t_point;
 
+typedef struct s_monsters
+{
+	t_point	pos;
+	int		count;
+	//int		alive;
+}				t_monsters;
+
+typedef struct s_doors
+{
+	t_point	pos;
+	int		lock;
+	//int 	count;
+	char 	*enigma;
+	char 	*soluce;
+}				t_doors;
+
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
 	int				held_key;
+	unsigned long	last_update;
 	t_texture		texture[NBR_TEXTURES];
 	t_point			player_pos;
 	t_point			cameraplane;
 	t_point			direction;
 	void			*mlx_ptr;
 	void			*win_ptr;
+	//bonus
+	t_texture		texture_bonus[NBR_TEXTURES_BONUS];
+	/* bonus objects */
+	t_monsters			*tab_monsters;
+	 t_doors		*tab_doors;
+	 int			doors_count;
 }				t_data;
 
 //utils.c
@@ -103,5 +132,22 @@ void	update_minimap(t_data *data);
 
 //input.c
 int		key_hook(int keycode, t_data *data);
+int		key_press(int keycode, t_data *data);
+int		key_release(int keycode, t_data *data);
+
+//raycasting.c
+//int		raycasting(t_data *data);
+
+//bonus_monsters.c
+int		monster_count(t_data *data);
+void	monster_init(t_data *data);
+void	monsters_move(t_data *data);
+
+//bonus_doors.c
+void	init_enigma(t_data *data, int i);
+void	doors_init(t_data *data);
+int		open_door(t_data *data, int i);
+int		door_is_locked_at(t_data *data, int tx, int ty);
+int		door_index_at(t_data *data, int tx, int ty);
 
 #endif

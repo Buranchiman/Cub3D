@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 16:38:15 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/14 21:50:56 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,6 +55,18 @@ void 	clean_textures(t_data *data)
 		}
 		i++;
 	}
+	i = 0; //⚜️bonus⚜️
+	while (i < NBR_TEXTURES_BONUS)
+	{
+		if (data->texture_bonus[i].ptr)	
+			mlx_destroy_image(data->mlx_ptr, data->texture_bonus[i].ptr);
+		if (data->texture_bonus[i].path)
+		{
+			free(data->texture_bonus[i].path);
+			data->texture_bonus[i].path = NULL;
+		}
+		i++;
+	}//⚜️fin bonus⚜️
 }
 
 void	ft_clean_exit(t_data *data, int option, char *msg)

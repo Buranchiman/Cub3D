@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/14 16:30:12 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/17 15:23:19 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,16 @@ void fil_textures_tab(t_data *data)
 	if (data->texture[6].path)
 		free(data->texture[6].path);
 	data->texture[6].path = ft_strdup(WEST);
+	//⚜️bonus⚜️
+	if (data->texture_bonus[0].path)
+		free(data->texture_bonus[0].path);
+	data->texture_bonus[0].path = ft_strdup(MONSTER);
+	if (data->texture_bonus[1].path)
+		free(data->texture_bonus[1].path);
+	data->texture_bonus[1].path = ft_strdup(DOOR_CLOSED);
+	if (data->texture_bonus[2].path)
+		free(data->texture_bonus[2].path);
+	data->texture_bonus[2].path = ft_strdup(DOOR_OPEN);
 }
 
 void	display_window(t_data *data)
@@ -62,6 +72,18 @@ void	display_window(t_data *data)
 			ft_clean_exit(data, 1, "Failed to load minimap texture");
 		i++;
 	}
+	i = 0;
+	while (i < NBR_TEXTURES_BONUS)
+	{
+		data->texture_bonus[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,
+			data->texture_bonus[i].path, &n, &n);
+		if (!data->texture_bonus[i].ptr)
+		{
+			fprintf(stderr, "[Error] Failed to load bonus minimap texture: %s\n", data->texture_bonus[i].path);
+			ft_clean_exit(data, 1, "Failed to load bonus minimap texture");
+		}
+		i++;
+	}
 
 }
 
@@ -71,10 +93,6 @@ void	display_minimap(t_data *data)
 	int	y;
 
 	y = 0;
-	//int	tile_size = IMG_SIZE/8;
-	//int offset_x = (ft_strlen(data->map[0]) * IMG_SIZE) - (ft_strlen(data->map[0]) * tile_size) - 20;
-	//int offset_y = (ft_tablen(data->map) * IMG_SIZE) - (ft_tablen(data->map) * tile_size) - 20;  
-	//printf ("tile_size: %d, offset_x: %d, offset_y: %d\n", tile_size, offset_x, offset_y);
 	while (data->map[y])
 	{
 		x = 0;
@@ -82,14 +100,20 @@ void	display_minimap(t_data *data)
 		{
 			if (data->map[y][x] == '1')	
 				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->texture[0].ptr, x * IMG_SIZE/8, y * IMG_SIZE/8);
-			else if (data->map[y][x] == '0' || ft_strchr("NSWE", data->map[y][x]))
+					data->texture[0].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
+			//else if (data->map[y][x] == '0' || ft_strchr("NSWE", data->map[y][x])) ⚜️bonus⚜️
+			else if (data->map[y][x] == '0' || ft_strchr("NSWEM", data->map[y][x]))
 				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->texture[1].ptr, x * IMG_SIZE/8, y * IMG_SIZE/8);
+					data->texture[1].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
+			//else if (data->map[y][x] == 'D' && data->tab_doors->lock == 1)
+			//		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+			//		data->texture_bonus[1].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
+			//else if (data->map[y][x] == 'D' && data->tab_doors->lock == 0)
+			//	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
+			//		data->texture_bonus[2].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
 			if (y == (int)data->player_pos.y && x == (int)data->player_pos.x)
 				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->texture[2].ptr, x * IMG_SIZE/8, y * IMG_SIZE/8);
-			//draw_player_on_minimap(data, x, y);
+					data->texture[2].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
 			x++;
 		}
 		y++;
