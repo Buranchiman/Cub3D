@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 12:24:34 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 14:36:26 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,7 @@ int	main(int arc, char **arv)
 	///mlx_key_hook(data->win_ptr, key_hook, data);
 	//mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	// mlx_loop_hook(data->mlx_ptr, loop_hook, data);
+	data->lasttime = get_time();
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);
 	return (0);

@@ -6,11 +6,19 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/13 16:45:18 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 14:56:34 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
+
+double	get_time(void)
+{
+	struct timeval	tv;
+
+	gettimeofday(&tv, NULL);
+	return (tv.tv_sec + tv.tv_usec / 1000000.0);
+}
 
 size_t	ft_tablen(char **tab)
 {
@@ -75,7 +83,7 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 	exit(EXIT_SUCCESS);
 }
 
-int quit_with_int(t_data *data)
+int	quit_with_int(t_data *data)
 {
 	ft_clean_exit(data, 0, "See you soon👋");
 	return (0);

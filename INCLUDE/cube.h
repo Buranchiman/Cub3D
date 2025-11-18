@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 12:59:47 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 14:29:14 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,11 +95,14 @@ typedef struct s_data
 	t_point			direction;
 	t_img			*mlx_img;
 	t_keys			keys;
+	double			lasttime;
+	double			deltatime;
 	void			*mlx_ptr;
 	void			*win_ptr;
 }				t_data;
 
 //utils.c
+double	get_time(void);
 int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 size_t	ft_tablen(char **tab);

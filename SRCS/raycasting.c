@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 13:06:31 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:01:56 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 
 void	update_player(t_data *d)
 {
-	double	rotSpeed = 0.15; // radians per frame (tune this)
-	double	stepDistance = 0.1;
+	double	rotSpeed = 3.0 * d->deltatime; // radians per frame (tune this)
+	double	moveSpeed = 2.0 * d->deltatime;
 	double	tmpPosX = 0;
 	double	tmpPosY = 0;
 	// rotate right
@@ -61,23 +61,23 @@ void	update_player(t_data *d)
 	tmpPosY = d->player_pos.y;
 	if (d->keys.w)
 	{
-		d->player_pos.x += d->direction.x * stepDistance;
-		d->player_pos.y += d->direction.y * stepDistance;
+		d->player_pos.x += d->direction.x * moveSpeed;
+		d->player_pos.y += d->direction.y * moveSpeed;
 	}
 	if (d->keys.s)
 	{
-		d->player_pos.x -= d->direction.x * stepDistance;
-		d->player_pos.y -= d->direction.y * stepDistance;
+		d->player_pos.x -= d->direction.x * moveSpeed;
+		d->player_pos.y -= d->direction.y * moveSpeed;
 	}
 	if (d->keys.a)
 	{
-		d->player_pos.x += -d->direction.y * stepDistance;
-		d->player_pos.y += d->direction.x * stepDistance;
+		d->player_pos.x += -d->direction.y * moveSpeed;
+		d->player_pos.y += d->direction.x * moveSpeed;
 	}
 	if (d->keys.d)
 	{
-		d->player_pos.x += d->direction.y * stepDistance;
-		d->player_pos.y += -d->direction.x * stepDistance;
+		d->player_pos.x += d->direction.y * moveSpeed;
+		d->player_pos.y += -d->direction.x * moveSpeed;
 	}
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1') //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
 	{
@@ -192,12 +192,12 @@ int	raycasting(t_data *data)
 			drawEnd = h - 1;
 
 		for (int y = 0; y < drawStart; ++y)
-    		put_px(data, x, y, ceiling_color);
+			put_px(data, x, y, ceiling_color);
 		 //texturing calculations
-		int texNum = /*data->map[mapX][mapY]*/ 0 ; //1 subtracted from it so that texture 0 can be used!
+		int	texNum = /*data->map[mapX][mapY]*/ 0 ; //1 subtracted from it so that texture 0 can be used!
 
 		 //calculate value of wallX
-		double wallX; //where exactly the wall was hit
+		double	wallX; //where exactly the wall was hit
 		if (side == 0)
 			wallX = data->player_pos.y + perpWallDist * rayDirY;
 		else
@@ -206,9 +206,9 @@ int	raycasting(t_data *data)
 
 		 //x coordinate on the texture
 		int texX = (int)(wallX * (double)data->texture[texNum].width);
-		if(side == 0 && rayDirX > 0)
+		if (side == 0 && rayDirX > 0)
 			texX = data->texture[texNum].width - texX - 1;
-		if(side == 1 && rayDirY < 0)
+		if (side == 1 && rayDirY < 0)
 			texX = data->texture[texNum].width - texX - 1;
 
 		 // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
@@ -263,10 +263,17 @@ int	raycasting(t_data *data)
 
 int	render_frame(void *param)
 {
-	t_data *data;
+	t_data	*data;
+	double	now;
 
 	(void)param;
 	data = get_data();
+	now = get_time();
+	data->deltatime = now - data->lasttime;
+	data->lasttime = now;
+	printf("delta time is %f\n", data->deltatime);
+	if (data->deltatime > 0.05)
+		data->deltatime = 0.05;
 	update_player(data);
 	raycasting(data);
 	//ft_printf(1, "put image to window reached\n");
