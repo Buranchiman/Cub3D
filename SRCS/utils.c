@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 14:56:34 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:58:57 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,19 @@ int	is_all_space_n_ones(char *string)
 	return (1);
 }
 
+void	free_img(t_img *img)
+{
+	t_data	*d;
+
+	d = get_data();
+	if (img)
+	{
+		if (img->img)
+			mlx_destroy_image(d->mlx_ptr, img->img);
+		free (img);
+	}
+}
+
 void	ft_clean_exit(t_data *data, int option, char *msg)
 {
 	int i;
@@ -56,15 +69,19 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		ft_clear_tab(data->map);
 	if (data->buffer)
 		free(data->buffer);
+	if (data->mlx_img)
+		free_img(data->mlx_img);
 	while (i < NBR_TEXTURES)
 	{
 		if (data->texture[i].ptr)
-			mlx_destroy_image(data->mlx_ptr, data->texture[i].ptr);
+			free_img(data->texture[i].ptr);
 		if (data->texture[i].path)
 		{
 			free(data->texture[i].path);
 			data->texture[i].path = NULL;
 		}
+		if (data->texture[i].pixels)
+			free(data->texture[i].pixels);
 		i++;
 	}
 	if (msg && option == 1)

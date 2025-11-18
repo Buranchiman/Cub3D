@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 14:29:14 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:35:17 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,6 +51,14 @@
 
 # define IMG_SIZE 64
 
+typedef enum e_cardinal
+{
+	CARDNORTH,
+	CARDSOUTH,
+	CARDEAST,
+	CARDWEST,
+}			t_cardinal;
+
 typedef struct s_keys {
 	int left;
 	int right;
@@ -89,6 +97,7 @@ typedef struct s_data
 	char			**map;
 	char			*buffer;
 	int				held_key;
+	int				cardinal;
 	t_texture		texture[NBR_TEXTURES];
 	t_point			player_pos;
 	t_point			cameraplane;

@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 14:36:26 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 15:50:00 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,8 @@ int	on_keyup(int keycode, void *param)
 {
 	t_data	*d = param;
 
+	if (keycode == KEY_ESC)
+		ft_clean_exit(get_data(), 0, "See you soon👋");
 	if (keycode == KEY_LEFT)
 		d->keys.left = 0;
 	else if (keycode == KEY_RIGHT)

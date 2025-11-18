@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 15:01:56 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/18 16:03:45 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	update_player(t_data *d)
 	double	tmpPosX = 0;
 	double	tmpPosY = 0;
 	// rotate right
-	if (d->keys.right)
+	if (d->keys.left) //j'ai inverse les touches (peut-etre a investiguer plus en profondeur)
 	{
 		double oldDirX = d->direction.x;
 		d->direction.x = d->direction.x * cos(-rotSpeed)
@@ -43,7 +43,7 @@ void	update_player(t_data *d)
 			+ d->cameraplane.y * cos(-rotSpeed);
 	}
 	// rotate left
-	if (d->keys.left)
+	if (d->keys.right)
 	{
 		double oldDirX = d->direction.x;
 		d->direction.x = d->direction.x * cos(rotSpeed)
@@ -69,12 +69,12 @@ void	update_player(t_data *d)
 		d->player_pos.x -= d->direction.x * moveSpeed;
 		d->player_pos.y -= d->direction.y * moveSpeed;
 	}
-	if (d->keys.a)
+	if (d->keys.d)
 	{
 		d->player_pos.x += -d->direction.y * moveSpeed;
 		d->player_pos.y += d->direction.x * moveSpeed;
 	}
-	if (d->keys.d)
+	if (d->keys.a)
 	{
 		d->player_pos.x += d->direction.y * moveSpeed;
 		d->player_pos.y += -d->direction.x * moveSpeed;
@@ -157,12 +157,20 @@ int	raycasting(t_data *data)
 				sideDistX += deltaDistX;
 				mapX += stepX;
 				side = 0;
+				if (stepX == 1)
+					data->cardinal = CARDEAST;
+				else
+					data->cardinal = CARDWEST;
 			}
 			else
 			{
 				sideDistY += deltaDistY;
 				mapY += stepY;
 				side = 1;
+				if (stepY == 1)
+					data->cardinal = CARDNORTH;
+				else
+					data->cardinal = CARDSOUTH;
 			}
 			//Check if ray has hit a wall
 			if(data->map[mapY][mapX] == '1')
@@ -194,7 +202,7 @@ int	raycasting(t_data *data)
 		for (int y = 0; y < drawStart; ++y)
 			put_px(data, x, y, ceiling_color);
 		 //texturing calculations
-		int	texNum = /*data->map[mapX][mapY]*/ 0 ; //1 subtracted from it so that texture 0 can be used!
+		int	texNum = /*data->map[mapX][mapY]*/ data->cardinal ; //1 subtracted from it so that texture 0 can be used!
 
 		 //calculate value of wallX
 		double	wallX; //where exactly the wall was hit
@@ -271,7 +279,7 @@ int	render_frame(void *param)
 	now = get_time();
 	data->deltatime = now - data->lasttime;
 	data->lasttime = now;
-	printf("delta time is %f\n", data->deltatime);
+	//printf("delta time is %f\n", data->deltatime);
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
 	update_player(data);
