@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/17 12:35:56 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/18 12:59:47 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,6 +47,7 @@
 # define TEXHEIGHT 64
 # define SCREENWIDTH 1900
 # define SCREENHEIGHT 1060
+# define CLOSEST 0.1 //closest you can get to a wall
 
 # define IMG_SIZE 64
 

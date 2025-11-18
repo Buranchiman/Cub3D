@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/17 12:45:12 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/18 12:24:34 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,28 +27,42 @@ void	verif_param(int argc, char **argv)
 	}
 }
 
-int on_keydown(int keycode, void *param)
+int	on_keydown(int keycode, void *param)
 {
-    t_data *d = param;
+	t_data	*d = param;
 
-	//printf("PRESSED KEY\n");
-    if (keycode == KEY_LEFT)
-        d->keys.left = 1;
-    if (keycode == KEY_RIGHT)
-        d->keys.right = 1;
-    // ... W/S/A/D etc.
-    return 0;
+	if (keycode == KEY_LEFT)
+		d->keys.left = 1;
+	else if (keycode == KEY_RIGHT)
+		d->keys.right = 1;
+	else if (keycode == KEY_W)
+		d->keys.w = 1;
+	else if (keycode == KEY_A)
+		d->keys.a = 1;
+	else if (keycode == KEY_S)
+		d->keys.s = 1;
+	else if (keycode == KEY_D)
+		d->keys.d = 1;
+	return (0);
 }
 
-int on_keyup(int keycode, void *param)
+int	on_keyup(int keycode, void *param)
 {
-    t_data *d = param;
+	t_data	*d = param;
 
-    if (keycode == KEY_LEFT)
-        d->keys.left = 0;
-    if (keycode == KEY_RIGHT)
-        d->keys.right = 0;
-    return 0;
+	if (keycode == KEY_LEFT)
+		d->keys.left = 0;
+	else if (keycode == KEY_RIGHT)
+		d->keys.right = 0;
+	else if (keycode == KEY_W)
+		d->keys.w = 0;
+	else if (keycode == KEY_A)
+		d->keys.a = 0;
+	else if (keycode == KEY_S)
+		d->keys.s = 0;
+	else if (keycode == KEY_D)
+		d->keys.d = 0;
+	return (0);
 }
 
 

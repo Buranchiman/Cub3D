@@ -3,17 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/17 12:54:53 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/18 13:06:31 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
 
-static inline void put_px(t_data *d, int x, int y, unsigned int argb)
+static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 {
 	if ((unsigned)x >= (unsigned)SCREENWIDTH || (unsigned)y >= (unsigned)SCREENHEIGHT)
 		return;
@@ -21,42 +21,69 @@ static inline void put_px(t_data *d, int x, int y, unsigned int argb)
 	*(unsigned int *)p = argb;
 }
 
-void    update_player(t_data *d)
+void	update_player(t_data *d)
 {
-    double rotSpeed = 0.15; // radians per frame (tune this)
+	double	rotSpeed = 0.15; // radians per frame (tune this)
+	double	stepDistance = 0.1;
+	double	tmpPosX = 0;
+	double	tmpPosY = 0;
+	// rotate right
+	if (d->keys.right)
+	{
+		double oldDirX = d->direction.x;
+		d->direction.x = d->direction.x * cos(-rotSpeed)
+			- d->direction.y * sin(-rotSpeed);
+		d->direction.y = oldDirX * sin(-rotSpeed)
+			+ d->direction.y * cos(-rotSpeed);
 
-    // rotate right
-    if (d->keys.right)
-    {
-        double oldDirX = d->direction.x;
-        d->direction.x = d->direction.x * cos(-rotSpeed)
-                       - d->direction.y * sin(-rotSpeed);
-        d->direction.y = oldDirX * sin(-rotSpeed)
-                       + d->direction.y * cos(-rotSpeed);
+		double oldPlaneX = d->cameraplane.x;
+		d->cameraplane.x = d->cameraplane.x * cos(-rotSpeed)
+			- d->cameraplane.y * sin(-rotSpeed);
+		d->cameraplane.y = oldPlaneX * sin(-rotSpeed)
+			+ d->cameraplane.y * cos(-rotSpeed);
+	}
+	// rotate left
+	if (d->keys.left)
+	{
+		double oldDirX = d->direction.x;
+		d->direction.x = d->direction.x * cos(rotSpeed)
+			- d->direction.y * sin(rotSpeed);
+		d->direction.y = oldDirX * sin(rotSpeed)
+			+ d->direction.y * cos(rotSpeed);
 
-        double oldPlaneX = d->cameraplane.x;
-        d->cameraplane.x = d->cameraplane.x * cos(-rotSpeed)
-                         - d->cameraplane.y * sin(-rotSpeed);
-        d->cameraplane.y = oldPlaneX * sin(-rotSpeed)
-                         + d->cameraplane.y * cos(-rotSpeed);
-    }
-    // rotate left
-    if (d->keys.left)
-    {
-        double oldDirX = d->direction.x;
-        d->direction.x = d->direction.x * cos(rotSpeed)
-                       - d->direction.y * sin(rotSpeed);
-        d->direction.y = oldDirX * sin(rotSpeed)
-                       + d->direction.y * cos(rotSpeed);
-
-        double oldPlaneX = d->cameraplane.x;
-        d->cameraplane.x = d->cameraplane.x * cos(rotSpeed)
-                         - d->cameraplane.y * sin(rotSpeed);
-        d->cameraplane.y = oldPlaneX * sin(rotSpeed)
-                         + d->cameraplane.y * cos(rotSpeed);
-    }
-
-    // (here you can also handle W/S/A/D movement)
+		double oldPlaneX = d->cameraplane.x;
+		d->cameraplane.x = d->cameraplane.x * cos(rotSpeed)
+			- d->cameraplane.y * sin(rotSpeed);
+		d->cameraplane.y = oldPlaneX * sin(rotSpeed)
+			+ d->cameraplane.y * cos(rotSpeed);
+	}
+	tmpPosX = d->player_pos.x;
+	tmpPosY = d->player_pos.y;
+	if (d->keys.w)
+	{
+		d->player_pos.x += d->direction.x * stepDistance;
+		d->player_pos.y += d->direction.y * stepDistance;
+	}
+	if (d->keys.s)
+	{
+		d->player_pos.x -= d->direction.x * stepDistance;
+		d->player_pos.y -= d->direction.y * stepDistance;
+	}
+	if (d->keys.a)
+	{
+		d->player_pos.x += -d->direction.y * stepDistance;
+		d->player_pos.y += d->direction.x * stepDistance;
+	}
+	if (d->keys.d)
+	{
+		d->player_pos.x += d->direction.y * stepDistance;
+		d->player_pos.y += -d->direction.x * stepDistance;
+	}
+	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1') //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
+	{
+		d->player_pos.x = tmpPosX;
+		d->player_pos.y = tmpPosY;
+	}
 }
 
 int	raycasting(t_data *data)
