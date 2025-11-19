@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 21:53:33 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/19 17:32:54 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,26 +27,61 @@ void	verif_param(int argc, char **argv)
 	}
 }
 
-int	loop_hook(t_data *data)
+int	on_keydown(int keycode, void *param)
 {
 	unsigned long	current;
 	struct timeval	tv;
+	t_data	*d = param;
 
 	gettimeofday(&tv, NULL);
 	current = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	if (current - data->last_update < 120UL)//120UL vaut 120 milliseconds
+	if (current - d->last_update < 120UL)//120UL vaut 120 milliseconds
 		return (0);
 	else
 	{
 		//⚜️bonus⚜️
-		monsters_move(data);
-		data->last_update = current;
-		if (data->held_key)
-			key_hook(data->held_key, data);
-	//	data->last_update = current;
+		monsters_move(d);
+		d->last_update = current;
+		if (d->held_key)
+			key_hook(d->held_key, d);
+	//	d->last_update = current;
 	}
+	if (keycode == KEY_LEFT)
+		d->keys.left = 1;
+	else if (keycode == KEY_RIGHT)
+		d->keys.right = 1;
+	else if (keycode == KEY_W)
+		d->keys.w = 1;
+	else if (keycode == KEY_A)
+		d->keys.a = 1;
+	else if (keycode == KEY_S)
+		d->keys.s = 1;
+	else if (keycode == KEY_D)
+		d->keys.d = 1;
 	return (0);
 }
+
+int	on_keyup(int keycode, void *param)
+{
+	t_data	*d = param;
+
+	if (keycode == KEY_ESC)
+		ft_clean_exit(get_data(), 0, "See you soon👋");
+	if (keycode == KEY_LEFT)
+		d->keys.left = 0;
+	else if (keycode == KEY_RIGHT)
+		d->keys.right = 0;
+	else if (keycode == KEY_W)
+		d->keys.w = 0;
+	else if (keycode == KEY_A)
+		d->keys.a = 0;
+	else if (keycode == KEY_S)
+		d->keys.s = 0;
+	else if (keycode == KEY_D)
+		d->keys.d = 0;
+	return (0);
+}
+
 
 int	main(int arc, char **arv)
 {
@@ -57,12 +92,13 @@ int	main(int arc, char **arv)
 	data = get_data();
 	display_window(data);
 	display_minimap(data);
+	data->lasttime = get_time();
 	//system("mpg123 --loop -1 -q musique1.mp3 &"); //add music
-	//mlx_key_hook(data->win_ptr, key_hook, data);
-	mlx_hook(data->win_ptr, 2, 1L<<0, key_press, data);
-	mlx_hook(data->win_ptr, 3, 1L<<1, key_release, data);
-	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
-	mlx_loop_hook(data->mlx_ptr, loop_hook, data);
+	data->mlx_img->img = mlx_new_image(data->mlx_ptr, SCREENWIDTH, SCREENHEIGHT);
+	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);
+	mlx_hook(data->win_ptr, 2, 1L<<0, on_keydown, data);
+	mlx_hook(data->win_ptr, 3, 1L<<1, on_keyup, data);
+	mlx_loop_hook(data->mlx_ptr, render_frame, data);
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);
 	return (0);

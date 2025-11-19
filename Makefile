@@ -11,6 +11,7 @@ SRCS	+=	checkmap.c
 SRCS	+=	checktexture.c
 SRCS	+=	data.c
 SRCS	+=	utils.c
+SRCS	+=	raycasting.c
 SRCS	+=	walls.c
 SRCS	+=	main.c
 SRCS	+=	minimap.c

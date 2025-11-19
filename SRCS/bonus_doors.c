@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/11/19 16:31:15 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/19 17:27:20 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	door_is_locked_at(t_data *data, int tx, int ty)
 	int i;
 
 	if (!data->tab_doors || data->doors_count <= 0)
-		return (1);
+		return (0);
 	i = 0;
 	while (i < data->doors_count)
 	{
@@ -77,7 +77,7 @@ int	door_is_locked_at(t_data *data, int tx, int ty)
 			return (data->tab_doors[i].lock);
 		i++;
 	}
-	return (1);
+	return (0);
 }
 
 int	door_index_at(t_data *data, int tx, int ty)

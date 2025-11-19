@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/18 14:13:07 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/19 16:45:16 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	import_texture(int index, int which, char *line)
 		count ++;
 	if (line[count + index])
 	{
-		printf("Error\nTexture format incorrect\n");
+		ft_clean_exit(get_data(), 1, "Error\nTexture format incorrect\n");
 		return (1);
 	}
 	if (data->texture[which].path)
@@ -78,6 +78,8 @@ int	read_textures(char ***map)
 			return (1);
 		i++;
 	}
+	//printf("%d textures have been read\n", i);
+	// display_texture();
 	take_texture_out(map, i);
 	return (0);
 }
