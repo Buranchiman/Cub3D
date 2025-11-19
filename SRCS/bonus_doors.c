@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/11/18 14:39:02 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/19 16:31:15 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void init_enigma(t_data *data, int i)
 		}
 		else if (i == 1)
 		{
-			data->tab_doors[i].enigma = "T - S = R | R + T = M | S + S = R | S + S + S = ?";
-			data->tab_doors[i].soluce = "M";
+			data->tab_doors[i].enigma = "T - S = R | S + S = R | S + S + S = ?";
+			data->tab_doors[i].soluce = "T";
 		}
 		else
 		{
@@ -98,18 +98,19 @@ int	door_index_at(t_data *data, int tx, int ty)
 
 int	open_door(t_data *data, int i)
 {
-	char user_input[100];
+	char *line;
 
 	if (data->tab_doors[i].lock == 0)
 		return (0);
 	if (data->tab_doors[i].lock == 1)
-		printf("[The door are locked]\n");
+		printf("[The door is locked]\n");
 	printf("[It's written on it: %s]\n", data->tab_doors[i].enigma);
-	scanf("%99s", user_input);
-	if (ft_strncmp(user_input, data->tab_doors[i].soluce, 100) == 0)
+	line = get_next_line(0);
+	line[ft_strlen(line) - 1] = '\0';
+	if (ft_strncmp(line, data->tab_doors[i].soluce, 100) == 0)
 	{
 		data->tab_doors[i].lock = 0;
-		printf("*A incomfortable sound come from the door*\n");
+		printf("*An uncomfortable sound come from the door*\n");
 		return (1);
 	}
 	else
@@ -143,15 +144,6 @@ void	doors_init(t_data *data)
 				init_enigma(data, i);
 				i++;
 			}
-			//if (data->map[y][x] == 'D')
-			//{
-			//	data->tab_doors[j].pos.x = (double)x;
-			//	data->tab_doors[j].pos.y = (double)y;
-			//	data->tab_doors[j].lock = 1;
-			//	data->tab_doors[j].enigma = NULL;
-			//	data->tab_doors[j].soluce = NULL;
-			//	j++;
-			//}
 			x++;
 		}
 		y++;
