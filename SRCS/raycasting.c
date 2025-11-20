@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/19 17:33:13 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/20 18:07:18 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,9 +291,10 @@ int	render_frame(void *param)
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
 	update_player(data);
-	update_minimap(data);
 	raycasting(data);
-	//ft_printf(1, "put image to window reached\n");
+	// draw main frame first
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img->img, 0, 0);
+	// then overlay the minimap on top
+	update_minimap(data);
 	return (0);
 }

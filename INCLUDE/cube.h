@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/19 17:31:28 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/20 18:25:52 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,7 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 7
-# define NBR_TEXTURES_BONUS 3
+# define NBR_TEXTURES 10
 
 // PATH TEXTURES
 # define GROUND_MINIMAP "TEXTURES/ground_mp.xpm"
@@ -32,8 +31,6 @@
 # define NORTH "TEXTURES/north.xpm"
 # define SOUTH "TEXTURES/south.xpm"
 # define WEST "TEXTURES/west.xpm"
-
-// BONUS TEXTURES
 # define MONSTER "TEXTURES/monsters.xpm"
 # define DOOR_CLOSED "TEXTURES/door_close.xpm"
 # define DOOR_OPEN "TEXTURES/door_open.xpm"
@@ -132,11 +129,9 @@ typedef struct s_data
 	void			*mlx_ptr;
 	void			*win_ptr;
 	//bonus
-	t_texture		texture_bonus[NBR_TEXTURES_BONUS];
-	/* bonus objects */
-	t_monsters			*tab_monsters;
-	 t_doors		*tab_doors;
-	 int			doors_count;
+	t_monsters		*tab_monsters;
+	t_doors			*tab_doors;
+	int				doors_count;
 }				t_data;
 
 //utils.c
@@ -167,6 +162,7 @@ t_data	*get_data(void);
 //raycasting.c
 int		raycasting(t_data *data);
 int		render_frame(void *param);
+
 
 //walls.c
 int		vertical_walls(char *line);
