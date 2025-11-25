@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_monsters.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:01:28 by manon             #+#    #+#             */
-/*   Updated: 2025/11/21 20:38:45 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/25 17:51:14 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,8 +90,10 @@ void	valid_moves(t_data *data, t_point tab_monster_tmp, int i)
 			return ;
 		j++;
 	}
+	data->map[(int)data->tab_monsters[i].pos.y][(int)data->tab_monsters[i].pos.x] = '0';
 	data->tab_monsters[i].pos.x = tab_monster_tmp.x;
 	data->tab_monsters[i].pos.y = tab_monster_tmp.y;
+	data->map[(int)data->tab_monsters[i].pos.y][(int)data->tab_monsters[i].pos.x] = 'M';
 	if (fabs(data->player_pos.x - data->tab_monsters[i].pos.x) < 0.3
 		&& fabs(data->player_pos.y - data->tab_monsters[i].pos.y) < 0.3)
 		ft_clean_exit(data, 0, "YOU'RE DEAD!💀");

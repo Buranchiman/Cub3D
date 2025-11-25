@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/25 17:09:17 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/25 17:28:54 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,43 @@ void	read_all_file(char *file_name, t_data *data)
 int	get_player(char **map, int i, int j)
 {
 	t_data	*data;
+	char	c;
 
 	data = get_data();
-	if (ft_strchr("NSWE", map[j][i]))
+	c = map[j][i];
+	if (ft_strchr("NSWE", c))
 	{
-		//printf("in get player coordinates are x:%d, y:%d\n", i, j);
-		data->player_pos.x = i;
-		data->player_pos.y = j;
+		data->player_pos.x = i + 0.5;
+		data->player_pos.y = j + 0.5;
 		map[j][i] = '0';
-		if (map[j][i] == 'N')
-			data->direction.y = 1;
-		else if (map[j][i] == 'S')
-			data->direction.y = -1;
-		else if (map[j][i] == 'E')
-			data->direction.x = 1;
-		else if (map[j][i] == 'O')
-			data->direction.x = -1;
+		if (c == 'N')
+		{
+			data->direction.x   = 0.0;
+			data->direction.y   = -1.0;
+			data->cameraplane.x = 0.66;
+			data->cameraplane.y = 0.0;
+		}
+		else if (c == 'S')
+		{
+			data->direction.x   = 0.0;
+			data->direction.y   = 1.0;
+			data->cameraplane.x = -0.66;
+			data->cameraplane.y = 0.0;
+		}
+		else if (c == 'E')
+		{
+			data->direction.x   = 1.0;
+			data->direction.y   = 0.0;
+			data->cameraplane.x = 0.0;
+			data->cameraplane.y = 0.66;
+		}
+		else if (c == 'W')
+		{
+			data->direction.x   = -1.0;
+			data->direction.y   = 0.0;
+			data->cameraplane.x = 0.0;
+			data->cameraplane.y = -0.66;
+		}
 		return (1);
 	}
 	return (0);
@@ -59,8 +80,8 @@ int	get_player(char **map, int i, int j)
 
 void	check_borders(t_data *data, char **map, int pcount)
 {
-	int				j;
-	int				i;
+	int	j;
+	int	i;
 
 	if (!is_all_space_n_ones(map[0]))
 		ft_clean_exit(data, 1, "Missing outside wall (top)");
@@ -72,7 +93,8 @@ void	check_borders(t_data *data, char **map, int pcount)
 		i = 0;
 		while (map[j][i])
 		{
-			if (!ft_strchr("01NSWEMD ", map[j][i]))
+			//if (!ft_strchr("01NSWE ", map[j][i])) ⚜️bonus⚜️
+			if (!ft_strchr("01NSWE MD", map[j][i]))
 				ft_clean_exit(data, 1, "Map char unvalid");
 			pcount += get_player(map, i, j);
 			if (leak_check(map, i, j))
@@ -112,5 +134,7 @@ void	get_map(char *file_name)
 	}
 	read_textures(&data->map);
 	check_map(data, data->map);
-	//printf("player is at x:%f, y%f\n", data->player_pos.x, data->player_pos.y);
+	//⚜️bonus⚜️
+	monster_init(data);
+	doors_init(data);
 }

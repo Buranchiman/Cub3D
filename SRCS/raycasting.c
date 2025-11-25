@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/25 17:07:25 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/25 18:06:43 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 	*(unsigned int *)p = argb;
 }
 
-static int	fetch_texture(char c)
+static int	fetch_texture(char c, int x, int y)
 {
 	t_data	*d;
 
@@ -29,7 +29,8 @@ static int	fetch_texture(char c)
 	if (c == 'D')
 	{
 		int	idx;
-		idx = door_index_at(d, (int)d->player_pos.x, (int)d->player_pos.y);
+		idx = door_index_at(d, x, y);
+		printf("index of door is %d\n", idx);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
 			return (8);
 		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
@@ -202,7 +203,7 @@ int	raycasting(t_data *data)
 			//Check if ray has hit a wall
 			if(data->map[mapY][mapX] != '0')
 			{
-				data->cardinal = fetch_texture(data->map[mapY][mapX]);
+				data->cardinal = fetch_texture(data->map[mapY][mapX], mapX, mapY);
 				hit = 1;
 			}
 		}
