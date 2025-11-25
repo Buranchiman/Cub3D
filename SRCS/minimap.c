@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/21 21:56:09 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/25 18:30:30 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,19 +105,23 @@ void	display_window(t_data *data)
 
 static inline void	put_pixel_img(t_data *d, int x, int y, unsigned int color)
 {
+	char *p;
+
 	if (!d || !d->mlx_img || !d->mlx_img->addr)
 		return;
 	if ((unsigned)x >= (unsigned)SCREENWIDTH || (unsigned)y >= (unsigned)SCREENHEIGHT)
 		return;
-	char *p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
+	p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
 	*(unsigned int *)p = color;
 }
 
 static void	draw_tex_on_img(t_data *d, t_texture *tex, int px, int py, int size)
 {
+	int sy;
+
 	if (!d || !tex || !tex->pixels)
 		return;
-	int sy = 0;
+	sy = 0;
 	while (sy < size)
 	{
 		int sx = 0;
@@ -140,8 +144,9 @@ static void	draw_tex_on_img(t_data *d, t_texture *tex, int px, int py, int size)
 
 void	display_minimap(t_data *data)
 {
-	int x, y;
-	const int size = IMG_SIZE / 8;
+	int			x;
+	int			y;
+	const int	size = IMG_SIZE / 8;
 
 	if (!data || !data->mlx_img || !data->mlx_img->addr)
 		return;

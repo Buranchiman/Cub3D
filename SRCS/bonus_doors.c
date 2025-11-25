@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/11/21 20:42:31 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/25 17:26:02 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,15 +106,20 @@ int	open_door(t_data *data, int i)
 		printf("[The door is locked]\n");
 	printf("[It's written on it: %s]\n", data->tab_doors[i].enigma);
 	line = get_next_line(0);
-	line[ft_strlen(line) - 1] = '\0';
+	if (!line)
+		return (printf("[No input]\n"), 0);
+	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
+		line[ft_strlen(line) - 1] = '\0';
 	if (ft_strncmp(line, data->tab_doors[i].soluce, 100) == 0)
 	{
 		data->tab_doors[i].lock = 0;
 		printf("*An uncomfortable sound come from the door*\n");
+		free(line);
 		return (1);
 	}
 	else
 		printf("[The door doesn't move.]\n");
+	free(line);
 	return (0);
 }
 
