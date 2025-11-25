@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/21 22:29:06 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/25 17:07:25 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,25 @@ static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 		return;
 	char *p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
 	*(unsigned int *)p = argb;
+}
+
+static int	fetch_texture(char c)
+{
+	t_data	*d;
+
+	d = get_data();
+	if (c == 'D')
+	{
+		int	idx;
+		idx = door_index_at(d, (int)d->player_pos.x, (int)d->player_pos.y);
+		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
+			return (8);
+		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
+			return (9);
+	}
+	else if (c == 'M')
+		return (7);
+	return (d->cardinal);
 }
 
 void	update_player(t_data *d)
@@ -181,8 +200,11 @@ int	raycasting(t_data *data)
 					data->cardinal = CARDSOUTH;
 			}
 			//Check if ray has hit a wall
-			if(data->map[mapY][mapX] == '1')
+			if(data->map[mapY][mapX] != '0')
+			{
+				data->cardinal = fetch_texture(data->map[mapY][mapX]);
 				hit = 1;
+			}
 		}
 
 		 //Calculate distance of perpendicular ray (Euclidean distance would give fisheye effect!)
