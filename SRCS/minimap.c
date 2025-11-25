@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/20 18:25:07 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/21 21:56:09 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,34 +35,28 @@ void	fil_textures_tab(t_data *data)
 	if (data->texture[6].path)
 		free(data->texture[6].path);
 	data->texture[6].path = ft_strdup(WALL_MINIMAP);
-	//⚜️bonus⚜️
-	if (data->texture[0].path)
-		free(data->texture[0].path);
-	data->texture[0].path = ft_strdup(MONSTER);
-	if (data->texture[1].path)
-		free(data->texture[1].path);
-	data->texture[1].path = ft_strdup(DOOR_CLOSED);
-	if (data->texture[2].path)
-		free(data->texture[2].path);
-	data->texture[2].path = ft_strdup(DOOR_OPEN);
-	//data->texture[6].path = ft_strdup(WALL_MINIMAP);
+	data->texture[7].path = ft_strdup(MONSTER);
+	data->texture[8].path = ft_strdup(DOOR_CLOSED);
+	data->texture[9].path = ft_strdup(DOOR_OPEN);
 }
 
 int	init_pixels(t_texture *tex)
 {
 	int	bytes_per_pixel;
 
-	bytes_per_pixel = tex->ptr->bpp / 8;           // usually 4
+	bytes_per_pixel = tex->ptr->bpp / 8;
 	tex->pixels = malloc(tex->width * tex->height * sizeof(uint32_t));
 	if (!tex->pixels)
 		return (1);
-	for (int y = 0; y < tex->height; y++)
+	int y = 0;
+	while (y < tex->height)
 	{
 		memcpy(
-			tex->pixels + y * tex->width,                 // destination
-			tex->ptr->addr + y * tex->ptr->line_len,      // source row in MLX image
-			tex->width * bytes_per_pixel                  // copy one row of pixels
+			tex->pixels + y * tex->width,
+			tex->ptr->addr + y * tex->ptr->line_len,
+			tex->width * bytes_per_pixel 
 		);
+		y++;
 	}
 	return (0);
 }
@@ -81,9 +75,6 @@ void	display_window(t_data *data)
 	fil_textures_tab(data);
 	while(i < NBR_TEXTURES)
 	{
-		//data->texture[i].ptr = mlx_xpm_file_to_image(data->mlx_ptr,
-		//	data->texture[i].path, &data->texture[i].width,
-		//	&data->texture[i].height)
 		data->texture[i].ptr = init_img();
 		data->texture[i].ptr->img = mlx_xpm_file_to_image(data->mlx_ptr, data->texture[i].path, &data->texture[i].width, &data->texture[i].height);
 		if (!data->texture[i].ptr->img)
@@ -92,55 +83,104 @@ void	display_window(t_data *data)
 		init_pixels(&data->texture[i]);
 		i++;
 	}
-	//i = 0;
-	//while (i < NBR_TEXTURES)
-	//{
-	//	data->texture[i].ptr = init_img();
-	//	data->texture[i].ptr->img = mlx_xpm_file_to_image(data->mlx_ptr, data->texture[i].path, &data->texture[i].width, &data->texture[i].height);
-	//	if (!data->texture[i].ptr->img)
-	//		ft_clean_exit(data, 1, "Failed to load bonus minimap texture");
-	//	data->texture[i].ptr->addr = mlx_get_data_addr(data->texture[i].ptr->img, &data->texture[i].ptr->bpp, &data->texture[i].ptr->line_len, &data->texture[i].ptr->endian);
-	//	init_pixels(&data->texture[i]);
-	//	i++;
-	//}
+	if (data->sky_fallback_path)
+	{
+		data->sky_texture.path = ft_strdup(data->sky_fallback_path);
+		data->sky_texture.ptr = init_img();
+		data->sky_texture.ptr->img = mlx_xpm_file_to_image(data->mlx_ptr, data->sky_texture.path, &data->sky_texture.width, &data->sky_texture.height);
+		if (data->sky_texture.ptr->img)
+		{
+			data->sky_texture.ptr->addr = mlx_get_data_addr(data->sky_texture.ptr->img, &data->sky_texture.ptr->bpp, &data->sky_texture.ptr->line_len, &data->sky_texture.ptr->endian);
+			if (init_pixels(&data->sky_texture))
+				ft_printf(2, "[warning] failed to init sky texture pixels\n");
+		}
+		else
+		{
+			ft_printf(2, "[warning] unable to load sky fallback '%s'\n", data->sky_fallback_path);
+			free(data->sky_texture.path);
+			data->sky_texture.path = NULL;
+		}
+	}
+}
 
+static inline void	put_pixel_img(t_data *d, int x, int y, unsigned int color)
+{
+	if (!d || !d->mlx_img || !d->mlx_img->addr)
+		return;
+	if ((unsigned)x >= (unsigned)SCREENWIDTH || (unsigned)y >= (unsigned)SCREENHEIGHT)
+		return;
+	char *p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
+	*(unsigned int *)p = color;
+}
+
+static void	draw_tex_on_img(t_data *d, t_texture *tex, int px, int py, int size)
+{
+	if (!d || !tex || !tex->pixels)
+		return;
+	int sy = 0;
+	while (sy < size)
+	{
+		int sx = 0;
+		while (sx < size)
+		{
+			int tx = (sx * tex->width) / size;
+			int ty = (sy * tex->height) / size;
+			unsigned int color = tex->pixels[ty * tex->width + tx];
+			if (color == 0xFF000000)
+			{
+				sx++;
+				continue;
+			}
+			put_pixel_img(d, px + sx, py + sy, color);
+			sx++;
+		}
+		sy++;
+	}
 }
 
 void	display_minimap(t_data *data)
 {
-	int	x;
-	int	y;
+	int x, y;
+	const int size = IMG_SIZE / 8;
 
+	if (!data || !data->mlx_img || !data->mlx_img->addr)
+		return;
 	y = 0;
 	while (data->map[y])
 	{
 		x = 0;
 		while (data->map[y][x])
 		{
+			int screen_x = 1604 + x * size;
+			int screen_y = 764 + y * size;
+			int tex_idx = 5;
 			if (data->map[y][x] == '1')
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->texture[6].ptr->img, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
-			//else if (data->map[y][x] == '0' || ft_strchr("NSWE", data->map[y][x])) ⚜️bonus⚜️
-			else if (data->map[y][x] == '0' || ft_strchr("NSWEM", data->map[y][x]))
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->texture[5].ptr->img, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
-			//else if (data->map[y][x] == 'D' && data->tab_doors->lock == 1)
-			//		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			//		data->texture[1].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
-			//else if (data->map[y][x] == 'D' && data->tab_doors->lock == 0)
-			//	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			//		data->texture[2].ptr, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
+				tex_idx = 6;
+			else if (ft_strchr("NSWE", data->map[y][x]))
+				tex_idx = 5;
+			else if (data->map[y][x] == 'D')
+			{
+				int idx = door_index_at(data, x, y);
+				if (idx >= 0 && data->tab_doors && data->tab_doors[idx].lock)
+					tex_idx = 8;
+				else
+					tex_idx = 9;
+			}
+			draw_tex_on_img(data, &data->texture[tex_idx], screen_x, screen_y, size);
+			if (data->tab_monsters)
+			{
+				int i = 0;
+				while (i < data->tab_monsters[0].count)
+				{
+					if ((int)data->tab_monsters[i].pos.x == x && (int)data->tab_monsters[i].pos.y == y)
+						draw_tex_on_img(data, &data->texture[7], screen_x, screen_y, size);
+					i++;
+				}
+			}
 			if (y == (int)data->player_pos.y && x == (int)data->player_pos.x)
-				mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-					data->texture[4].ptr->img, 1604 + x * IMG_SIZE/8, 764 + y * IMG_SIZE/8);
+				draw_tex_on_img(data, &data->texture[4], screen_x, screen_y, size);
 			x++;
 		}
 		y++;
 	}
-}
-
-void	update_minimap(t_data *data)
-{
-	/* draw minimap overlay; do not clear the window here (main image is already drawn) */
-	display_minimap(data);
 }

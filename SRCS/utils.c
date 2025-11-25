@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/20 18:09:25 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/21 20:38:19 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,20 +84,31 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 			free(data->texture[i].pixels);
 		i++;
 	}
-	i = 0; //⚜️bonus⚜️
-	while (i < NBR_TEXTURES_BONUS)
+	/* free fallback sky texture if any */
+	if (data->sky_texture.ptr)
+		free_img(data->sky_texture.ptr);
+	if (data->sky_texture.path)
 	{
-		if (data->texture_bonus[i].ptr)	
-			free_img(data->texture_bonus[i].ptr);
-		if (data->texture_bonus[i].path)
-		{
-			free(data->texture_bonus[i].path);
-			data->texture_bonus[i].path = NULL;
-		}
-		if (data->texture_bonus[i].pixels)
-			free(data->texture_bonus[i].pixels);
-		i++;
-	}//⚜️fin bonus⚜️
+		free(data->sky_texture.path);
+		data->sky_texture.path = NULL;
+	}
+	if (data->sky_texture.pixels)
+		free(data->sky_texture.pixels);
+	if (data->sky_fallback_path)
+	{
+		free(data->sky_fallback_path);
+		data->sky_fallback_path = NULL;
+	}
+	if (data->tab_monsters)
+	{
+		free(data->tab_monsters);
+		data->tab_monsters = NULL;
+	}
+	if (data->tab_doors)
+	{
+		free(data->tab_doors);
+		data->tab_doors = NULL;
+	}
 	if (msg && option == 1)
 		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
 	if (msg && option == 0)
@@ -123,28 +134,3 @@ int	quit_with_int(t_data *data)
 	ft_clean_exit(data, 0, "See you soon👋");
 	return (0);
 }
-
-// void	ft_clean_exit(t_data *data, int option, char *msg)
-// {
-// 	if (data->map)
-// 		ft_clear_tab(data->map);
-// 	if (data->buffer)
-// 		free(data->buffer);
-// 	clean_textures(data);
-// 	if (msg && option == 1)
-// 		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
-// 	if (msg && option == 0)
-// 		ft_printf(1, "\x1b[38;5;55m[%s]\033[0m\n", msg);
-// 	if (data->win_ptr)
-// 		mlx_destroy_window(data->mlx_ptr, data->win_ptr);
-// 	if (data->mlx_ptr)
-// 	{
-// 		mlx_destroy_display(data->mlx_ptr);
-// 		free(data->mlx_ptr);
-// 	}
-// 	//system("pkill mpg123"); //clean music
-// 	//system("stty sane");
-// 	if (option == 1)
-// 		exit(EXIT_FAILURE);
-// 	exit(EXIT_SUCCESS);
-// }

@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/20 18:09:22 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/21 22:28:40 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,23 +29,8 @@ void	verif_param(int argc, char **argv)
 
 int	on_keydown(int keycode, void *param)
 {
-	// unsigned long	current;
-	// struct timeval	tv;
 	t_data	*d = param;
 
-	// gettimeofday(&tv, NULL);
-	// current = (tv.tv_sec * 1000) + (tv.tv_usec / 1000);
-	// if (current - d->last_update < 120UL)//120UL vaut 120 milliseconds
-	// 	return (0);
-	// else
-	// {
-	// 	//⚜️bonus⚜️
-	// 	monsters_move(d);
-	// 	d->last_update = current;
-	// 	if (d->held_key)
-	// 		key_hook(d->held_key, d);
-	// //	d->last_update = current;
-	// }
 	if (keycode == KEY_LEFT)
 		d->keys.left = 1;
 	else if (keycode == KEY_RIGHT)
@@ -93,6 +78,7 @@ int	main(int arc, char **arv)
 	display_window(data);
 	display_minimap(data);
 	data->lasttime = get_time();
+	data->last_update = (unsigned long)(data->lasttime * 1000.0);
 	//system("mpg123 --loop -1 -q musique1.mp3 &"); //add music
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr, SCREENWIDTH, SCREENHEIGHT);
 	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);

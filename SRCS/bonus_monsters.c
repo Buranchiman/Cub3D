@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:01:28 by manon             #+#    #+#             */
-/*   Updated: 2025/11/18 13:56:45 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/21 20:38:45 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,8 +118,6 @@ void	monsters_move(t_data *data)
 		else if ((data->player_pos.y - data->tab_monsters[i].pos.y) > 0)
 			tab_monster_tmp.y = data->tab_monsters[i].pos.y + 0.3;
 		valid_moves(data, tab_monster_tmp, i);
-		mlx_put_image_to_window(data->mlx_ptr, data->win_ptr,
-			data->texture_bonus[0].ptr, 1604 + data->tab_monsters[i].pos.x * IMG_SIZE/8, 764 + data->tab_monsters[i].pos.y * IMG_SIZE/8);
 		i++;
 	}
 }

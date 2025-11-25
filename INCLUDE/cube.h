@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/20 18:25:52 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/21 22:13:23 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,9 @@
 # define MONSTER "TEXTURES/monsters.xpm"
 # define DOOR_CLOSED "TEXTURES/door_close.xpm"
 # define DOOR_OPEN "TEXTURES/door_open.xpm"
+# define MONSTER_MAP "TEXTURES/monster_mp.xpm"//to rename i think
+# define DOOR_CLOSED_MAP "TEXTURES/door_closed_mp.xpm"
+# define DOOR_OPEN_MAP "TEXTURES/door_open_mp.xpm"
 
 // KEYBOARD_MOVES
 # define KEY_ESC 65307
@@ -99,14 +102,12 @@ typedef struct s_monsters
 {
 	t_point	pos;
 	int		count;
-	//int		alive;
 }				t_monsters;
 
 typedef struct s_doors
 {
 	t_point	pos;
 	int		lock;
-	//int 	count;
 	char 	*enigma;
 	char 	*soluce;
 }				t_doors;
@@ -128,10 +129,11 @@ typedef struct s_data
 	double			deltatime;
 	void			*mlx_ptr;
 	void			*win_ptr;
-	//bonus
 	t_monsters		*tab_monsters;
 	t_doors			*tab_doors;
 	int				doors_count;
+	char		*sky_fallback_path;
+	t_texture		sky_texture;
 }				t_data;
 
 //utils.c
@@ -171,7 +173,6 @@ int		leak_check(char **map, int x, int y);
 //minimap.c
 void	display_window(t_data *data);
 void	display_minimap(t_data *data);
-void	update_minimap(t_data *data);
 
 //bonus_monsters.c
 int		monster_count(t_data *data);

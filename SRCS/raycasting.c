@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/20 18:07:18 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/21 22:29:06 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,7 +208,17 @@ int	raycasting(t_data *data)
 			drawEnd = h - 1;
 
 		for (int y = 0; y < drawStart; ++y)
-			put_px(data, x, y, ceiling_color);
+		{
+			if (data->sky_texture.pixels && data->sky_texture.width > 0 && data->sky_texture.height > 0)
+			{
+				int texX = (int)((double)x * data->sky_texture.width / (double)SCREENWIDTH);
+				int texY = (int)((double)y * data->sky_texture.height / (double)SCREENHEIGHT);
+				unsigned int color = data->sky_texture.pixels[texY * data->sky_texture.width + texX];
+				put_px(data, x, y, color | 0xFF000000);
+			}
+			else
+				put_px(data, x, y, ceiling_color);
+		}
 		 //texturing calculations
 		int	texNum = /*data->map[mapX][mapY]*/ data->cardinal ; //1 subtracted from it so that texture 0 can be used!
 
@@ -287,14 +297,18 @@ int	render_frame(void *param)
 	now = get_time();
 	data->deltatime = now - data->lasttime;
 	data->lasttime = now;
-	//printf("delta time is %f\n", data->deltatime);
+	unsigned long now_ms = (unsigned long)(now * 1000.0);
+	if (now_ms - data->last_update >= 120UL)
+	{
+		monsters_move(data);
+		data->last_update = now_ms;
+	}
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
 	update_player(data);
 	raycasting(data);
-	// draw main frame first
+	// compose minimap into the main image buffer, then blit once
+	display_minimap(data);
 	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img->img, 0, 0);
-	// then overlay the minimap on top
-	update_minimap(data);
 	return (0);
 }

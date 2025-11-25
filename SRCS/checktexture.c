@@ -69,7 +69,9 @@ void	take_texture_out(char ***map, int end)
 int	read_textures(char ***map)
 {
 	int	i;
+	t_data *data;
 
+	data = get_data();
 	i = 0;
 	while ((*map)[i] && (*map)[i][0] != '1' && (*map)[i][0] != ' '
 		&& (*map)[i][0] != '0')
@@ -81,5 +83,12 @@ int	read_textures(char ***map)
 	//printf("%d textures have been read\n", i);
 	// display_texture();
 	take_texture_out(map, i);
+	/* if no ceiling texture provided in the map, use our spirale fallback */
+	if (!data->texture[4].path && !data->sky_fallback_path)
+	{
+		data->sky_fallback_path = ft_strdup("TEXTURES/spirale.xpm");
+		if (!data->sky_fallback_path)
+			ft_clean_exit(data, 1, "malloc failed for sky fallback path");
+	}
 	return (0);
 }

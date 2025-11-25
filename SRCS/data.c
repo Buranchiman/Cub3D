@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/19 16:45:20 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/20 19:56:24 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,26 +37,6 @@ void	init_data(void)
 	t_data	*data;
 
 	data = get_data();
-	// data->buffer = NULL;
-	// data->map = NULL;
-	// data->player_pos.x = -1;
-	// data->player_pos.y = -1;
-	// data->cameraplane.x = 0;
-	// data->cameraplane.y = 0.66;
-	// data->direction.x = 0;
-	// data->direction.y = 0;
-	// data->mlx_ptr = NULL;
-	// data->win_ptr = NULL;
-	// data->mlx_img = init_img();
-	// //a adapter👇
-	// while (i <= 9)
-	// {
-	// 	data->texture[i].path = NULL;
-	// 	data->texture[i].ptr = NULL;
-	// 	//data->texture[i].width = 32;
-	// 	//data->texture[i].height = 32;
-	// 	i++;
-	// }
 	ft_bzero(data, sizeof(t_data));
 	data->player_pos.x = -1;
 	data->player_pos.y = -1;
