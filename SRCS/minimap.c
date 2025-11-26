@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/21 21:56:09 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/26 13:20:31 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ int	init_pixels(t_texture *tex)
 		memcpy(
 			tex->pixels + y * tex->width,
 			tex->ptr->addr + y * tex->ptr->line_len,
-			tex->width * bytes_per_pixel 
+			tex->width * bytes_per_pixel
 		);
 		y++;
 	}
@@ -170,7 +170,7 @@ void	display_minimap(t_data *data)
 			if (data->tab_monsters)
 			{
 				int i = 0;
-				while (i < data->tab_monsters[0].count)
+				while (i < data->monster_count)
 				{
 					if ((int)data->tab_monsters[i].pos.x == x && (int)data->tab_monsters[i].pos.y == y)
 						draw_tex_on_img(data, &data->texture[7], screen_x, screen_y, size);

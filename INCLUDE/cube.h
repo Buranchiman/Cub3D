@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/21 22:13:23 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/26 13:17:12 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,11 +98,11 @@ typedef struct s_point
 	double	y;
 }				t_point;
 
-typedef struct s_monsters
+typedef struct s_monster
 {
-	t_point	pos;
-	int		count;
-}				t_monsters;
+	t_point		pos;
+	double		dist;
+}				t_monster;
 
 typedef struct s_doors
 {
@@ -129,7 +129,8 @@ typedef struct s_data
 	double			deltatime;
 	void			*mlx_ptr;
 	void			*win_ptr;
-	t_monsters		*tab_monsters;
+	t_monster		*tab_monsters;
+	int				monster_count;
 	t_doors			*tab_doors;
 	int				doors_count;
 	char		*sky_fallback_path;

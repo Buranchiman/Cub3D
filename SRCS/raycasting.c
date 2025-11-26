@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/25 18:06:43 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/26 13:30:07 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,6 @@ static int	fetch_texture(char c, int x, int y)
 		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
 			return (9);
 	}
-	else if (c == 'M')
-		return (7);
 	return (d->cardinal);
 }
 
@@ -121,6 +119,7 @@ int	raycasting(t_data *data)
 	double	rayDirX;
 	double	rayDirY;
 	int		h;
+	double ZBuffer[SCREENWIDTH];
 
 	h = SCREENHEIGHT;
 	w = SCREENWIDTH;
@@ -201,7 +200,7 @@ int	raycasting(t_data *data)
 					data->cardinal = CARDSOUTH;
 			}
 			//Check if ray has hit a wall
-			if(data->map[mapY][mapX] != '0')
+			if(data->map[mapY][mapX] == '1' || data->map[mapY][mapX] == 'D')
 			{
 				data->cardinal = fetch_texture(data->map[mapY][mapX], mapX, mapY);
 				hit = 1;
@@ -218,7 +217,7 @@ int	raycasting(t_data *data)
 		 if (perpWallDist < 1e-6)
 		 	perpWallDist = 1e-6;
 		int lineHeight = (int)(h / perpWallDist);
-
+		ZBuffer[x] = perpWallDist;
 
 		int pitch = 100;
 
@@ -280,6 +279,57 @@ int	raycasting(t_data *data)
 		for (int y = drawEnd; y < h; ++y)
     		put_px(data, x, y, floor_color);
 		x++;
+	}
+	for (int i = 0; i < data->monster_count; i++)
+	{
+		t_monster *m = &data->tab_monsters[i];
+
+		// relative to player
+		double spriteX = m->pos.x - data->player_pos.x;
+		double spriteY = m->pos.y - data->player_pos.y;
+
+		// inverse determinant of camera matrix
+		double invDet = 1.0 / (data->cameraplane.x * data->direction.y
+							- data->direction.x * data->cameraplane.y);
+
+		// transform to camera space
+		double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
+		double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
+
+		// project to screen
+		int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
+
+		// sprite dimensions (scale with distance)
+		int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
+		int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2;
+		if (drawStartY < 0) drawStartY = 0;
+		int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2;
+		if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
+
+		int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
+		int drawStartX = -spriteWidth / 2 + spriteScreenX;
+		if (drawStartX < 0) drawStartX = 0;
+		int drawEndX = spriteWidth / 2 + spriteScreenX;
+		if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
+
+		// draw each vertical stripe of the sprite
+		for (int stripe = drawStartX; stripe < drawEndX; stripe++)
+		{
+			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
+						* data->texture[7].width / spriteWidth) / 256;
+
+			if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
+			{
+				for (int y = drawStartY; y < drawEndY; y++)
+				{
+					int d = (y) * 256 - SCREENHEIGHT * 128 + spriteHeight * 128;
+					int texY = ((d * data->texture[7].height) / spriteHeight) / 256;
+					unsigned int color = data->texture[7].pixels[texY * data->texture[7].width + texX];
+					if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
+						put_px(data, stripe, y, color);
+				}
+			}
+		}
 	}
 	return (0);
 }
