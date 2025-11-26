@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/21 20:38:19 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/25 16:46:21 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 			free(data->texture[i].pixels);
 		i++;
 	}
-	/* free fallback sky texture if any */
 	if (data->sky_texture.ptr)
 		free_img(data->sky_texture.ptr);
 	if (data->sky_texture.path)
