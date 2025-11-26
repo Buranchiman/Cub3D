@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/26 14:00:37 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/26 16:44:43 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,13 @@ void	fil_textures_tab(t_data *data)
 	if (data->texture[6].path)
 		free(data->texture[6].path);
 	data->texture[6].path = ft_strdup(WALL_MINIMAP);
-	data->texture[7].path = ft_strdup(MONSTER);
-	data->texture[8].path = ft_strdup(DOOR_CLOSED);
-	data->texture[9].path = ft_strdup(DOOR_OPEN);
+	data->texture[7].path = ft_strdup(MONSTER_MAP);
+	data->texture[8].path = ft_strdup(DOOR_CLOSED_MAP);
+	data->texture[9].path = ft_strdup(DOOR_OPENED_MAP);
+	data->texture[10].path = ft_strdup(MONSTER);
+	data->texture[11].path = ft_strdup(DOOR_CLOSED);
+	data->texture[12].path = ft_strdup(DOOR_OPENED);
+	printf("HELL YEAH\n");
 }
 
 int	init_pixels(t_texture *tex)
@@ -101,6 +105,8 @@ void	display_window(t_data *data)
 			data->sky_texture.path = NULL;
 		}
 	}
+	mlx_mouse_move(data->mlx_ptr, data->win_ptr, SCREENWIDTH / 2, SCREENHEIGHT / 2);
+	mlx_mouse_hide(data->mlx_ptr, data->win_ptr);
 }
 
 static inline void	put_pixel_img(t_data *d, int x, int y, unsigned int color)

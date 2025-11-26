@@ -6,35 +6,37 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/26 13:30:07 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/27 10:17:11 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-
 static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 {
-	if ((unsigned)x >= (unsigned)SCREENWIDTH || (unsigned)y >= (unsigned)SCREENHEIGHT)
-		return;
-	char *p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
+	char	*p;
+
+	if ((unsigned)x >= (unsigned)SCREENWIDTH
+		|| (unsigned)y >= (unsigned)SCREENHEIGHT)
+		return ;
+	p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
 	*(unsigned int *)p = argb;
 }
 
 static int	fetch_texture(char c, int x, int y)
 {
 	t_data	*d;
+	int	idx;
 
 	d = get_data();
 	if (c == 'D')
 	{
-		int	idx;
 		idx = door_index_at(d, x, y);
 		printf("index of door is %d\n", idx);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
-			return (8);
+			return (11);
 		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
-			return (9);
+			return (12);
 	}
 	return (d->cardinal);
 }
@@ -45,6 +47,7 @@ void	update_player(t_data *d)
 	double	moveSpeed = 2.0 * d->deltatime;
 	double	tmpPosX = 0;
 	double	tmpPosY = 0;
+	int 	idx;
 	// rotate right
 	if (d->keys.left) //j'ai inverse les touches (peut-etre a investiguer plus en profondeur)
 	{
@@ -99,7 +102,6 @@ void	update_player(t_data *d)
 	}
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D')
 	{
-		int idx;
 		idx = door_index_at(d, (int)d->player_pos.x, (int)d->player_pos.y);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
 			open_door(d, idx);
@@ -316,15 +318,15 @@ int	raycasting(t_data *data)
 		for (int stripe = drawStartX; stripe < drawEndX; stripe++)
 		{
 			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-						* data->texture[7].width / spriteWidth) / 256;
+						* data->texture[10].width / spriteWidth) / 256;
 
 			if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
 			{
 				for (int y = drawStartY; y < drawEndY; y++)
 				{
 					int d = (y) * 256 - SCREENHEIGHT * 128 + spriteHeight * 128;
-					int texY = ((d * data->texture[7].height) / spriteHeight) / 256;
-					unsigned int color = data->texture[7].pixels[texY * data->texture[7].width + texX];
+					int texY = ((d * data->texture[10].height) / spriteHeight) / 256;
+					unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
 					if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
 						put_px(data, stripe, y, color);
 				}
@@ -378,6 +380,27 @@ int	render_frame(void *param)
 	}
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
+	int dx = data->mouse_dx;
+	data->mouse_dx = 0;
+
+	// convert to radians; DO NOT multiply by dt here (event accumulation already reflects real motion)
+	double rot = dx * data->mouse_sens;
+
+	// clamp huge flicks so it never spins too fast
+	if (rot >  data->max_rot_frame) rot =  data->max_rot_frame;
+	if (rot < -data->max_rot_frame) rot = -data->max_rot_frame;
+
+	if (rot != 0.0) {
+		double c = cos(rot), s = sin(rot);
+
+		double oldDirX = data->direction.x;
+		data->direction.x = data->direction.x * c - data->direction.y * s;
+		data->direction.y = oldDirX            * s + data->direction.y * c;
+
+		double oldPlaneX = data->cameraplane.x;
+		data->cameraplane.x = data->cameraplane.x * c - data->cameraplane.y * s;
+		data->cameraplane.y = oldPlaneX            * s + data->cameraplane.y * c;
+	}
 	update_player(data);
 	raycasting(data);
 	// compose minimap into the main image buffer, then blit once

@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/26 13:17:12 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/27 10:06:48 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,22 +21,22 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 10
+# define NBR_TEXTURES 13
 
 // PATH TEXTURES
-# define GROUND_MINIMAP "TEXTURES/ground_mp.xpm"
-# define WALL_MINIMAP "TEXTURES/wall_mp.xpm"
-# define PLAYER_MINIMAP "TEXTURES/player_mp.xpm"
+# define GROUND_MINIMAP "TEXTURES/ground_map.xpm"
+# define WALL_MINIMAP "TEXTURES/wall_map.xpm"
+# define PLAYER_MINIMAP "TEXTURES/player_map.xpm"
 # define EAST "TEXTURES/east.xpm"
 # define NORTH "TEXTURES/north.xpm"
 # define SOUTH "TEXTURES/south.xpm"
 # define WEST "TEXTURES/west.xpm"
-# define MONSTER "TEXTURES/monsters.xpm"
-# define DOOR_CLOSED "TEXTURES/door_close.xpm"
-# define DOOR_OPEN "TEXTURES/door_open.xpm"
-# define MONSTER_MAP "TEXTURES/monster_mp.xpm"//to rename i think
-# define DOOR_CLOSED_MAP "TEXTURES/door_closed_mp.xpm"
-# define DOOR_OPEN_MAP "TEXTURES/door_open_mp.xpm"
+# define MONSTER "TEXTURES/monster.xpm"
+# define DOOR_CLOSED "TEXTURES/door_closed.xpm"
+# define DOOR_OPENED "TEXTURES/door_opened.xpm"
+# define MONSTER_MAP "TEXTURES/monster_map.xpm"//to rename i think
+# define DOOR_CLOSED_MAP "TEXTURES/door_closed_map.xpm"
+# define DOOR_OPENED_MAP "TEXTURES/door_opened_map.xpm"
 
 // KEYBOARD_MOVES
 # define KEY_ESC 65307
@@ -108,8 +108,8 @@ typedef struct s_doors
 {
 	t_point	pos;
 	int		lock;
-	char 	*enigma;
-	char 	*soluce;
+	char	*enigma;
+	char	*soluce;
 }				t_doors;
 
 typedef struct s_data
@@ -133,8 +133,14 @@ typedef struct s_data
 	int				monster_count;
 	t_doors			*tab_doors;
 	int				doors_count;
-	char		*sky_fallback_path;
+	char			*sky_fallback_path;
 	t_texture		sky_texture;
+	int				mouse_center_x;
+	int				mouse_center_y;
+	double			mouse_sens;     // radians per pixel
+	int				mouse_ready;    // 0 until first center
+	int				mouse_dx;        // accumulated horizontal delta (pixels) since last frame
+	double			max_rot_frame;   // hard cap per frame in radians (e.g. 0.06 ≈ 3.4°)
 }				t_data;
 
 //utils.c
@@ -142,7 +148,7 @@ double	get_time(void);
 int		is_all_space_n_ones(char *string);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 size_t	ft_tablen(char **tab);
-int 	quit_with_int(t_data *data);
+int		quit_with_int(t_data *data);
 
 //checktextures.c
 int		import_texture(int index, int which, char *line);
@@ -166,10 +172,9 @@ t_data	*get_data(void);
 int		raycasting(t_data *data);
 int		render_frame(void *param);
 
-
 //walls.c
 int		vertical_walls(char *line);
-int		leak_check(char **map, int x, int y);
+void		leak_check(char **map, int x, int y);
 
 //minimap.c
 void	display_window(t_data *data);
@@ -186,5 +191,8 @@ void	doors_init(t_data *data);
 int		open_door(t_data *data, int i);
 int		door_is_locked_at(t_data *data, int tx, int ty);
 int		door_index_at(t_data *data, int tx, int ty);
+
+//main.c
+int		mouse_move(int x, int y, t_data *d);
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/21 22:28:40 by manon            ###   ########.fr       */
+/*   Updated: 2025/11/27 10:10:42 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ void	verif_param(int argc, char **argv)
 		printf("Wrong number of arguments");
 		exit(1);
 	}
-
 	if (ft_strncmp(&argv[1][ft_strlen(argv[1]) - 4], ".cub", 4) != 0)
 	{
 		printf("File map is not .cub");
@@ -29,8 +28,9 @@ void	verif_param(int argc, char **argv)
 
 int	on_keydown(int keycode, void *param)
 {
-	t_data	*d = param;
+	t_data	*d;
 
+	d = param;
 	if (keycode == KEY_LEFT)
 		d->keys.left = 1;
 	else if (keycode == KEY_RIGHT)
@@ -67,6 +67,77 @@ int	on_keyup(int keycode, void *param)
 	return (0);
 }
 
+// int mouse_move(int x, int y, t_data *d)
+// {
+//     static int  first = 1;
+//     int         centerX = SCREENWIDTH / 2;
+//     int         centerY = SCREENHEIGHT / 2;
+//     (void)y;
+
+//     if (first)
+//     {
+//         mlx_mouse_move(d->mlx_ptr, d->win_ptr, centerX, centerY);
+//         first = 0;
+//         return (0);
+//     }
+
+//     int delta_x = x - centerX;
+//     if (delta_x == 0)
+//         return (0);
+
+//     /* ----------------------------
+//        Sensitivity tuning
+//        Lower = slower turn
+//        Typical good range: 0.001 → 0.004
+//     ---------------------------- */
+//     double mouse_sens = 0.0025;
+
+//     /* fixed-time rotation (don’t scale by deltatime,
+//        MLX event frequency already depends on real time) */
+//     double rot = delta_x * mouse_sens;
+
+//     /* Clamp large flicks */
+//     if (rot > 0.1)  rot = 0.1;
+//     if (rot < -0.1) rot = -0.1;
+
+//     /* Rotate camera */
+//     double oldDirX = d->direction.x;
+//     d->direction.x = d->direction.x * cos(rot) - d->direction.y * sin(rot);
+//     d->direction.y = oldDirX * sin(rot) + d->direction.y * cos(rot);
+
+//     double oldPlaneX = d->cameraplane.x;
+//     d->cameraplane.x = d->cameraplane.x * cos(rot) - d->cameraplane.y * sin(rot);
+//     d->cameraplane.y = oldPlaneX * sin(rot) + d->cameraplane.y * cos(rot);
+
+//     mlx_mouse_move(d->mlx_ptr, d->win_ptr, centerX, centerY);
+//     return (0);
+// }
+
+int	mouse_move(int x, int y, t_data *d)
+{
+	static int	first = 1;
+	int			cx;
+	int			cy;
+	int			dx;
+
+	(void)y;
+	cx = SCREENWIDTH / 2;
+	cy = SCREENHEIGHT / 2;
+	if (first)
+	{
+		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);
+		first = 0;
+		return (0);
+	}
+	dx = x - cx;
+	if (dx != 0)
+	{
+		d->mouse_dx += dx;                    // accumulate for this frame
+		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);  // keep centered
+	}
+	return (0);
+}
+
 
 int	main(int arc, char **arv)
 {
@@ -80,11 +151,15 @@ int	main(int arc, char **arv)
 	data->lasttime = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
 	//system("mpg123 --loop -1 -q musique1.mp3 &"); //add music
-	data->mlx_img->img = mlx_new_image(data->mlx_ptr, SCREENWIDTH, SCREENHEIGHT);
-	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img, &data->mlx_img->bpp, &data->mlx_img->line_len, &data->mlx_img->endian);
-	mlx_hook(data->win_ptr, 2, 1L<<0, on_keydown, data);
-	mlx_hook(data->win_ptr, 3, 1L<<1, on_keyup, data);
-    mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
+	data->mlx_img->img = mlx_new_image(data->mlx_ptr,
+			SCREENWIDTH, SCREENHEIGHT);
+	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img,
+			&data->mlx_img->bpp, &data->mlx_img->line_len,
+			&data->mlx_img->endian);
+	mlx_hook(data->win_ptr, 2, 1L << 0, on_keydown, data);
+	mlx_hook(data->win_ptr, 3, 1L << 1, on_keyup, data);
+	mlx_hook(data->win_ptr, 6, 1L << 6, mouse_move, data);
+	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	mlx_loop_hook(data->mlx_ptr, render_frame, data);
 	mlx_loop(data->mlx_ptr);
 	ft_clean_exit(data, 0, NULL);

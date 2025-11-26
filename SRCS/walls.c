@@ -3,23 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   walls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 16:41:42 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/14 12:34:17 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/11/27 10:23:18 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-int	leak_check(char **map, int x, int y)
+void	leak_check(char **map, int x, int y)
 {
 	if (map[y][x] == ' ' && ((y > 0 && map[y - 1][x] == '0')
 		|| (map[y + 1] && map[y + 1][x] == '0')
 		|| (x > 0 && map[y][x - 1] == '0')
 		|| (map[y][x + 1] == '0')))
-		return (ft_printf(2, "Hole is at x:%d, y:%d\n", x, y), 1);
-	return (0);
+		return (ft_printf(2, "Error\nHole is at x:%d, y:%d\n", x, y),
+			ft_clean_exit(get_data(), 1, NULL));
 }
 
 int	vertical_walls(char *line)
