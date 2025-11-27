@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 10:17:11 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/27 17:06:33 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,31 +51,31 @@ void	update_player(t_data *d)
 	// rotate right
 	if (d->keys.left) //j'ai inverse les touches (peut-etre a investiguer plus en profondeur)
 	{
-		double oldDirX = d->direction.x;
+		double old_dirx = d->direction.x;
 		d->direction.x = d->direction.x * cos(-rotSpeed)
 			- d->direction.y * sin(-rotSpeed);
-		d->direction.y = oldDirX * sin(-rotSpeed)
+		d->direction.y = old_dirx * sin(-rotSpeed)
 			+ d->direction.y * cos(-rotSpeed);
 
-		double oldPlaneX = d->cameraplane.x;
+		double old_planex = d->cameraplane.x;
 		d->cameraplane.x = d->cameraplane.x * cos(-rotSpeed)
 			- d->cameraplane.y * sin(-rotSpeed);
-		d->cameraplane.y = oldPlaneX * sin(-rotSpeed)
+		d->cameraplane.y = old_planex * sin(-rotSpeed)
 			+ d->cameraplane.y * cos(-rotSpeed);
 	}
 	// rotate left
 	if (d->keys.right)
 	{
-		double oldDirX = d->direction.x;
+		double old_dirx = d->direction.x;
 		d->direction.x = d->direction.x * cos(rotSpeed)
 			- d->direction.y * sin(rotSpeed);
-		d->direction.y = oldDirX * sin(rotSpeed)
+		d->direction.y = old_dirx * sin(rotSpeed)
 			+ d->direction.y * cos(rotSpeed);
 
-		double oldPlaneX = d->cameraplane.x;
+		double old_planex = d->cameraplane.x;
 		d->cameraplane.x = d->cameraplane.x * cos(rotSpeed)
 			- d->cameraplane.y * sin(rotSpeed);
-		d->cameraplane.y = oldPlaneX * sin(rotSpeed)
+		d->cameraplane.y = old_planex * sin(rotSpeed)
 			+ d->cameraplane.y * cos(rotSpeed);
 	}
 	tmpPosX = d->player_pos.x;
@@ -122,6 +122,7 @@ int	raycasting(t_data *data)
 	double	rayDirY;
 	int		h;
 	double ZBuffer[SCREENWIDTH];
+	int pitch = 100;
 
 	h = SCREENHEIGHT;
 	w = SCREENWIDTH;
@@ -221,8 +222,6 @@ int	raycasting(t_data *data)
 		int lineHeight = (int)(h / perpWallDist);
 		ZBuffer[x] = perpWallDist;
 
-		int pitch = 100;
-
 		//calculate lowest and highest pixel to fill in current stripe
 		int drawStart = -lineHeight / 2 + h / 2 + pitch;
 		if (drawStart < 0)
@@ -276,63 +275,136 @@ int	raycasting(t_data *data)
 			// unsigned int color = 0xFF0000FF;
 			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			// if(side == 1) color = (color >> 1) & 8355711;
-			put_px(data, x, y, color | 0xFF000000);
+			if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
+                put_px(data, x, y, color);
 		}
 		for (int y = drawEnd; y < h; ++y)
     		put_px(data, x, y, floor_color);
 		x++;
 	}
+	// for (int i = 0; i < data->monster_count; i++)
+	// {
+	// 	t_monster *m = &data->tab_monsters[i];
+
+	// 	// relative to player
+	// 	double spriteX = m->pos.x - data->player_pos.x;
+	// 	double spriteY = m->pos.y - data->player_pos.y;
+
+	// 	// inverse determinant of camera matrix
+	// 	double invDet = 1.0 / (data->cameraplane.x * data->direction.y
+	// 						- data->direction.x * data->cameraplane.y);
+
+	// 	// transform to camera space
+	// 	double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
+	// 	double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
+
+	// 	// project to screen
+	// 	int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
+	// 	// world-space vertical offset to adjust "feet" height (tune 0.0–0.7)
+	// 	double vMove = 0.3;
+	// 	int vMoveScreen = (int)(vMove / transformY) + pitch;
+	// 	// sprite dimensions (scale with distance)
+	// 	int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
+	// 	int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2 + vMoveScreen;
+	// 	if (drawStartY < 0) drawStartY = 0;
+	// 	int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2 + vMoveScreen;
+	// 	if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
+
+	// 	int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
+	// 	int drawStartX = -spriteWidth / 2 + spriteScreenX;
+	// 	if (drawStartX < 0) drawStartX = 0;
+	// 	int drawEndX = spriteWidth / 2 + spriteScreenX;
+	// 	if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
+
+	// 	// draw each vertical stripe of the sprite
+	// 	for (int stripe = drawStartX; stripe < drawEndX; stripe++)
+	// 	{
+	// 		int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
+	// 					* data->texture[10].width / spriteWidth) / 256;
+	// 		if (texX < 0) texX = 0;
+	// 		if (texX >= data->texture[10].width) texX = data->texture[10].width - 1;
+
+	// 		if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
+	// 		{
+	// 			for (int y = drawStartY; y < drawEndY; y++)
+	// 			{
+	// 				int d = (y - (pitch + vMoveScreen)) * 256 - SCREENHEIGHT * 128 + spriteHeight * 128;
+	// 				int texY = ((d * data->texture[10].height) / spriteHeight) / 256;
+	// 				if (texY < 0) texY = 0;
+	// 				if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
+	// 				unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
+	// 				if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
+	// 					put_px(data, stripe, y, color);
+	// 			}
+	// 		}
+	// 	}
+	// }
 	for (int i = 0; i < data->monster_count; i++)
-	{
-		t_monster *m = &data->tab_monsters[i];
+{
+    t_monster *m = &data->tab_monsters[i];
 
-		// relative to player
-		double spriteX = m->pos.x - data->player_pos.x;
-		double spriteY = m->pos.y - data->player_pos.y;
+    // relative to player
+    double spriteX = m->pos.x - data->player_pos.x;
+    double spriteY = m->pos.y - data->player_pos.y;
 
-		// inverse determinant of camera matrix
-		double invDet = 1.0 / (data->cameraplane.x * data->direction.y
-							- data->direction.x * data->cameraplane.y);
+    // inverse determinant of camera matrix
+    double invDet = 1.0 / (data->cameraplane.x * data->direction.y
+                        - data->direction.x * data->cameraplane.y);
 
-		// transform to camera space
-		double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
-		double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
+    // transform to camera space
+    double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
+    double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
 
-		// project to screen
-		int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
+    if (transformY <= 0)
+        continue;
 
-		// sprite dimensions (scale with distance)
-		int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
-		int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2;
-		if (drawStartY < 0) drawStartY = 0;
-		int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2;
-		if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
+    // screen X
+    int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
 
-		int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
-		int drawStartX = -spriteWidth / 2 + spriteScreenX;
-		if (drawStartX < 0) drawStartX = 0;
-		int drawEndX = spriteWidth / 2 + spriteScreenX;
-		if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
+    // world-space vertical offset (feet height, tune 0.0–0.7)
+    double vMove = 0.3;
+    int vMoveScreen = (int)(vMove / transformY);   // <-- NO + pitch here
 
-		// draw each vertical stripe of the sprite
-		for (int stripe = drawStartX; stripe < drawEndX; stripe++)
-		{
-			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-						* data->texture[10].width / spriteWidth) / 256;
+    // sprite dimensions (scale with distance)
+    int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
+    int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2 + pitch + vMoveScreen;
+    if (drawStartY < 0) drawStartY = 0;
+    int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2 + pitch + vMoveScreen;
+    if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
 
-			if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
-			{
-				for (int y = drawStartY; y < drawEndY; y++)
-				{
-					int d = (y) * 256 - SCREENHEIGHT * 128 + spriteHeight * 128;
-					int texY = ((d * data->texture[10].height) / spriteHeight) / 256;
-					unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
-					if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
-						put_px(data, stripe, y, color);
-				}
-			}
-		}
-	}
+    int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
+    int drawStartX = -spriteWidth / 2 + spriteScreenX;
+    if (drawStartX < 0) drawStartX = 0;
+    int drawEndX = spriteWidth / 2 + spriteScreenX;
+    if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
+
+    // draw each vertical stripe of the sprite
+    for (int stripe = drawStartX; stripe < drawEndX; stripe++)
+    {
+        int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
+                    * data->texture[10].width / spriteWidth) / 256;
+        if (texX < 0) texX = 0;
+        if (texX >= data->texture[10].width) texX = data->texture[10].width - 1;
+
+        if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
+        {
+            for (int y = drawStartY; y < drawEndY; y++)
+            {
+                int d = (y - (pitch + vMoveScreen)) * 256
+                        - SCREENHEIGHT * 128
+                        + spriteHeight * 128;
+                int texY = (d * data->texture[10].height) / spriteHeight / 256;
+                if (texY < 0) texY = 0;
+                if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
+
+                unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
+                if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
+                    put_px(data, stripe, y, color);
+            }
+        }
+    }
+}
+
 	return (0);
 }
 
@@ -362,17 +434,49 @@ int	raycasting(t_data *data)
 //     return 0;
 // }
 
+void	mouse_rotation(t_data *data)
+{
+	int		dx;
+	double	rot;
+	double	c;
+	double	s;
+	double	old_dirx;
+	double	old_planex;
+
+	dx = data->mouse_dx;
+	data->mouse_dx = 0;
+	// convert to radians; DO NOT multiply by dt here (event accumulation already reflects real motion)
+	rot = dx * data->mouse_sens;
+	// clamp huge flicks so it never spins too fast
+	if (rot > data->max_rot_frame)
+		rot = data->max_rot_frame;
+	if (rot < -data->max_rot_frame)
+	rot = -data->max_rot_frame;
+	if (rot != 0.0)
+	{
+		c = cos(rot);
+		s = sin(rot);
+		old_dirx = data->direction.x;
+		data->direction.x = data->direction.x * c - data->direction.y * s;
+		data->direction.y = old_dirx * s + data->direction.y * c;
+		old_planex = data->cameraplane.x;
+		data->cameraplane.x = data->cameraplane.x * c - data->cameraplane.y * s;
+		data->cameraplane.y = old_planex * s + data->cameraplane.y * c;
+	}
+}
+
 int	render_frame(void *param)
 {
-	t_data	*data;
-	double	now;
+	t_data			*data;
+	double			now;
+	unsigned long	now_ms;
 
 	(void)param;
 	data = get_data();
 	now = get_time();
 	data->deltatime = now - data->lasttime;
 	data->lasttime = now;
-	unsigned long now_ms = (unsigned long)(now * 1000.0);
+	now_ms = (unsigned long)(now * 1000.0);
 	if (now_ms - data->last_update >= 120UL)
 	{
 		monsters_move(data);
@@ -380,31 +484,12 @@ int	render_frame(void *param)
 	}
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
-	int dx = data->mouse_dx;
-	data->mouse_dx = 0;
-
-	// convert to radians; DO NOT multiply by dt here (event accumulation already reflects real motion)
-	double rot = dx * data->mouse_sens;
-
-	// clamp huge flicks so it never spins too fast
-	if (rot >  data->max_rot_frame) rot =  data->max_rot_frame;
-	if (rot < -data->max_rot_frame) rot = -data->max_rot_frame;
-
-	if (rot != 0.0) {
-		double c = cos(rot), s = sin(rot);
-
-		double oldDirX = data->direction.x;
-		data->direction.x = data->direction.x * c - data->direction.y * s;
-		data->direction.y = oldDirX            * s + data->direction.y * c;
-
-		double oldPlaneX = data->cameraplane.x;
-		data->cameraplane.x = data->cameraplane.x * c - data->cameraplane.y * s;
-		data->cameraplane.y = oldPlaneX            * s + data->cameraplane.y * c;
-	}
+	mouse_rotation(data);
 	update_player(data);
 	raycasting(data);
 	// compose minimap into the main image buffer, then blit once
 	display_minimap(data);
-	mlx_put_image_to_window(data->mlx_ptr, data->win_ptr, data->mlx_img->img, 0, 0);
+	mlx_put_image_to_window(data->mlx_ptr,
+		data->win_ptr, data->mlx_img->img, 0, 0);
 	return (0);
 }

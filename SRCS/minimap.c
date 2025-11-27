@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/11/26 16:44:43 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/27 15:49:07 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,25 +41,25 @@ void	fil_textures_tab(t_data *data)
 	data->texture[10].path = ft_strdup(MONSTER);
 	data->texture[11].path = ft_strdup(DOOR_CLOSED);
 	data->texture[12].path = ft_strdup(DOOR_OPENED);
-	printf("HELL YEAH\n");
 }
 
 int	init_pixels(t_texture *tex)
 {
 	int	bytes_per_pixel;
+	int	y;
 
 	bytes_per_pixel = tex->ptr->bpp / 8;
 	tex->pixels = malloc(tex->width * tex->height * sizeof(uint32_t));
 	if (!tex->pixels)
 		return (1);
-	int y = 0;
+	y = 0;
 	while (y < tex->height)
 	{
 		memcpy(
 			tex->pixels + y * tex->width,
 			tex->ptr->addr + y * tex->ptr->line_len,
 			tex->width * bytes_per_pixel
-		);
+			);
 		y++;
 	}
 	return (0);
@@ -67,7 +67,7 @@ int	init_pixels(t_texture *tex)
 
 void	display_window(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	data->mlx_ptr = mlx_init();
