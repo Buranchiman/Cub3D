@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 17:06:33 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/01 16:37:57 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 static int	fetch_texture(char c, int x, int y)
 {
 	t_data	*d;
-	int	idx;
+	int		idx;
 
 	d = get_data();
 	if (c == 'D')
@@ -41,76 +41,85 @@ static int	fetch_texture(char c, int x, int y)
 	return (d->cardinal);
 }
 
-void	update_player(t_data *d)
+void	rotate_player(t_data *d)
 {
-	double	rotSpeed = 3.0 * d->deltatime; // radians per frame (tune this)
-	double	moveSpeed = 2.0 * d->deltatime;
-	double	tmpPosX = 0;
-	double	tmpPosY = 0;
-	int 	idx;
-	// rotate right
+	double	old_dir;
+	double	old_plan;
+	double	rotspeed;
+
+	rotspeed = 3.0 * d->deltatime;
+	old_dir = d->direction.x;
+	old_plan = d->cam.x;
 	if (d->keys.left) //j'ai inverse les touches (peut-etre a investiguer plus en profondeur)
 	{
-		double old_dirx = d->direction.x;
-		d->direction.x = d->direction.x * cos(-rotSpeed)
-			- d->direction.y * sin(-rotSpeed);
-		d->direction.y = old_dirx * sin(-rotSpeed)
-			+ d->direction.y * cos(-rotSpeed);
-
-		double old_planex = d->cameraplane.x;
-		d->cameraplane.x = d->cameraplane.x * cos(-rotSpeed)
-			- d->cameraplane.y * sin(-rotSpeed);
-		d->cameraplane.y = old_planex * sin(-rotSpeed)
-			+ d->cameraplane.y * cos(-rotSpeed);
+		d->direction.x = d->direction.x * cos(-rotspeed)
+			- d->direction.y * sin(-rotspeed);
+		d->direction.y = old_dir * sin(-rotspeed)
+			+ d->direction.y * cos(-rotspeed);
+		d->cam.x = d->cam.x * cos(-rotspeed) - d->cam.y * sin(-rotspeed);
+		d->cam.y = old_plan * sin(-rotspeed) + d->cam.y * cos(-rotspeed);
 	}
-	// rotate left
 	if (d->keys.right)
 	{
-		double old_dirx = d->direction.x;
-		d->direction.x = d->direction.x * cos(rotSpeed)
-			- d->direction.y * sin(rotSpeed);
-		d->direction.y = old_dirx * sin(rotSpeed)
-			+ d->direction.y * cos(rotSpeed);
-
-		double old_planex = d->cameraplane.x;
-		d->cameraplane.x = d->cameraplane.x * cos(rotSpeed)
-			- d->cameraplane.y * sin(rotSpeed);
-		d->cameraplane.y = old_planex * sin(rotSpeed)
-			+ d->cameraplane.y * cos(rotSpeed);
+		d->direction.x = d->direction.x * cos(rotspeed)
+			- d->direction.y * sin(rotspeed);
+		d->direction.y = old_dir * sin(rotspeed)
+			+ d->direction.y * cos(rotspeed);
+		d->cam.x = d->cam.x * cos(rotspeed) - d->cam.y * sin(rotspeed);
+		d->cam.y = old_plan * sin(rotspeed) + d->cam.y * cos(rotspeed);
 	}
-	tmpPosX = d->player_pos.x;
-	tmpPosY = d->player_pos.y;
+}
+
+t_point	move_player(t_data *d, double movespeed)
+{
+	t_point	tmp;
+
+	tmp.x = d->player_pos.x;
+	tmp.y = d->player_pos.y;
 	if (d->keys.w)
 	{
-		d->player_pos.x += d->direction.x * moveSpeed;
-		d->player_pos.y += d->direction.y * moveSpeed;
+		d->player_pos.x += d->direction.x * movespeed;
+		d->player_pos.y += d->direction.y * movespeed;
 	}
 	if (d->keys.s)
 	{
-		d->player_pos.x -= d->direction.x * moveSpeed;
-		d->player_pos.y -= d->direction.y * moveSpeed;
+		d->player_pos.x -= d->direction.x * movespeed;
+		d->player_pos.y -= d->direction.y * movespeed;
 	}
 	if (d->keys.d)
 	{
-		d->player_pos.x += -d->direction.y * moveSpeed;
-		d->player_pos.y += d->direction.x * moveSpeed;
+		d->player_pos.x += -d->direction.y * movespeed;
+		d->player_pos.y += d->direction.x * movespeed;
 	}
 	if (d->keys.a)
 	{
-		d->player_pos.x += d->direction.y * moveSpeed;
-		d->player_pos.y += -d->direction.x * moveSpeed;
+		d->player_pos.x += d->direction.y * movespeed;
+		d->player_pos.y += -d->direction.x * movespeed;
 	}
-	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D')
+	return (tmp);
+}
+
+void	update_player(t_data *d)
+{
+	double	movespeed;
+	int		idx;
+	t_point	tmp;
+
+	movespeed = 2.0 * d->deltatime;
+	rotate_player(d);
+	tmp = move_player(d, movespeed);
+	if (d->map[(int)tmp.y][(int)tmp.x] == 'D')
 	{
-		idx = door_index_at(d, (int)d->player_pos.x, (int)d->player_pos.y);
+		idx = door_index_at(d, (int)tmp.x, (int)tmp.y);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
 			open_door(d, idx);
 	}
-	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1' || (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
- 		&& door_is_locked_at(d, (int)d->player_pos.x, (int)d->player_pos.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
+	if (d->map[(int)tmp.y][(int)tmp.x] == '1'
+	|| (d->map[(int)tmp.y][(int)tmp.x] == 'D'
+ 		&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
 	{
-		d->player_pos.x = tmpPosX;
-		d->player_pos.y = tmpPosY;
+		d->player_pos.x = tmp.x;
+		d->player_pos.y = tmp.y;
 	}
 }
 
@@ -133,9 +142,9 @@ int	raycasting(t_data *data)
 	while (x < w)
 	{
 		//calculate ray position and direction
-		double cameraX = 2 * x / (double)w - 1; //x-coordinate in camera space
-		rayDirX = data->direction.x + data->cameraplane.x * cameraX;
-		rayDirY = data->direction.y + data->cameraplane.y * cameraX;
+		double camX = 2 * x / (double)w - 1; //x-coordinate in cam space
+		rayDirX = data->direction.x + data->cam.x * camX;
+		rayDirY = data->direction.y + data->cam.y * camX;
 
 		//which box of the map we're in
 		int mapX = (int)data->player_pos.x;
@@ -275,8 +284,7 @@ int	raycasting(t_data *data)
 			// unsigned int color = 0xFF0000FF;
 			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			// if(side == 1) color = (color >> 1) & 8355711;
-			if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
-                put_px(data, x, y, color);
+			put_px(data, x, y, color | 0xFF000000);
 		}
 		for (int y = drawEnd; y < h; ++y)
     		put_px(data, x, y, floor_color);
@@ -290,13 +298,13 @@ int	raycasting(t_data *data)
 	// 	double spriteX = m->pos.x - data->player_pos.x;
 	// 	double spriteY = m->pos.y - data->player_pos.y;
 
-	// 	// inverse determinant of camera matrix
-	// 	double invDet = 1.0 / (data->cameraplane.x * data->direction.y
-	// 						- data->direction.x * data->cameraplane.y);
+	// 	// inverse determinant of cam matrix
+	// 	double invDet = 1.0 / (data->cam.x * data->direction.y
+	// 						- data->direction.x * data->cam.y);
 
-	// 	// transform to camera space
+	// 	// transform to cam space
 	// 	double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
-	// 	double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
+	// 	double transformY = invDet * (-data->cam.y * spriteX + data->cam.x * spriteY);
 
 	// 	// project to screen
 	// 	int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
@@ -347,13 +355,13 @@ int	raycasting(t_data *data)
     double spriteX = m->pos.x - data->player_pos.x;
     double spriteY = m->pos.y - data->player_pos.y;
 
-    // inverse determinant of camera matrix
-    double invDet = 1.0 / (data->cameraplane.x * data->direction.y
-                        - data->direction.x * data->cameraplane.y);
+    // inverse determinant of cam matrix
+    double invDet = 1.0 / (data->cam.x * data->direction.y
+                        - data->direction.x * data->cam.y);
 
-    // transform to camera space
+    // transform to cam space
     double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
-    double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
+    double transformY = invDet * (-data->cam.y * spriteX + data->cam.x * spriteY);
 
     if (transformY <= 0)
         continue;
@@ -440,8 +448,8 @@ void	mouse_rotation(t_data *data)
 	double	rot;
 	double	c;
 	double	s;
-	double	old_dirx;
-	double	old_planex;
+	double	old_dir;
+	double	old_plan;
 
 	dx = data->mouse_dx;
 	data->mouse_dx = 0;
@@ -456,12 +464,12 @@ void	mouse_rotation(t_data *data)
 	{
 		c = cos(rot);
 		s = sin(rot);
-		old_dirx = data->direction.x;
+		old_dir = data->direction.x;
 		data->direction.x = data->direction.x * c - data->direction.y * s;
-		data->direction.y = old_dirx * s + data->direction.y * c;
-		old_planex = data->cameraplane.x;
-		data->cameraplane.x = data->cameraplane.x * c - data->cameraplane.y * s;
-		data->cameraplane.y = old_planex * s + data->cameraplane.y * c;
+		data->direction.y = old_dir * s + data->direction.y * c;
+		old_plan = data->cam.x;
+		data->cam.x = data->cam.x * c - data->cam.y * s;
+		data->cam.y = old_plan * s + data->cam.y * c;
 	}
 }
 

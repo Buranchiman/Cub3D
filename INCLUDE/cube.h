@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 10:06:48 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/01 14:50:59 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,7 +121,7 @@ typedef struct s_data
 	int				cardinal;
 	t_texture		texture[NBR_TEXTURES];
 	t_point			player_pos;
-	t_point			cameraplane;
+	t_point			cam;
 	t_point			direction;
 	t_img			*mlx_img;
 	t_keys			keys;
@@ -174,7 +174,7 @@ int		render_frame(void *param);
 
 //walls.c
 int		vertical_walls(char *line);
-void		leak_check(char **map, int x, int y);
+void	leak_check(char **map, int x, int y);
 
 //minimap.c
 void	display_window(t_data *data);

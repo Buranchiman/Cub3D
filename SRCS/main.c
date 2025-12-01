@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 10:10:42 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/01 14:50:59 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,14 +100,14 @@ int	on_keyup(int keycode, void *param)
 //     if (rot > 0.1)  rot = 0.1;
 //     if (rot < -0.1) rot = -0.1;
 
-//     /* Rotate camera */
+//     /* Rotate cam */
 //     double oldDirX = d->direction.x;
 //     d->direction.x = d->direction.x * cos(rot) - d->direction.y * sin(rot);
 //     d->direction.y = oldDirX * sin(rot) + d->direction.y * cos(rot);
 
-//     double oldPlaneX = d->cameraplane.x;
-//     d->cameraplane.x = d->cameraplane.x * cos(rot) - d->cameraplane.y * sin(rot);
-//     d->cameraplane.y = oldPlaneX * sin(rot) + d->cameraplane.y * cos(rot);
+//     double oldPlaneX = d->cam.x;
+//     d->cam.x = d->cam.x * cos(rot) - d->cam.y * sin(rot);
+//     d->cam.y = oldPlaneX * sin(rot) + d->cam.y * cos(rot);
 
 //     mlx_mouse_move(d->mlx_ptr, d->win_ptr, centerX, centerY);
 //     return (0);

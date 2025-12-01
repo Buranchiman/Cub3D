@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 10:09:11 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/01 14:50:59 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,22 +39,22 @@ static void	set_direction(char c, t_data *data)
 	{
 		data->direction.x = 0.0;
 		data->direction.y = 1.0;
-		data->cameraplane.x = -0.66;
-		data->cameraplane.y = 0.0;
+		data->cam.x = -0.66;
+		data->cam.y = 0.0;
 	}
 	else if (c == 'E')
 	{
 		data->direction.x = 1.0;
 		data->direction.y = 0.0;
-		data->cameraplane.x = 0.0;
-		data->cameraplane.y = 0.66;
+		data->cam.x = 0.0;
+		data->cam.y = 0.66;
 	}
 	else if (c == 'W')
 	{
 		data->direction.x = -1.0;
 		data->direction.y = 0.0;
-		data->cameraplane.x = 0.0;
-		data->cameraplane.y = -0.66;
+		data->cam.x = 0.0;
+		data->cam.y = -0.66;
 	}
 }
 
