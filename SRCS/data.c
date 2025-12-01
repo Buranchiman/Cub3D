@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 09:58:39 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/11/30 21:51:15 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,8 +41,8 @@ void	init_data(void)
 	data->player_pos.x = -1;
 	data->player_pos.y = -1;
 	data->mlx_img = init_img();
-	data->mouse_center_x = SCREENWIDTH / 2;
-	data->mouse_center_y = SCREENHEIGHT / 2;
+	data->mouse_center_x = SCRN_W / 2;
+	data->mouse_center_y = SCRN_H / 2;
 	data->mouse_dx = 0;
 	data->mouse_sens = 0.0015;   // tune 0.0010–0.0030
 	data->max_rot_frame = 0.06;  // per frame cap; try 0.04–0.08

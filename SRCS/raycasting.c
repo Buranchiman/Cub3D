@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/27 17:06:33 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/01 02:47:21 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,8 @@ static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 {
 	char	*p;
 
-	if ((unsigned)x >= (unsigned)SCREENWIDTH
-		|| (unsigned)y >= (unsigned)SCREENHEIGHT)
+	if ((unsigned)x >= (unsigned)SCRN_W
+		|| (unsigned)y >= (unsigned)SCRN_H)
 		return ;
 	p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
 	*(unsigned int *)p = argb;
@@ -32,7 +32,6 @@ static int	fetch_texture(char c, int x, int y)
 	if (c == 'D')
 	{
 		idx = door_index_at(d, x, y);
-		printf("index of door is %d\n", idx);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
 			return (11);
 		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
@@ -107,7 +106,7 @@ void	update_player(t_data *d)
 			open_door(d, idx);
 	}
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1' || (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
- 		&& door_is_locked_at(d, (int)d->player_pos.x, (int)d->player_pos.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
+ 		&& door_is_locked_at(d, (int)d->player_pos.x, (int)d->player_pos.y)))
 	{
 		d->player_pos.x = tmpPosX;
 		d->player_pos.y = tmpPosY;
@@ -121,11 +120,11 @@ int	raycasting(t_data *data)
 	double	rayDirX;
 	double	rayDirY;
 	int		h;
-	double ZBuffer[SCREENWIDTH];
+	double ZBuffer[SCRN_W];
 	int pitch = 100;
 
-	h = SCREENHEIGHT;
-	w = SCREENWIDTH;
+	h = SCRN_H;
+	w = SCRN_W;
 	x = 0;
 	unsigned int ceiling_color = 0xFF87CEEB;  // sky
 	unsigned int floor_color   = 0xFF444444;  // floor
@@ -232,11 +231,11 @@ int	raycasting(t_data *data)
 
 		for (int y = 0; y < drawStart; ++y)
 		{
-			if (data->sky_texture.pixels && data->sky_texture.width > 0 && data->sky_texture.height > 0)
+			if (data->sky.pixels && data->sky.width > 0 && data->sky.height > 0)
 			{
-				int texX = (int)((double)x * data->sky_texture.width / (double)SCREENWIDTH);
-				int texY = (int)((double)y * data->sky_texture.height / (double)SCREENHEIGHT);
-				unsigned int color = data->sky_texture.pixels[texY * data->sky_texture.width + texX];
+				int texX = (int)((double)x * data->sky.width / (double)SCRN_W);
+				int texY = (int)((double)y * data->sky.height / (double)SCRN_H);
+				unsigned int color = data->sky.pixels[texY * data->sky.width + texX];
 				put_px(data, x, y, color | 0xFF000000);
 			}
 			else
@@ -254,24 +253,24 @@ int	raycasting(t_data *data)
 		wallX -= floor((wallX));
 
 		 //x coordinate on the texture
-		int texX = (int)(wallX * (double)data->texture[texNum].width);
+		int texX = (int)(wallX * (double)data->tex[texNum].width);
 		if (side == 0 && rayDirX > 0)
-			texX = data->texture[texNum].width - texX - 1;
+			texX = data->tex[texNum].width - texX - 1;
 		if (side == 1 && rayDirY < 0)
-			texX = data->texture[texNum].width - texX - 1;
+			texX = data->tex[texNum].width - texX - 1;
 
 		 // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
 		// How much to increase the texture coordinate per screen pixel
-		double step = 1.0 * data->texture[texNum].height / lineHeight;
+		double step = 1.0 * data->tex[texNum].height / lineHeight;
 		// Starting texture coordinate
 		double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
 		for(int y = drawStart; y < drawEnd; y++)
 		{
-			//ft_printf(1, "WTHHHHHH OHMAGAAAD Also texture path is %s\n", data->texture[texNum].path);
+			//ft_printf(1, "WTHHHHHH OHMAGAAAD Also texture path is %s\n", data->tex[texNum].path);
 			// Cast the texture coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
-			int texY = (int)texPos & (data->texture[texNum].height - 1);
+			int texY = (int)texPos & (data->tex[texNum].height - 1);
 			texPos += step;
-			unsigned int color = data->texture[texNum].pixels[texY * data->texture[texNum].width + texX];
+			unsigned int color = data->tex[texNum].pixels[texY * data->tex[texNum].width + texX];
 			// unsigned int color = 0xFF0000FF;
 			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			// if(side == 1) color = (color >> 1) & 8355711;
@@ -284,7 +283,7 @@ int	raycasting(t_data *data)
 	}
 	// for (int i = 0; i < data->monster_count; i++)
 	// {
-	// 	t_monster *m = &data->tab_monsters[i];
+	// 	t_monster *m = &data->tab_m[i];
 
 	// 	// relative to player
 	// 	double spriteX = m->pos.x - data->player_pos.x;
@@ -299,40 +298,40 @@ int	raycasting(t_data *data)
 	// 	double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
 
 	// 	// project to screen
-	// 	int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
+	// 	int spriteScreenX = (int)((SCRN_W / 2) * (1 + transformX / transformY));
 	// 	// world-space vertical offset to adjust "feet" height (tune 0.0–0.7)
 	// 	double vMove = 0.3;
 	// 	int vMoveScreen = (int)(vMove / transformY) + pitch;
 	// 	// sprite dimensions (scale with distance)
-	// 	int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
-	// 	int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2 + vMoveScreen;
+	// 	int spriteHeight = abs((int)(SCRN_H / transformY));
+	// 	int drawStartY = -spriteHeight / 2 + SCRN_H / 2 + vMoveScreen;
 	// 	if (drawStartY < 0) drawStartY = 0;
-	// 	int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2 + vMoveScreen;
-	// 	if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
+	// 	int drawEndY = spriteHeight / 2 + SCRN_H / 2 + vMoveScreen;
+	// 	if (drawEndY >= SCRN_H) drawEndY = SCRN_H - 1;
 
-	// 	int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
+	// 	int spriteWidth = abs((int)(SCRN_H / transformY));
 	// 	int drawStartX = -spriteWidth / 2 + spriteScreenX;
 	// 	if (drawStartX < 0) drawStartX = 0;
 	// 	int drawEndX = spriteWidth / 2 + spriteScreenX;
-	// 	if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
+	// 	if (drawEndX >= SCRN_W) drawEndX = SCRN_W - 1;
 
 	// 	// draw each vertical stripe of the sprite
 	// 	for (int stripe = drawStartX; stripe < drawEndX; stripe++)
 	// 	{
 	// 		int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-	// 					* data->texture[10].width / spriteWidth) / 256;
+	// 					* data->tex[10].width / spriteWidth) / 256;
 	// 		if (texX < 0) texX = 0;
-	// 		if (texX >= data->texture[10].width) texX = data->texture[10].width - 1;
+	// 		if (texX >= data->tex[10].width) texX = data->tex[10].width - 1;
 
-	// 		if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
+	// 		if (transformY > 0 && stripe >= 0 && stripe < SCRN_W && transformY < ZBuffer[stripe])
 	// 		{
 	// 			for (int y = drawStartY; y < drawEndY; y++)
 	// 			{
-	// 				int d = (y - (pitch + vMoveScreen)) * 256 - SCREENHEIGHT * 128 + spriteHeight * 128;
-	// 				int texY = ((d * data->texture[10].height) / spriteHeight) / 256;
+	// 				int d = (y - (pitch + vMoveScreen)) * 256 - SCRN_H * 128 + spriteHeight * 128;
+	// 				int texY = ((d * data->tex[10].height) / spriteHeight) / 256;
 	// 				if (texY < 0) texY = 0;
-	// 				if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
-	// 				unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
+	// 				if (texY >= data->tex[10].height) texY = data->tex[10].height - 1;
+	// 				unsigned int color = data->tex[10].pixels[texY * data->tex[10].width + texX];
 	// 				if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
 	// 					put_px(data, stripe, y, color);
 	// 			}
@@ -341,7 +340,7 @@ int	raycasting(t_data *data)
 	// }
 	for (int i = 0; i < data->monster_count; i++)
 {
-    t_monster *m = &data->tab_monsters[i];
+    t_monster *m = &data->tab_m[i];
 
     // relative to player
     double spriteX = m->pos.x - data->player_pos.x;
@@ -359,45 +358,45 @@ int	raycasting(t_data *data)
         continue;
 
     // screen X
-    int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
+    int spriteScreenX = (int)((SCRN_W / 2) * (1 + transformX / transformY));
 
     // world-space vertical offset (feet height, tune 0.0–0.7)
     double vMove = 0.3;
     int vMoveScreen = (int)(vMove / transformY);   // <-- NO + pitch here
 
     // sprite dimensions (scale with distance)
-    int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
-    int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2 + pitch + vMoveScreen;
+    int spriteHeight = abs((int)(SCRN_H / transformY));
+    int drawStartY = -spriteHeight / 2 + SCRN_H / 2 + pitch + vMoveScreen;
     if (drawStartY < 0) drawStartY = 0;
-    int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2 + pitch + vMoveScreen;
-    if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
+    int drawEndY = spriteHeight / 2 + SCRN_H / 2 + pitch + vMoveScreen;
+    if (drawEndY >= SCRN_H) drawEndY = SCRN_H - 1;
 
-    int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
+    int spriteWidth = abs((int)(SCRN_H / transformY));
     int drawStartX = -spriteWidth / 2 + spriteScreenX;
     if (drawStartX < 0) drawStartX = 0;
     int drawEndX = spriteWidth / 2 + spriteScreenX;
-    if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
+    if (drawEndX >= SCRN_W) drawEndX = SCRN_W - 1;
 
     // draw each vertical stripe of the sprite
     for (int stripe = drawStartX; stripe < drawEndX; stripe++)
     {
         int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-                    * data->texture[10].width / spriteWidth) / 256;
+                    * data->tex[10].width / spriteWidth) / 256;
         if (texX < 0) texX = 0;
-        if (texX >= data->texture[10].width) texX = data->texture[10].width - 1;
+        if (texX >= data->tex[10].width) texX = data->tex[10].width - 1;
 
-        if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
+        if (transformY > 0 && stripe >= 0 && stripe < SCRN_W && transformY < ZBuffer[stripe])
         {
             for (int y = drawStartY; y < drawEndY; y++)
             {
                 int d = (y - (pitch + vMoveScreen)) * 256
-                        - SCREENHEIGHT * 128
+                        - SCRN_H * 128
                         + spriteHeight * 128;
-                int texY = (d * data->texture[10].height) / spriteHeight / 256;
+                int texY = (d * data->tex[10].height) / spriteHeight / 256;
                 if (texY < 0) texY = 0;
-                if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
+                if (texY >= data->tex[10].height) texY = data->tex[10].height - 1;
 
-                unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
+                unsigned int color = data->tex[10].pixels[texY * data->tex[10].width + texX];
                 if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
                     put_px(data, stripe, y, color);
             }
@@ -414,12 +413,12 @@ int	raycasting(t_data *data)
 
 //     // simple gradient to test drawing
 // 	(void)param;
-//     for (int y = 0; y < SCREENHEIGHT; ++y)
+//     for (int y = 0; y < SCRN_H; ++y)
 //     {
-//         for (int x = 0; x < SCREENWIDTH; ++x)
+//         for (int x = 0; x < SCRN_W; ++x)
 //         {
-//             unsigned int r = (x * 255) / SCREENWIDTH;
-//             unsigned int g = (y * 255) / SCREENHEIGHT;
+//             unsigned int r = (x * 255) / SCRN_W;
+//             unsigned int g = (y * 255) / SCRN_H;
 //             unsigned int b = 128;
 //             unsigned int color = (r << 16) | (g << 8) | b;
 
@@ -488,7 +487,7 @@ int	render_frame(void *param)
 	update_player(data);
 	raycasting(data);
 	// compose minimap into the main image buffer, then blit once
-	display_minimap(data);
+	display_minimap(data, 0, 0);
 	mlx_put_image_to_window(data->mlx_ptr,
 		data->win_ptr, data->mlx_img->img, 0, 0);
 	return (0);

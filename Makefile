@@ -13,6 +13,7 @@ SRCS	+=	data.c
 SRCS	+=	utils.c
 SRCS	+=	raycasting.c
 SRCS	+=	walls.c
+SRCS	+=	display.c
 SRCS	+=	main.c
 SRCS	+=	minimap.c
 SRCS	+=	bonus_monsters.c
