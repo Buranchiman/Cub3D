@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:04:46 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:21:19 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,26 +60,18 @@ void	free_img(t_img *img)
 	}
 }
 
-void	ft_clean_exit(t_data *data, int option, char *msg)
+
+void free_data(t_data *data)
 {
 	int i;
 
 	i = 0;
-	if (data->map)
-		ft_clear_tab(data->map);
-	if (data->buffer)
-		free(data->buffer);
-	if (data->mlx_img)
-		free_img(data->mlx_img);
 	while (i < NBR_TEXTURES)
 	{
 		if (data->tex[i].ptr)
 			free_img(data->tex[i].ptr);
 		if (data->tex[i].path)
-		{
 			free(data->tex[i].path);
-			data->tex[i].path = NULL;
-		}
 		if (data->tex[i].pixels)
 			free(data->tex[i].pixels);
 		i++;
@@ -87,27 +79,26 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 	if (data->sky.ptr)
 		free_img(data->sky.ptr);
 	if (data->sky.path)
-	{
 		free(data->sky.path);
-		data->sky.path = NULL;
-	}
 	if (data->sky.pixels)
 		free(data->sky.pixels);
 	if (data->sky_path)
-	{
 		free(data->sky_path);
-		data->sky_path = NULL;
-	}
 	if (data->tab_m)
-	{
 		free(data->tab_m);
-		data->tab_m = NULL;
-	}
 	if (data->tab_doors)
-	{
 		free(data->tab_doors);
-		data->tab_doors = NULL;
-	}
+}
+
+void	ft_clean_exit(t_data *data, int option, char *msg)
+{
+	free_data(data);
+	if (data->map)
+		ft_clear_tab(data->map);
+	if (data->buffer)
+		free(data->buffer);
+	if (data->mlx_img)
+		free_img(data->mlx_img);
 	if (msg && option == 1)
 		ft_printf(2, "\x1b[38;5;196m[Error : %s]\033[0m\n", msg);
 	if (msg && option == 0)
@@ -119,7 +110,7 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		mlx_destroy_display(data->mlx_ptr);
 		free(data->mlx_ptr);
 	}
-	system("pkill mpg123"); //clean music
+	system("pkill mpg123");
 	system("stty sane");
 	if (option == 1)
 		exit(EXIT_FAILURE);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:59:02 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:21:34 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,7 @@ int	main(int arc, char **arv)
 	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
-	system("mpg123 --loop -1 -q lavanville.mp3 &"); //add music
+	system("mpg123 --loop -1 -q lavanville.mp3 &");
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr,
 			SCRN_W, SCRN_H);
 	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img,

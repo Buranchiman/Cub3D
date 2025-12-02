@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:06:02 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 19:58:20 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,6 +122,72 @@ void	update_player(t_data *d)
 	}
 }
 
+/*
+// Treat pure black (RGB = 0) as transparent
+// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
+static void draw_gates2(t_data *data, int x, int drawStart, int drawEnd, int texX, double step, double texPos, double dist, t_tex *gateTex)
+{
+	int y;
+
+	y = drawStart;
+	while (y < drawEnd)
+    {
+        int texY = (int)texPos;
+        texPos += step;
+        if (texY < 0) 
+			texY = 0;
+        if (texY >= gateTex->height)
+			texY = gateTex->height - 1;
+        unsigned int color = gateTex->pixels[texY * gateTex->width + texX];
+		if ((color & 0x00FFFFFF) != 0) // not transparent
+		{
+			if (dist < data->pixelDepth[y][x])
+			{
+				put_px(data, x, y, color | 0xFF000000);
+				data->pixelDepth[y][x] = dist;
+			}
+		}
+		y++;
+    }
+}
+
+// draw from far → near so closer gate overwrites farther
+static void draw_gates(t_data *data, int pitch, int h)
+{
+	t_tex *gateTex ;
+
+	int x;
+	
+	x= 0;
+    while (x < SCRN_W)
+    {
+		int count = data->gateCount[x];
+        if (count <= 0)
+			continue;
+		int gi = count - 1;
+        while (gi >= 0)
+        {
+            double dist = data->gateLayers[x][gi].dist;
+            if (dist <= 0.0)
+            	continue;
+			gateTex = &data->tex[data->gateLayers[x][gi].locked];
+            int lineHeight = (int)(h / dist);
+            int drawStart = -lineHeight / 2 + h / 2 + pitch;
+            if (drawStart < 0)
+				drawStart = 0;
+            int drawEnd = lineHeight / 2 + h / 2 + pitch;
+            if (drawEnd >= h)
+				drawEnd = h - 1;
+            int texX = data->gateLayers[x][gi].texX;
+            double step = 1.0 * gateTex->height / lineHeight;
+            double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
+            draw_gates2(data, x, drawStart, drawEnd, texX, step, texPos, dist, gateTex);
+			gi--;
+        }
+		x++;
+    }
+}*/
+
 static void draw_gates(t_data *data, int pitch, int h)
 {
 	t_tex *gateTex ;
@@ -132,7 +198,6 @@ static void draw_gates(t_data *data, int pitch, int h)
         int count = data->gateCount[x];
         if (count <= 0)
             continue;
-
         // draw from far → near so closer gate overwrites farther
         for (int gi = count - 1; gi >= 0; --gi)
         {
@@ -141,29 +206,24 @@ static void draw_gates(t_data *data, int pitch, int h)
                 continue;
 			gateTex = &data->tex[data->gateLayers[x][gi].locked];
             int lineHeight = (int)(h / dist);
-
             int drawStart = -lineHeight / 2 + h / 2 + pitch;
-            if (drawStart < 0) drawStart = 0;
-
+            if (drawStart < 0)
+				drawStart = 0;
             int drawEnd = lineHeight / 2 + h / 2 + pitch;
-            if (drawEnd >= h) drawEnd = h - 1;
-
+            if (drawEnd >= h)
+				drawEnd = h - 1;
             int texX = data->gateLayers[x][gi].texX;
-
             double step = 1.0 * gateTex->height / lineHeight;
             double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
-
             for (int y = drawStart; y < drawEnd; ++y)
             {
                 int texY = (int)texPos;
                 texPos += step;
-
-                if (texY < 0) texY = 0;
-                if (texY >= gateTex->height) texY = gateTex->height - 1;
-
-                unsigned int color =
-                    gateTex->pixels[texY * gateTex->width + texX];
-
+                if (texY < 0) 
+					texY = 0;
+                if (texY >= gateTex->height)
+					texY = gateTex->height - 1;
+                unsigned int color = gateTex->pixels[texY * gateTex->width + texX];
                 // Treat pure black (RGB = 0) as transparent
 				if ((color & 0x00FFFFFF) != 0) // not transparent
 				{
@@ -187,7 +247,6 @@ int	raycasting(t_data *data)
 	double	rayDirX;
 	double	rayDirY;
 	int		h;
-	double ZBuffer[SCRN_W];
 	int pitch = 100;
 
 	h = SCRN_H;
@@ -332,7 +391,6 @@ int	raycasting(t_data *data)
 		 if (perpWallDist < 1e-6)
 		 	perpWallDist = 1e-6;
 		int lineHeight = (int)(h / perpWallDist);
-		ZBuffer[x] = perpWallDist;
 
 		//calculate lowest and highest pixel to fill in current stripe
 		int drawStart = -lineHeight / 2 + h / 2 + pitch;
@@ -499,6 +557,8 @@ int	raycasting(t_data *data)
 //     return 0;
 // }
 
+// convert to radians; DO NOT multiply by dt here (event accumulation already reflects real motion)
+// clamp huge flicks so it never spins too fast
 void	mouse_rotation(t_data *data)
 {
 	int		dx;
@@ -506,13 +566,10 @@ void	mouse_rotation(t_data *data)
 	double	c;
 	double	s;
 	double	old_dir;
-	double	old_plan;
 
 	dx = data->mouse_dx;
 	data->mouse_dx = 0;
-	// convert to radians; DO NOT multiply by dt here (event accumulation already reflects real motion)
 	rot = dx * data->mouse_sens;
-	// clamp huge flicks so it never spins too fast
 	if (rot > data->max_rot_frame)
 		rot = data->max_rot_frame;
 	if (rot < -data->max_rot_frame)
@@ -524,12 +581,12 @@ void	mouse_rotation(t_data *data)
 		old_dir = data->direction.x;
 		data->direction.x = data->direction.x * c - data->direction.y * s;
 		data->direction.y = old_dir * s + data->direction.y * c;
-		old_plan = data->cam.x;
+		data->cam.y = data->cam.x * s + data->cam.y * c;
 		data->cam.x = data->cam.x * c - data->cam.y * s;
-		data->cam.y = old_plan * s + data->cam.y * c;
 	}
 }
 
+// compose minimap into the main image buffer, then blit once
 int	render_frame(void *param)
 {
 	t_data			*data;
@@ -552,7 +609,6 @@ int	render_frame(void *param)
 	mouse_rotation(data);
 	update_player(data);
 	raycasting(data);
-	// compose minimap into the main image buffer, then blit once
 	display_minimap(data, 0, 0);
 	mlx_put_image_to_window(data->mlx_ptr,
 		data->win_ptr, data->mlx_img->img, 0, 0);
