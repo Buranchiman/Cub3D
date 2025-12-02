@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 02:14:53 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/02 15:32:07 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 13
+# define NBR_TEXTURES 14
 
 // PATH TEXTURES
 # define GROUND_MINIMAP "TEXTURES/ground_map.xpm"
@@ -32,7 +32,7 @@
 # define SOUTH "TEXTURES/south.xpm"
 # define WEST "TEXTURES/west.xpm"
 # define MONSTER "TEXTURES/monster.xpm"
-//# define MONSTER2 "TEXTURES/monster2.xpm"
+# define MONSTER2 "TEXTURES/monster2.xpm"
 # define DOOR_CLOSED "TEXTURES/door_closed.xpm"
 # define DOOR_OPENED "TEXTURES/door_opened.xpm"
 # define MONSTER_MAP "TEXTURES/monster_map.xpm"//to rename i think

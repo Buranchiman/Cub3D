@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:01:28 by manon             #+#    #+#             */
-/*   Updated: 2025/11/30 18:42:35 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/02 15:44:21 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,23 +64,23 @@ void	monster_init(t_data *data, int x, int y)
 	}
 }
 
-void	valid_moves(t_data *data, t_point tab_tmp, int i)
+void	valid_moves(t_data *data, t_point tab_tmp, int i, int j)
 {
 	int	tx;
 	int	ty;
-	int	j;
 
 	tx = (int)tab_tmp.x;
 	ty = (int)tab_tmp.y;
-	if (ty < 0 || ty >= (int)ft_tablen(data->map) || tx < 0 || tx >= (int)ft_strlen(data->map[ty]))
+	if (ty < 0 || ty >= (int)ft_tablen(data->map) || tx < 0
+		|| tx >= (int)ft_strlen(data->map[ty]))
 		return ;
-	if (data->map[ty][tx] == '1'
-		|| (data->map[ty][tx] == 'D' && door_is_locked_at(data, tab_tmp.x, tab_tmp.y)))
+	if (data->map[ty][tx] == '1' || (data->map[ty][tx] == 'D'
+		&& door_is_locked_at(data, tab_tmp.x, tab_tmp.y)))
 		return ;
-	j = 0;
 	while (data->tab_m && j < data->monster_count)
 	{
-		if (j != i && (int)data->tab_m[j].pos.x == tx && (int)data->tab_m[j].pos.y == ty)
+		if (j != i && (int)data->tab_m[j].pos.x == tx
+			&& (int)data->tab_m[j].pos.y == ty)
 			return ;
 		j++;
 	}
@@ -113,7 +113,7 @@ void	monsters_move(t_data *data)
 			tab_tmp.y = data->tab_m[i].pos.y - 0.1;
 		else if ((data->player_pos.y - data->tab_m[i].pos.y) > 0)
 			tab_tmp.y = data->tab_m[i].pos.y + 0.1;
-		valid_moves(data, tab_tmp, i);
+		valid_moves(data, tab_tmp, i, 0);
 		i++;
 	}
 }
