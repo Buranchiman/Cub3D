@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/01 02:30:38 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/02 02:14:58 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,9 @@
 
 void	fil_textures_tab(t_data *data)
 {
+	//int i;
+//
+	//i = 0;
 	data->tex[0].path = ft_strdup(NORTH);
 	data->tex[1].path = ft_strdup(SOUTH);
 	data->tex[2].path = ft_strdup(WEST);
@@ -27,6 +30,13 @@ void	fil_textures_tab(t_data *data)
 	data->tex[10].path = ft_strdup(MONSTER);
 	data->tex[11].path = ft_strdup(DOOR_CLOSED);
 	data->tex[12].path = ft_strdup(DOOR_OPENED);
+	//data->tex[13].path = ft_strdup(MONSTER2);
+	//while(i < NBR_TEXTURES)
+	//{
+	//	if (!data->tex[i].path)
+	//		ft_clean_exit(data, 1, "Failed to allocate texture path");
+	//	i++;
+	//}
 }
 
 int	init_pixels(t_texture *tex)
