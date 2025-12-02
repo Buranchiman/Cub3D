@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:45:28 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 15:58:02 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 13
+# define NBR_TEXTURES 14
 
 // PATH TEXTURES
 # define GROUND_MINIMAP "TEXTURES/ground_map.xpm"
@@ -32,6 +32,7 @@
 # define SOUTH "TEXTURES/south.xpm"
 # define WEST "TEXTURES/west.xpm"
 # define MONSTER "TEXTURES/monster.xpm"
+# define MONSTER2 "TEXTURES/monster2.xpm"
 # define DOOR_CLOSED "TEXTURES/door_closed.xpm"
 # define DOOR_OPENED "TEXTURES/door_opened.xpm"
 # define MONSTER_MAP "TEXTURES/monster_map.xpm"//to rename i think
@@ -52,8 +53,8 @@
 //	DIMENSIONS
 # define TEXWIDTH 64
 # define TEXHEIGHT 64
-# define SCREENWIDTH 1900
-# define SCREENHEIGHT 1060
+# define SCRN_W 1900
+# define SCRN_H 1060
 # define CLOSEST 0.1 //closest you can get to a wall
 
 # define IMG_SIZE 64
@@ -129,7 +130,7 @@ typedef struct s_data
 	int				held_key;
 	unsigned long	last_update;
 	int				cardinal;
-	t_texture		texture[NBR_TEXTURES];
+	t_texture		tex[NBR_TEXTURES];
 	t_point			player_pos;
 	t_point			cam;
 	t_point			direction;
@@ -139,22 +140,22 @@ typedef struct s_data
 	double			deltatime;
 	void			*mlx_ptr;
 	void			*win_ptr;
-	t_monster		*tab_monsters;
+	t_monster		*tab_m;
 	int				monster_count;
 	t_doors			*tab_doors;
 	int				doors_count;
-	char			*sky_fallback_path;
-	t_texture		sky_texture;
+	char			*sky_path;
+	t_texture		sky;
 	int				mouse_center_x;
 	int				mouse_center_y;
 	double			mouse_sens;     // radians per pixel
 	int				mouse_ready;    // 0 until first center
 	int				mouse_dx;        // accumulated horizontal delta (pixels) since last frame
 	double			max_rot_frame;   // hard cap per frame in radians (e.g. 0.06 ≈ 3.4°)
-	t_gate_layer	gateLayers[SCREENWIDTH][MAX_GATES_PER_COLUMN];
-	int				gateCount[SCREENWIDTH];
-	double			pixelDepth[SCREENHEIGHT][SCREENWIDTH];
-	double			zbuffer[SCREENWIDTH];
+	t_gate_layer	gateLayers[SCRN_W][MAX_GATES_PER_COLUMN];
+	int				gateCount[SCRN_W];
+	double			pixelDepth[SCRN_H][SCRN_W];
+	double			zbuffer[SCRN_W];
 }				t_data;
 
 //utils.c
@@ -191,17 +192,18 @@ int		vertical_walls(char *line);
 void	leak_check(char **map, int x, int y);
 
 //minimap.c
-void	display_window(t_data *data);
-void	display_minimap(t_data *data);
+void	display_window(t_data *data, int i);
+//void	display_window(t_data *data);
+void	display_minimap(t_data *data, int x, int y);
 
 //bonus_monsters.c
-int		monster_count(t_data *data);
-void	monster_init(t_data *data);
+int		monster_count(t_data *data, int x, int y);
+void	monster_init(t_data *data, int x, int y);
 void	monsters_move(t_data *data);
 
 //bonus_doors.c
 void	init_enigma(t_data *data, int i);
-void	doors_init(t_data *data);
+void	doors_init(t_data *data, int x, int y);
 int		open_door(t_data *data, int i);
 int		door_is_locked_at(t_data *data, int tx, int ty);
 int		door_index_at(t_data *data, int tx, int ty);

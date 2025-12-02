@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 15:43:02 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/19 16:45:16 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/01 02:04:40 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ int	import_texture(int index, int which, char *line)
 		ft_clean_exit(get_data(), 1, "Error\nTexture format incorrect\n");
 		return (1);
 	}
-	if (data->texture[which].path)
-		free(data->texture[which].path);
-	data->texture[which].path = ft_substr(line, index, count);
+	if (data->tex[which].path)
+		free(data->tex[which].path);
+	data->tex[which].path = ft_substr(line, index, count);
 	return (0);
 }
 
@@ -80,14 +80,11 @@ int	read_textures(char ***map)
 			return (1);
 		i++;
 	}
-	//printf("%d textures have been read\n", i);
-	// display_texture();
 	take_texture_out(map, i);
-	/* if no ceiling texture provided in the map, use our spirale fallback */
-	if (!data->texture[4].path && !data->sky_fallback_path)
+	if (!data->tex[4].path && !data->sky_path)
 	{
-		data->sky_fallback_path = ft_strdup("TEXTURES/spirale.xpm");
-		if (!data->sky_fallback_path)
+		data->sky_path = ft_strdup("TEXTURES/spirale.xpm");
+		if (!data->sky_path)
 			ft_clean_exit(data, 1, "malloc failed for sky fallback path");
 	}
 	return (0);

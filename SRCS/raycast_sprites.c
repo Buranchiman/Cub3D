@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:02:42 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 15:57:36 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ static void	init_sprite_screen(t_data *d, t_monster *m, int *sx,
 		*sx = -1;
 		return ;
 	}
-	*sx = (int)((SCREENWIDTH / 2)
+	*sx = (int)((SCRN_W / 2)
 			* (1.0 + tr_x_y[0] / tr_x_y[1]));
 }
 
@@ -44,20 +44,20 @@ static void	compute_sprite_bounds(double tr_y, int pitch,
 	int	draw_start_x;
 	int	draw_end_x;
 
-	sprite_h = (int)fabs((double)SCREENHEIGHT / tr_y);
-	sprite_w = (int)fabs((double)SCREENHEIGHT / tr_y);
-	draw_start_y = -sprite_h / 2 + SCREENHEIGHT / 2 + pitch;
+	sprite_h = (int)fabs((double)SCRN_H / tr_y);
+	sprite_w = (int)fabs((double)SCRN_H / tr_y);
+	draw_start_y = -sprite_h / 2 + SCRN_H / 2 + pitch;
 	if (draw_start_y < 0)
 		draw_start_y = 0;
-	draw_end_y = sprite_h / 2 + SCREENHEIGHT / 2 + pitch;
-	if (draw_end_y >= SCREENHEIGHT)
-		draw_end_y = SCREENHEIGHT - 1;
+	draw_end_y = sprite_h / 2 + SCRN_H / 2 + pitch;
+	if (draw_end_y >= SCRN_H)
+		draw_end_y = SCRN_H - 1;
 	draw_start_x = -sprite_w / 2 + bounds[0];
 	if (draw_start_x < 0)
 		draw_start_x = 0;
 	draw_end_x = sprite_w / 2 + bounds[0];
-	if (draw_end_x >= SCREENWIDTH)
-		draw_end_x = SCREENWIDTH - 1;
+	if (draw_end_x >= SCRN_W)
+		draw_end_x = SCRN_W - 1;
 	bounds[1] = draw_start_y;
 	bounds[2] = draw_end_y;
 	bounds[3] = draw_start_x;
@@ -80,12 +80,12 @@ static void	draw_sprite_stripe(t_data *d, int stripe, int *b, double tr_y)
 		tex_x = 0;
 	if (tex_x >= d->texture[10].width)
 		tex_x = d->texture[10].width - 1;
-	if (!(tr_y > 0.0 && stripe >= 0 && stripe < SCREENWIDTH))
+	if (!(tr_y > 0.0 && stripe >= 0 && stripe < SCRN_W))
 		return ;
 	y = b[1];
 	while (y < b[2])
 	{
-		dv = (y - b[7]) * 256 - SCREENHEIGHT * 128 + b[5] * 128;
+		dv = (y - b[7]) * 256 - SCRN_H * 128 + b[5] * 128;
 		tex_y = (dv * d->texture[10].height) / b[5] / 256;
 		if (tex_y < 0)
 			tex_y = 0;

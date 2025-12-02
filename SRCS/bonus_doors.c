@@ -3,23 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_doors.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/11/26 14:00:28 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/01 02:12:48 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-int doors_count(t_data *data)
+int	doors_count(t_data *data, int x, int y)
 {
-	int y;
-	int x;
-	int doors_count;
+	int	doors_count;
 
 	doors_count = 0;
-	y = 0;
 	while (data->map[y])
 	{
 		x = 0;
@@ -44,36 +41,37 @@ int doors_count(t_data *data)
 	return (data->doors_count);
 }
 
-void init_enigma(t_data *data, int i)
+void	init_enigma(t_data *data, int i)
 {
-		if (i == 0)
-		{
-			data->tab_doors[i].enigma = "I am ./door. I am a directory.";
-			data->tab_doors[i].soluce = "cd ./door";
-		}
-		else if (i == 1)
-		{
-			data->tab_doors[i].enigma = "T - S = R | S + S = R | S + S + S = ?";
-			data->tab_doors[i].soluce = "T";
-		}
-		else
-		{
-			data->tab_doors[i].enigma = "The code is oO0OOo0Oo";
-			data->tab_doors[i].soluce = "oO0OOo0Oo";
-		}
-		data->tab_doors[i].lock = 1;
+	if (i == 0)
+	{
+		data->tab_doors[i].enigma = "I am ./door. I am a directory.";
+		data->tab_doors[i].soluce = "cd ./door";
+	}
+	else if (i == 1)
+	{
+		data->tab_doors[i].enigma = "T - S = R | S + S = R | S + S + S = ?";
+		data->tab_doors[i].soluce = "T";
+	}
+	else
+	{
+		data->tab_doors[i].enigma = "The code is oO0OOo0Oo";
+		data->tab_doors[i].soluce = "oO0OOo0Oo";
+	}
+	data->tab_doors[i].lock = 1;
 }
 
 int	door_is_locked_at(t_data *data, int tx, int ty)
 {
-	int i;
+	int	i;
 
 	if (!data->tab_doors || data->doors_count <= 0)
 		return (0);
 	i = 0;
 	while (i < data->doors_count)
 	{
-		if ((int)data->tab_doors[i].pos.x == tx && (int)data->tab_doors[i].pos.y == ty)
+		if ((int)data->tab_doors[i].pos.x == tx
+			&& (int)data->tab_doors[i].pos.y == ty)
 			return (data->tab_doors[i].lock);
 		i++;
 	}
@@ -82,14 +80,15 @@ int	door_is_locked_at(t_data *data, int tx, int ty)
 
 int	door_index_at(t_data *data, int tx, int ty)
 {
-	int i;
+	int	i;
 
 	if (!data->tab_doors || data->doors_count <= 0)
 		return (-1);
 	i = 0;
 	while (i < data->doors_count)
 	{
-		if ((int)data->tab_doors[i].pos.x == tx && (int)data->tab_doors[i].pos.y == ty)
+		if ((int)data->tab_doors[i].pos.x == tx
+			&& (int)data->tab_doors[i].pos.y == ty)
 			return (i);
 		i++;
 	}
@@ -98,7 +97,7 @@ int	door_index_at(t_data *data, int tx, int ty)
 
 int	open_door(t_data *data, int i)
 {
-	char *line;
+	char	*line;
 
 	if (data->tab_doors[i].lock == 0)
 		return (0);
@@ -123,15 +122,12 @@ int	open_door(t_data *data, int i)
 	return (0);
 }
 
-void	doors_init(t_data *data)
+void	doors_init(t_data *data, int x, int y)
 {
-	int y;
-	int x;
-	int i;
+	int	i;
 
 	i = 0;
-	y = 0;
-	if (!doors_count(data))
+	if (!doors_count(data, 0, 0))
 		return ;
 	if (!data->tab_doors)
 		ft_clean_exit(data, 1, "tab_doors NULL in doors_init");

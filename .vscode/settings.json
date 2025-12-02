@@ -3,6 +3,7 @@
 		"time.h": "c",
 		"math.h": "c",
 		"libft.h": "c",
-		"cube.h": "c"
+		"cube.h": "c",
+		"stdio.h": "c"
 	}
 }

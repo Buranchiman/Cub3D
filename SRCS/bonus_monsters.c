@@ -3,23 +3,20 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_monsters.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:01:28 by manon             #+#    #+#             */
-/*   Updated: 2025/11/26 13:28:12 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/02 15:44:21 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-int	monster_count(t_data *data)
+int	monster_count(t_data *data, int x, int y)
 {
-	int y;
-	int x;
-	int monsters_count;
+	int	monsters_count;
 
 	monsters_count = 0;
-	y = 0;
 	while (data->map[y])
 	{
 		x = 0;
@@ -33,25 +30,22 @@ int	monster_count(t_data *data)
 	}
 	if (monsters_count > 0)
 	{
-		data->tab_monsters = ft_calloc(monsters_count, sizeof(*(data->tab_monsters)));
-		if (!data->tab_monsters)
+		data->tab_m = ft_calloc(monsters_count, sizeof(*(data->tab_m)));
+		if (!data->tab_m)
 			ft_clean_exit(data, 1, "Malloc failed in monster_count");
 		data->monster_count = monsters_count;
 	}
 	else
-		data->tab_monsters = NULL;
+		data->tab_m = NULL;
 	return (monsters_count);
 }
 
-void	monster_init(t_data *data)
+void	monster_init(t_data *data, int x, int y)
 {
-	int y;
-	int x;
-	int i;
+	int	i;
 
 	i = 0;
-	y = 0;
-	if (!monster_count(data))
+	if (!monster_count(data, 0, 0))
 		return ;
 	while (data->map[y])
 	{
@@ -60,8 +54,8 @@ void	monster_init(t_data *data)
 		{
 			if (data->map[y][x] == 'M')
 			{
-				data->tab_monsters[i].pos.x = (double)x;
-				data->tab_monsters[i].pos.y = (double)y;
+				data->tab_m[i].pos.x = (double)x;
+				data->tab_m[i].pos.y = (double)y;
 				i++;
 			}
 			x++;
@@ -70,56 +64,56 @@ void	monster_init(t_data *data)
 	}
 }
 
-void	valid_moves(t_data *data, t_point tab_monster_tmp, int i)
+void	valid_moves(t_data *data, t_point tab_tmp, int i, int j)
 {
-	int tx;
-	int ty;
-	int j;
+	int	tx;
+	int	ty;
 
-	tx = (int)tab_monster_tmp.x;
-	ty = (int)tab_monster_tmp.y;
-	if (ty < 0 || ty >= (int)ft_tablen(data->map) || tx < 0 || tx >= (int)ft_strlen(data->map[ty]))
+	tx = (int)tab_tmp.x;
+	ty = (int)tab_tmp.y;
+	if (ty < 0 || ty >= (int)ft_tablen(data->map) || tx < 0
+		|| tx >= (int)ft_strlen(data->map[ty]))
 		return ;
-	if (data->map[ty][tx] == '1'
-		|| (data->map[ty][tx] == 'D' && door_is_locked_at(data, tab_monster_tmp.x, tab_monster_tmp.y)))
+	if (data->map[ty][tx] == '1' || (data->map[ty][tx] == 'D'
+		&& door_is_locked_at(data, tab_tmp.x, tab_tmp.y)))
 		return ;
-	j = 0;
-	while (data->tab_monsters && j < data->monster_count)
+	while (data->tab_m && j < data->monster_count)
 	{
-		if (j != i && (int)data->tab_monsters[j].pos.x == tx && (int)data->tab_monsters[j].pos.y == ty)
+		if (j != i && (int)data->tab_m[j].pos.x == tx
+			&& (int)data->tab_m[j].pos.y == ty)
 			return ;
 		j++;
 	}
-	data->map[(int)data->tab_monsters[i].pos.y][(int)data->tab_monsters[i].pos.x] = '0';
-	data->tab_monsters[i].pos.x = tab_monster_tmp.x;
-	data->tab_monsters[i].pos.y = tab_monster_tmp.y;
-	data->map[(int)data->tab_monsters[i].pos.y][(int)data->tab_monsters[i].pos.x] = 'M';
-	if (fabs(data->player_pos.x - data->tab_monsters[i].pos.x) < 0.3
-		&& fabs(data->player_pos.y - data->tab_monsters[i].pos.y) < 0.3)
+	data->map[(int)data->tab_m[i].pos.y][(int)data->tab_m[i].pos.x] = '0';
+	data->tab_m[i].pos.x = tab_tmp.x;
+	data->tab_m[i].pos.y = tab_tmp.y;
+	data->map[(int)data->tab_m[i].pos.y][(int)data->tab_m[i].pos.x] = 'M';
+	if (fabs(data->player_pos.x - data->tab_m[i].pos.x) < 0.3
+		&& fabs(data->player_pos.y - data->tab_m[i].pos.y) < 0.3)
 		ft_clean_exit(data, 0, "YOU'RE DEAD!💀");
 }
 
 void	monsters_move(t_data *data)
 {
-	int 		i;
-	t_point		tab_monster_tmp;
+	int		i;
+	t_point	tab_tmp;
 
 	i = 0;
-	if (!data->tab_monsters || data->monster_count == 0)
+	if (!data->tab_m || data->monster_count == 0)
 		return ;
 	while (i < data->monster_count)
 	{
-		tab_monster_tmp.x = data->tab_monsters[i].pos.x;
-		tab_monster_tmp.y = data->tab_monsters[i].pos.y;
-		if ((data->player_pos.x - data->tab_monsters[i].pos.x) < 0)
-			tab_monster_tmp.x = data->tab_monsters[i].pos.x - 0.1;
-		else if ((data->player_pos.x - data->tab_monsters[i].pos.x) > 0)
-			tab_monster_tmp.x = data->tab_monsters[i].pos.x + 0.1;
-		if ((data->player_pos.y - data->tab_monsters[i].pos.y) < 0)
-			tab_monster_tmp.y = data->tab_monsters[i].pos.y - 0.1;
-		else if ((data->player_pos.y - data->tab_monsters[i].pos.y) > 0)
-			tab_monster_tmp.y = data->tab_monsters[i].pos.y + 0.1;
-		valid_moves(data, tab_monster_tmp, i);
+		tab_tmp.x = data->tab_m[i].pos.x;
+		tab_tmp.y = data->tab_m[i].pos.y;
+		if ((data->player_pos.x - data->tab_m[i].pos.x) < 0)
+			tab_tmp.x = data->tab_m[i].pos.x - 0.1;
+		else if ((data->player_pos.x - data->tab_m[i].pos.x) > 0)
+			tab_tmp.x = data->tab_m[i].pos.x + 0.1;
+		if ((data->player_pos.y - data->tab_m[i].pos.y) < 0)
+			tab_tmp.y = data->tab_m[i].pos.y - 0.1;
+		else if ((data->player_pos.y - data->tab_m[i].pos.y) > 0)
+			tab_tmp.y = data->tab_m[i].pos.y + 0.1;
+		valid_moves(data, tab_tmp, i, 0);
 		i++;
 	}
 }

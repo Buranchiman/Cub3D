@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:42:52 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 15:57:36 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,8 @@ static void	init_frame(t_data *d, int *h, int *w, int *pitch)
 	int	x;
 	int	y;
 
-	*h = SCREENHEIGHT;
-	*w = SCREENWIDTH;
+	*h = SCRN_H;
+	*w = SCRN_W;
 	*pitch = 100;
 	y = 0;
 	while (y < *h)
@@ -32,7 +32,7 @@ static void	init_frame(t_data *d, int *h, int *w, int *pitch)
 		y++;
 	}
 	x = 0;
-	while (x < SCREENWIDTH)
+	while (x < SCRN_W)
 	{
 		d->gateCount[x] = 0;
 		x++;
@@ -183,9 +183,9 @@ static void	draw_column(t_data *d, int x, int h, int pitch,
 			&& d->sky_texture.width > 0 && d->sky_texture.height > 0)
 		{
 			tex_x = (int)((double)x * d->sky_texture.width
-					/ (double)SCREENWIDTH);
+					/ (double)SCRN_W);
 			tex_y = (int)((double)y * d->sky_texture.height
-					/ (double)SCREENHEIGHT);
+					/ (double)SCRN_H);
 			color = d->sky_texture.pixels[tex_y * d->sky_texture.width
 				+ tex_x];
 			put_px(d, x, y, color | 0xFF000000);

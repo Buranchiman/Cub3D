@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkmap.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/01 14:50:59 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/02 15:58:44 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ void	check_borders(t_data *data, char **map, int pcount)
 		i = 0;
 		while (map[j][i])
 		{
-			//if (!ft_strchr("01NSWE ", map[j][i])) ⚜️bonus⚜️
 			if (!ft_strchr("01NSWE MD", map[j][i]))
 				ft_clean_exit(data, 1, "Map char unvalid");
 			pcount += get_player(map, i, j);
@@ -131,7 +130,6 @@ void	get_map(char *file_name)
 	}
 	read_textures(&data->map);
 	check_map(data, data->map);
-	//⚜️bonus⚜️
-	monster_init(data);
-	doors_init(data);
+	monster_init(data, 0, 0);
+	doors_init(data, 0, 0);
 }

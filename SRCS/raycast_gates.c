@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:42:52 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 15:57:07 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,7 +74,7 @@ void	draw_gates(t_data *data, int pitch, int h)
 	int	x;
 
 	x = 0;
-	while (x < SCREENWIDTH)
+	while (x < SCRN_W)
 	{
 		if (data->gateCount[x] > 0)
 			draw_gate_column(data, x, h, pitch);

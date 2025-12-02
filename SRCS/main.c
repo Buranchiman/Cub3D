@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/01 14:50:59 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/02 15:59:02 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,8 @@ int	on_keyup(int keycode, void *param)
 // int mouse_move(int x, int y, t_data *d)
 // {
 //     static int  first = 1;
-//     int         centerX = SCREENWIDTH / 2;
-//     int         centerY = SCREENHEIGHT / 2;
+//     int         centerX = SCRN_W / 2;
+//     int         centerY = SCRN_H / 2;
 //     (void)y;
 
 //     if (first)
@@ -121,8 +121,8 @@ int	mouse_move(int x, int y, t_data *d)
 	int			dx;
 
 	(void)y;
-	cx = SCREENWIDTH / 2;
-	cy = SCREENHEIGHT / 2;
+	cx = SCRN_W / 2;
+	cy = SCRN_H / 2;
 	if (first)
 	{
 		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);
@@ -146,13 +146,13 @@ int	main(int arc, char **arv)
 	verif_param(arc, arv);
 	get_map(arv[1]);
 	data = get_data();
-	display_window(data);
-	display_minimap(data);
+	display_window(data, 0);
+	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
-	//system("mpg123 --loop -1 -q musique1.mp3 &"); //add music
+	system("mpg123 --loop -1 -q lavanville.mp3 &"); //add music
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr,
-			SCREENWIDTH, SCREENHEIGHT);
+			SCRN_W, SCRN_H);
 	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img,
 			&data->mlx_img->bpp, &data->mlx_img->line_len,
 			&data->mlx_img->endian);

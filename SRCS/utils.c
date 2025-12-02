@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/11/25 16:46:21 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/02 15:54:27 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,35 +73,35 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		free_img(data->mlx_img);
 	while (i < NBR_TEXTURES)
 	{
-		if (data->texture[i].ptr)
-			free_img(data->texture[i].ptr);
-		if (data->texture[i].path)
+		if (data->tex[i].ptr)
+			free_img(data->tex[i].ptr);
+		if (data->tex[i].path)
 		{
-			free(data->texture[i].path);
-			data->texture[i].path = NULL;
+			free(data->tex[i].path);
+			data->tex[i].path = NULL;
 		}
-		if (data->texture[i].pixels)
-			free(data->texture[i].pixels);
+		if (data->tex[i].pixels)
+			free(data->tex[i].pixels);
 		i++;
 	}
-	if (data->sky_texture.ptr)
-		free_img(data->sky_texture.ptr);
-	if (data->sky_texture.path)
+	if (data->sky.ptr)
+		free_img(data->sky.ptr);
+	if (data->sky.path)
 	{
-		free(data->sky_texture.path);
-		data->sky_texture.path = NULL;
+		free(data->sky.path);
+		data->sky.path = NULL;
 	}
-	if (data->sky_texture.pixels)
-		free(data->sky_texture.pixels);
-	if (data->sky_fallback_path)
+	if (data->sky.pixels)
+		free(data->sky.pixels);
+	if (data->sky_path)
 	{
-		free(data->sky_fallback_path);
-		data->sky_fallback_path = NULL;
+		free(data->sky_path);
+		data->sky_path = NULL;
 	}
-	if (data->tab_monsters)
+	if (data->tab_m)
 	{
-		free(data->tab_monsters);
-		data->tab_monsters = NULL;
+		free(data->tab_m);
+		data->tab_m = NULL;
 	}
 	if (data->tab_doors)
 	{
@@ -119,8 +119,8 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 		mlx_destroy_display(data->mlx_ptr);
 		free(data->mlx_ptr);
 	}
-	//system("pkill mpg123"); //clean music
-	//system("stty sane");
+	system("pkill mpg123"); //clean music
+	system("stty sane");
 	if (option == 1)
 		exit(EXIT_FAILURE);
 	exit(EXIT_SUCCESS);
