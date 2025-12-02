@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/01 16:37:57 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/02 15:48:45 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -114,14 +114,72 @@ void	update_player(t_data *d)
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
 			open_door(d, idx);
 	}
-	if (d->map[(int)tmp.y][(int)tmp.x] == '1'
-	|| (d->map[(int)tmp.y][(int)tmp.x] == 'D'
+	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'
+	|| (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
  		&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
 	{
 		d->player_pos.x = tmp.x;
 		d->player_pos.y = tmp.y;
 	}
 }
+
+static void draw_gates(t_data *data, int pitch, int h)
+{
+	t_texture *gateTex ;
+
+
+    for (int x = 0; x < SCREENWIDTH; ++x)
+    {
+        int count = data->gateCount[x];
+        if (count <= 0)
+            continue;
+
+        // draw from far → near so closer gate overwrites farther
+        for (int gi = count - 1; gi >= 0; --gi)
+        {
+            double dist = data->gateLayers[x][gi].dist;
+            if (dist <= 0.0)
+                continue;
+			gateTex = &data->texture[data->gateLayers[x][gi].locked];
+            int lineHeight = (int)(h / dist);
+
+            int drawStart = -lineHeight / 2 + h / 2 + pitch;
+            if (drawStart < 0) drawStart = 0;
+
+            int drawEnd = lineHeight / 2 + h / 2 + pitch;
+            if (drawEnd >= h) drawEnd = h - 1;
+
+            int texX = data->gateLayers[x][gi].texX;
+
+            double step = 1.0 * gateTex->height / lineHeight;
+            double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
+
+            for (int y = drawStart; y < drawEnd; ++y)
+            {
+                int texY = (int)texPos;
+                texPos += step;
+
+                if (texY < 0) texY = 0;
+                if (texY >= gateTex->height) texY = gateTex->height - 1;
+
+                unsigned int color =
+                    gateTex->pixels[texY * gateTex->width + texX];
+
+                // Treat pure black (RGB = 0) as transparent
+				if ((color & 0x00FFFFFF) != 0) // not transparent
+				{
+					// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
+					if (dist < data->pixelDepth[y][x])
+					{
+						put_px(data, x, y, color | 0xFF000000);
+						data->pixelDepth[y][x] = dist;
+					}
+				}
+            }
+        }
+    }
+}
+
 
 int	raycasting(t_data *data)
 {
@@ -138,7 +196,12 @@ int	raycasting(t_data *data)
 	x = 0;
 	unsigned int ceiling_color = 0xFF87CEEB;  // sky
 	unsigned int floor_color   = 0xFF444444;  // floor
-
+	// reset gate counts for this frame
+	for (int i = 0; i < SCREENWIDTH; ++i)
+		data->gateCount[i] = 0;
+	for (int y = 0; y < h; ++y)
+    	for (int x2 = 0; x2 < w; ++x2)
+        	data->pixelDepth[y][x2] = 1e30;
 	while (x < w)
 	{
 		//calculate ray position and direction
@@ -212,9 +275,50 @@ int	raycasting(t_data *data)
 					data->cardinal = CARDSOUTH;
 			}
 			//Check if ray has hit a wall
-			if(data->map[mapY][mapX] == '1' || data->map[mapY][mapX] == 'D')
+			char tile = data->map[mapY][mapX];
+			if (tile == 'D') // transparent gate tile
 			{
-				data->cardinal = fetch_texture(data->map[mapY][mapX], mapX, mapY);
+				int	gate_tex;
+
+				if (door_is_locked_at(data, mapX, mapY))
+					gate_tex = 11;
+				else
+					gate_tex = 12;
+				// distance to this gate
+				double gateDist = (side == 0)
+					? (sideDistX - deltaDistX)
+					: (sideDistY - deltaDistY);
+
+				// compute where on the texture we hit (like walls)
+				double wallX;
+				if (side == 0)
+					wallX = data->player_pos.y + gateDist * rayDirY;
+				else
+					wallX = data->player_pos.x + gateDist * rayDirX;
+				wallX -= floor(wallX);
+
+				int texX_gate = (int)(wallX * (double)data->texture[gate_tex].width);
+				if (texX_gate < 0) texX_gate = 0;
+				if (texX_gate >= data->texture[gate_tex].width)
+					texX_gate = data->texture[gate_tex].width - 1;
+
+				// store this gate layer for this column
+				if (data->gateCount[x] < MAX_GATES_PER_COLUMN)
+				{
+					int gi = data->gateCount[x];
+					data->gateLayers[x][gi].dist = gateDist;
+					data->gateLayers[x][gi].texX = texX_gate;
+					data->gateLayers[x][gi].locked = gate_tex;
+					data->gateCount[x]++;
+				}
+
+				// DO NOT mark hit, this gate is not a blocking wall
+				continue;
+			}
+			else if (tile == '1')
+			{
+				// solid wall or door: stop ray here
+				data->cardinal = fetch_texture(tile, mapX, mapY);
 				hit = 1;
 			}
 		}
@@ -285,68 +389,12 @@ int	raycasting(t_data *data)
 			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 			// if(side == 1) color = (color >> 1) & 8355711;
 			put_px(data, x, y, color | 0xFF000000);
+			data->pixelDepth[y][x] = perpWallDist;   // wall is at this distance
 		}
 		for (int y = drawEnd; y < h; ++y)
     		put_px(data, x, y, floor_color);
 		x++;
 	}
-	// for (int i = 0; i < data->monster_count; i++)
-	// {
-	// 	t_monster *m = &data->tab_monsters[i];
-
-	// 	// relative to player
-	// 	double spriteX = m->pos.x - data->player_pos.x;
-	// 	double spriteY = m->pos.y - data->player_pos.y;
-
-	// 	// inverse determinant of cam matrix
-	// 	double invDet = 1.0 / (data->cam.x * data->direction.y
-	// 						- data->direction.x * data->cam.y);
-
-	// 	// transform to cam space
-	// 	double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
-	// 	double transformY = invDet * (-data->cam.y * spriteX + data->cam.x * spriteY);
-
-	// 	// project to screen
-	// 	int spriteScreenX = (int)((SCREENWIDTH / 2) * (1 + transformX / transformY));
-	// 	// world-space vertical offset to adjust "feet" height (tune 0.0–0.7)
-	// 	double vMove = 0.3;
-	// 	int vMoveScreen = (int)(vMove / transformY) + pitch;
-	// 	// sprite dimensions (scale with distance)
-	// 	int spriteHeight = abs((int)(SCREENHEIGHT / transformY));
-	// 	int drawStartY = -spriteHeight / 2 + SCREENHEIGHT / 2 + vMoveScreen;
-	// 	if (drawStartY < 0) drawStartY = 0;
-	// 	int drawEndY = spriteHeight / 2 + SCREENHEIGHT / 2 + vMoveScreen;
-	// 	if (drawEndY >= SCREENHEIGHT) drawEndY = SCREENHEIGHT - 1;
-
-	// 	int spriteWidth = abs((int)(SCREENHEIGHT / transformY));
-	// 	int drawStartX = -spriteWidth / 2 + spriteScreenX;
-	// 	if (drawStartX < 0) drawStartX = 0;
-	// 	int drawEndX = spriteWidth / 2 + spriteScreenX;
-	// 	if (drawEndX >= SCREENWIDTH) drawEndX = SCREENWIDTH - 1;
-
-	// 	// draw each vertical stripe of the sprite
-	// 	for (int stripe = drawStartX; stripe < drawEndX; stripe++)
-	// 	{
-	// 		int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-	// 					* data->texture[10].width / spriteWidth) / 256;
-	// 		if (texX < 0) texX = 0;
-	// 		if (texX >= data->texture[10].width) texX = data->texture[10].width - 1;
-
-	// 		if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
-	// 		{
-	// 			for (int y = drawStartY; y < drawEndY; y++)
-	// 			{
-	// 				int d = (y - (pitch + vMoveScreen)) * 256 - SCREENHEIGHT * 128 + spriteHeight * 128;
-	// 				int texY = ((d * data->texture[10].height) / spriteHeight) / 256;
-	// 				if (texY < 0) texY = 0;
-	// 				if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
-	// 				unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
-	// 				if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
-	// 					put_px(data, stripe, y, color);
-	// 			}
-	// 		}
-	// 	}
-	// }
 	for (int i = 0; i < data->monster_count; i++)
 {
     t_monster *m = &data->tab_monsters[i];
@@ -394,25 +442,35 @@ int	raycasting(t_data *data)
         if (texX < 0) texX = 0;
         if (texX >= data->texture[10].width) texX = data->texture[10].width - 1;
 
-        if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH && transformY < ZBuffer[stripe])
-        {
-            for (int y = drawStartY; y < drawEndY; y++)
-            {
-                int d = (y - (pitch + vMoveScreen)) * 256
-                        - SCREENHEIGHT * 128
-                        + spriteHeight * 128;
-                int texY = (d * data->texture[10].height) / spriteHeight / 256;
-                if (texY < 0) texY = 0;
-                if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
+        if (transformY > 0 && stripe >= 0 && stripe < SCREENWIDTH)
+	{
+		for (int y = drawStartY; y < drawEndY; y++)
+		{
+			int d = (y - (pitch + vMoveScreen)) * 256
+					- SCREENHEIGHT * 128
+					+ spriteHeight * 128;
+			int texY = (d * data->texture[10].height) / spriteHeight / 256;
+			if (texY < 0) texY = 0;
+			if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
 
-                unsigned int color = data->texture[10].pixels[texY * data->texture[10].width + texX];
-                if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
-                    put_px(data, stripe, y, color);
-            }
-        }
+			unsigned int color =
+				data->texture[10].pixels[texY * data->texture[10].width + texX];
+
+			if ((color & 0x00FFFFFF) != 0) // non-transparent pixel
+			{
+				// Only draw if sprite is in front of whatever is already there
+				if (transformY < data->pixelDepth[y][stripe])
+				{
+					put_px(data, stripe, y, color | 0xFF000000);
+					data->pixelDepth[y][stripe] = transformY;
+				}
+			}
+			// if sprite pixel is transparent: do nothing, don't change pixelDepth
+		}
+	}
     }
 }
-
+	draw_gates(data, pitch, h);
 	return (0);
 }
 

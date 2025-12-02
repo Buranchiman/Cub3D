@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/01 14:50:59 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/02 15:45:28 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@
 
 # define IMG_SIZE 64
 
+# define MAX_GATES_PER_COLUMN 16
+
 typedef enum e_cardinal
 {
 	CARDNORTH,
@@ -74,6 +76,14 @@ typedef struct s_keys {
 	int a;
 	int d;
 }				t_keys;
+
+typedef struct s_gate_layer
+{
+	double	dist;   // distance from player to this gate slice
+	int		texX;   // X coordinate on gate texture
+	int		locked;
+}				t_gate_layer;
+
 
 typedef struct s_img {
 	void	*img;      // MLX image handle
@@ -141,6 +151,10 @@ typedef struct s_data
 	int				mouse_ready;    // 0 until first center
 	int				mouse_dx;        // accumulated horizontal delta (pixels) since last frame
 	double			max_rot_frame;   // hard cap per frame in radians (e.g. 0.06 ≈ 3.4°)
+	t_gate_layer	gateLayers[SCREENWIDTH][MAX_GATES_PER_COLUMN];
+	int				gateCount[SCREENWIDTH];
+	double			pixelDepth[SCREENHEIGHT][SCREENWIDTH];
+	double			zbuffer[SCREENWIDTH];
 }				t_data;
 
 //utils.c
@@ -194,5 +208,22 @@ int		door_index_at(t_data *data, int tx, int ty);
 
 //main.c
 int		mouse_move(int x, int y, t_data *d);
+
+// /* pixel / texture utils */
+// void	put_px(t_data *d, int x, int y, unsigned int argb);
+// int		fetch_texture(char c, int x, int y);
+
+// /* player / raycasting */
+// void	update_player(t_data *d);
+// int		raycasting(t_data *data);
+
+// /* mouse */
+// void	mouse_rotation(t_data *data);
+
+// //draw_gate
+// void	draw_gates(t_data *data, int pitch, int h);
+
+// //draw_sprites
+// void	draw_sprites(t_data *d, int pitch);
 
 #endif
