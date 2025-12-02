@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:57:36 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	put_px(t_data *d, int x, int y, unsigned int argb)
 	*(unsigned int *)p = argb;
 }
 
-int	fetch_texture(char c, int x, int y)
+int	fetch_tex(char c, int x, int y)
 {
 	t_data	*d;
 	int		idx;

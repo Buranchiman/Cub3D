@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/12/01 02:30:23 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static inline void	put_pixel_img(t_data *d, int x, int y, unsigned int color)
 	*(unsigned int *)p = color;
 }
 
-static void	draw_tex_on_img(t_data *d, t_texture *tex, int px, int py)
+static void	draw_tex_on_img(t_data *d, t_tex *tex, int px, int py)
 {
 	int				sy;
 	int				sx;

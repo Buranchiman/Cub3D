@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:58:44 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,7 +128,7 @@ void	get_map(char *file_name)
 		free(data->buffer);
 		exit(EXIT_FAILURE);
 	}
-	read_textures(&data->map);
+	read_texs(&data->map);
 	check_map(data, data->map);
 	monster_init(data, 0, 0);
 	doors_init(data, 0, 0);

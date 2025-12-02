@@ -23,9 +23,6 @@ SRCS	+=	minimap.c
 # SRCS	+=	raycast_sprites.c
 # SRCS	+=	raycast_tmp.c
 # SRCS	+=	render_frame.c
-SRCS	+=	raycasting.c
-SRCS	+=	utils.c
-SRCS	+=	walls.c
 SRCS	+=	bonus_monsters.c
 SRCS	+=	bonus_doors.c
 

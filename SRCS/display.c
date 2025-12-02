@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/02 15:38:15 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/02 16:04:46 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-void	fil_textures_tab(t_data *data)
+void	fil_texs_tab(t_data *data)
 {
 	int	i;
 
@@ -34,12 +34,12 @@ void	fil_textures_tab(t_data *data)
 	while (i < NBR_TEXTURES)
 	{
 		if (!data->tex[i].path)
-			ft_clean_exit(data, 1, "Failed to allocate texture path");
+			ft_clean_exit(data, 1, "Failed to allocate tex path");
 		i++;
 	}
 }
 
-int	init_pixels(t_texture *tex)
+int	init_pixels(t_tex *tex)
 {
 	int	bytes_per_pixel;
 	int	y;
@@ -73,7 +73,7 @@ void	display_sky(t_data *data)
 				&data->sky.ptr->bpp, &data->sky.ptr->line_len,
 				&data->sky.ptr->endian);
 		if (init_pixels(&data->sky))
-			ft_printf(1, "failed to init sky texture pixels");
+			ft_printf(1, "failed to init sky tex pixels");
 	}
 	else
 	{
@@ -92,14 +92,14 @@ void	display_window(t_data *data, int i)
 			"Where are the escape ?");
 	if (!data->win_ptr)
 		ft_clean_exit(data, 1, "Window creation failed\n");
-	fil_textures_tab(data);
+	fil_texs_tab(data);
 	while (i < NBR_TEXTURES)
 	{
 		data->tex[i].ptr = init_img();
 		data->tex[i].ptr->img = mlx_xpm_file_to_image(data->mlx_ptr,
 				data->tex[i].path, &data->tex[i].width, &data->tex[i].height);
 		if (!data->tex[i].ptr->img)
-			ft_clean_exit(data, 1, "Failed to load texture");
+			ft_clean_exit(data, 1, "Failed to load tex");
 		data->tex[i].ptr->addr = mlx_get_data_addr(data->tex[i].ptr->img,
 				&data->tex[i].ptr->bpp, &data->tex[i].ptr->line_len,
 				&data->tex[i].ptr->endian);

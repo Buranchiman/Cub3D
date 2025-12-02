@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:58:02 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:04:47 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,7 +81,7 @@ typedef struct s_keys {
 typedef struct s_gate_layer
 {
 	double	dist;   // distance from player to this gate slice
-	int		texX;   // X coordinate on gate texture
+	int		texX;   // X coordinate on gate tex
 	int		locked;
 }				t_gate_layer;
 
@@ -94,14 +94,14 @@ typedef struct s_img {
 	int		endian;   // byte order flag (0 or 1)
 } t_img;
 
-typedef struct s_texture
+typedef struct s_tex
 {
 	char		*path;
 	int			height;
 	int			width;
 	t_img		*ptr;
 	uint32_t	*pixels;
-}				t_texture;
+}				t_tex;
 
 typedef struct s_point
 {
@@ -130,7 +130,7 @@ typedef struct s_data
 	int				held_key;
 	unsigned long	last_update;
 	int				cardinal;
-	t_texture		tex[NBR_TEXTURES];
+	t_tex		tex[NBR_TEXTURES];
 	t_point			player_pos;
 	t_point			cam;
 	t_point			direction;
@@ -145,7 +145,7 @@ typedef struct s_data
 	t_doors			*tab_doors;
 	int				doors_count;
 	char			*sky_path;
-	t_texture		sky;
+	t_tex		sky;
 	int				mouse_center_x;
 	int				mouse_center_y;
 	double			mouse_sens;     // radians per pixel
@@ -165,11 +165,11 @@ void	ft_clean_exit(t_data *data, int option, char *msg);
 size_t	ft_tablen(char **tab);
 int		quit_with_int(t_data *data);
 
-//checktextures.c
-int		import_texture(int index, int which, char *line);
-void	take_texture_out(char ***map, int end);
-int		get_textures(char *line);
-int		read_textures(char ***map);
+//checktexs.c
+int		import_tex(int index, int which, char *line);
+void	take_tex_out(char ***map, int end);
+int		get_texs(char *line);
+int		read_texs(char ***map);
 
 //checkmap.c
 void	read_all_file(char *file_name, t_data *data);
@@ -211,9 +211,9 @@ int		door_index_at(t_data *data, int tx, int ty);
 //main.c
 int		mouse_move(int x, int y, t_data *d);
 
-// /* pixel / texture utils */
+// /* pixel / tex utils */
 // void	put_px(t_data *d, int x, int y, unsigned int argb);
-// int		fetch_texture(char c, int x, int y);
+// int		fetch_tex(char c, int x, int y);
 
 // /* player / raycasting */
 // void	update_player(t_data *d);

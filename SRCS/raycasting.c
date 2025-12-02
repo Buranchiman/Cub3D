@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/12/02 15:48:45 by wivallee         ###   ########.fr       */
-=======
-/*   Updated: 2025/12/02 02:09:19 by manon            ###   ########.fr       */
->>>>>>> origin/norme_etc
+/*   Updated: 2025/12/02 16:06:02 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +23,7 @@ static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
 	*(unsigned int *)p = argb;
 }
 
-static int	fetch_texture(char c, int x, int y)
+static int	fetch_tex(char c, int x, int y)
 {
 	t_data	*d;
 	int		idx;
@@ -117,14 +113,9 @@ void	update_player(t_data *d)
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
 			open_door(d, idx);
 	}
-<<<<<<< HEAD
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'
 	|| (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
  		&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
-=======
-	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1' || (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
- 		&& door_is_locked_at(d, (int)d->player_pos.x, (int)d->player_pos.y)))
->>>>>>> origin/norme_etc
 	{
 		d->player_pos.x = tmp.x;
 		d->player_pos.y = tmp.y;
@@ -133,7 +124,7 @@ void	update_player(t_data *d)
 
 static void draw_gates(t_data *data, int pitch, int h)
 {
-	t_texture *gateTex ;
+	t_tex *gateTex ;
 
 
     for (int x = 0; x < SCRN_W; ++x)
@@ -148,7 +139,7 @@ static void draw_gates(t_data *data, int pitch, int h)
             double dist = data->gateLayers[x][gi].dist;
             if (dist <= 0.0)
                 continue;
-			gateTex = &data->texture[data->gateLayers[x][gi].locked];
+			gateTex = &data->tex[data->gateLayers[x][gi].locked];
             int lineHeight = (int)(h / dist);
 
             int drawStart = -lineHeight / 2 + h / 2 + pitch;
@@ -297,7 +288,7 @@ int	raycasting(t_data *data)
 					? (sideDistX - deltaDistX)
 					: (sideDistY - deltaDistY);
 
-				// compute where on the texture we hit (like walls)
+				// compute where on the tex we hit (like walls)
 				double wallX;
 				if (side == 0)
 					wallX = data->player_pos.y + gateDist * rayDirY;
@@ -305,10 +296,10 @@ int	raycasting(t_data *data)
 					wallX = data->player_pos.x + gateDist * rayDirX;
 				wallX -= floor(wallX);
 
-				int texX_gate = (int)(wallX * (double)data->texture[gate_tex].width);
+				int texX_gate = (int)(wallX * (double)data->tex[gate_tex].width);
 				if (texX_gate < 0) texX_gate = 0;
-				if (texX_gate >= data->texture[gate_tex].width)
-					texX_gate = data->texture[gate_tex].width - 1;
+				if (texX_gate >= data->tex[gate_tex].width)
+					texX_gate = data->tex[gate_tex].width - 1;
 
 				// store this gate layer for this column
 				if (data->gateCount[x] < MAX_GATES_PER_COLUMN)
@@ -326,7 +317,7 @@ int	raycasting(t_data *data)
 			else if (tile == '1')
 			{
 				// solid wall or door: stop ray here
-				data->cardinal = fetch_texture(tile, mapX, mapY);
+				data->cardinal = fetch_tex(tile, mapX, mapY);
 				hit = 1;
 			}
 		}
@@ -364,7 +355,7 @@ int	raycasting(t_data *data)
 				put_px(data, x, y, ceiling_color);
 		}
 		 //texturing calculations
-		int	texNum = /*data->map[mapX][mapY]*/ data->cardinal ; //1 subtracted from it so that texture 0 can be used!
+		int	texNum = /*data->map[mapX][mapY]*/ data->cardinal ; //1 subtracted from it so that tex 0 can be used!
 
 		 //calculate value of wallX
 		double	wallX; //where exactly the wall was hit
@@ -374,22 +365,22 @@ int	raycasting(t_data *data)
 			wallX = data->player_pos.x + perpWallDist * rayDirX;
 		wallX -= floor((wallX));
 
-		 //x coordinate on the texture
+		 //x coordinate on the tex
 		int texX = (int)(wallX * (double)data->tex[texNum].width);
 		if (side == 0 && rayDirX > 0)
 			texX = data->tex[texNum].width - texX - 1;
 		if (side == 1 && rayDirY < 0)
 			texX = data->tex[texNum].width - texX - 1;
 
-		 // TODO: an integer-only bresenham or DDA like algorithm could make the texture coordinate stepping faster
-		// How much to increase the texture coordinate per screen pixel
+		 // TODO: an integer-only bresenham or DDA like algorithm could make the tex coordinate stepping faster
+		// How much to increase the tex coordinate per screen pixel
 		double step = 1.0 * data->tex[texNum].height / lineHeight;
-		// Starting texture coordinate
+		// Starting tex coordinate
 		double texPos = (drawStart - pitch - h / 2 + lineHeight / 2) * step;
 		for(int y = drawStart; y < drawEnd; y++)
 		{
-			//ft_printf(1, "WTHHHHHH OHMAGAAAD Also texture path is %s\n", data->tex[texNum].path);
-			// Cast the texture coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
+			//ft_printf(1, "WTHHHHHH OHMAGAAAD Also tex path is %s\n", data->tex[texNum].path);
+			// Cast the tex coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
 			int texY = (int)texPos & (data->tex[texNum].height - 1);
 			texPos += step;
 			unsigned int color = data->tex[texNum].pixels[texY * data->tex[texNum].width + texX];
@@ -403,66 +394,6 @@ int	raycasting(t_data *data)
     		put_px(data, x, y, floor_color);
 		x++;
 	}
-<<<<<<< HEAD
-=======
-	// for (int i = 0; i < data->monster_count; i++)
-	// {
-	// 	t_monster *m = &data->tab_m[i];
-
-	// 	// relative to player
-	// 	double spriteX = m->pos.x - data->player_pos.x;
-	// 	double spriteY = m->pos.y - data->player_pos.y;
-
-	// 	// inverse determinant of camera matrix
-	// 	double invDet = 1.0 / (data->cameraplane.x * data->direction.y
-	// 						- data->direction.x * data->cameraplane.y);
-
-	// 	// transform to camera space
-	// 	double transformX = invDet * (data->direction.y * spriteX - data->direction.x * spriteY);
-	// 	double transformY = invDet * (-data->cameraplane.y * spriteX + data->cameraplane.x * spriteY);
-
-	// 	// project to screen
-	// 	int spriteScreenX = (int)((SCRN_W / 2) * (1 + transformX / transformY));
-	// 	// world-space vertical offset to adjust "feet" height (tune 0.0–0.7)
-	// 	double vMove = 0.3;
-	// 	int vMoveScreen = (int)(vMove / transformY) + pitch;
-	// 	// sprite dimensions (scale with distance)
-	// 	int spriteHeight = abs((int)(SCRN_H / transformY));
-	// 	int drawStartY = -spriteHeight / 2 + SCRN_H / 2 + vMoveScreen;
-	// 	if (drawStartY < 0) drawStartY = 0;
-	// 	int drawEndY = spriteHeight / 2 + SCRN_H / 2 + vMoveScreen;
-	// 	if (drawEndY >= SCRN_H) drawEndY = SCRN_H - 1;
-
-	// 	int spriteWidth = abs((int)(SCRN_H / transformY));
-	// 	int drawStartX = -spriteWidth / 2 + spriteScreenX;
-	// 	if (drawStartX < 0) drawStartX = 0;
-	// 	int drawEndX = spriteWidth / 2 + spriteScreenX;
-	// 	if (drawEndX >= SCRN_W) drawEndX = SCRN_W - 1;
-
-	// 	// draw each vertical stripe of the sprite
-	// 	for (int stripe = drawStartX; stripe < drawEndX; stripe++)
-	// 	{
-	// 		int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-	// 					* data->tex[10].width / spriteWidth) / 256;
-	// 		if (texX < 0) texX = 0;
-	// 		if (texX >= data->tex[10].width) texX = data->tex[10].width - 1;
-
-	// 		if (transformY > 0 && stripe >= 0 && stripe < SCRN_W && transformY < ZBuffer[stripe])
-	// 		{
-	// 			for (int y = drawStartY; y < drawEndY; y++)
-	// 			{
-	// 				int d = (y - (pitch + vMoveScreen)) * 256 - SCRN_H * 128 + spriteHeight * 128;
-	// 				int texY = ((d * data->tex[10].height) / spriteHeight) / 256;
-	// 				if (texY < 0) texY = 0;
-	// 				if (texY >= data->tex[10].height) texY = data->tex[10].height - 1;
-	// 				unsigned int color = data->tex[10].pixels[texY * data->tex[10].width + texX];
-	// 				if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
-	// 					put_px(data, stripe, y, color);
-	// 			}
-	// 		}
-	// 	}
-	// }
->>>>>>> origin/norme_etc
 	for (int i = 0; i < data->monster_count; i++)
 {
     t_monster *m = &data->tab_m[i];
@@ -510,7 +441,6 @@ int	raycasting(t_data *data)
         if (texX < 0) texX = 0;
         if (texX >= data->tex[10].width) texX = data->tex[10].width - 1;
 
-<<<<<<< HEAD
         if (transformY > 0 && stripe >= 0 && stripe < SCRN_W)
 	{
 		for (int y = drawStartY; y < drawEndY; y++)
@@ -518,12 +448,12 @@ int	raycasting(t_data *data)
 			int d = (y - (pitch + vMoveScreen)) * 256
 					- SCRN_H * 128
 					+ spriteHeight * 128;
-			int texY = (d * data->texture[10].height) / spriteHeight / 256;
+			int texY = (d * data->tex[10].height) / spriteHeight / 256;
 			if (texY < 0) texY = 0;
-			if (texY >= data->texture[10].height) texY = data->texture[10].height - 1;
+			if (texY >= data->tex[10].height) texY = data->tex[10].height - 1;
 
 			unsigned int color =
-				data->texture[10].pixels[texY * data->texture[10].width + texX];
+				data->tex[10].pixels[texY * data->tex[10].width + texX];
 
 			if ((color & 0x00FFFFFF) != 0) // non-transparent pixel
 			{
@@ -537,24 +467,6 @@ int	raycasting(t_data *data)
 			// if sprite pixel is transparent: do nothing, don't change pixelDepth
 		}
 	}
-=======
-        if (transformY > 0 && stripe >= 0 && stripe < SCRN_W && transformY < ZBuffer[stripe])
-        {
-            for (int y = drawStartY; y < drawEndY; y++)
-            {
-                int d = (y - (pitch + vMoveScreen)) * 256
-                        - SCRN_H * 128
-                        + spriteHeight * 128;
-                int texY = (d * data->tex[10].height) / spriteHeight / 256;
-                if (texY < 0) texY = 0;
-                if (texY >= data->tex[10].height) texY = data->tex[10].height - 1;
-
-                unsigned int color = data->tex[10].pixels[texY * data->tex[10].width + texX];
-                if ((color & 0x00FFFFFF) != 0) // skip transparent pixels
-                    put_px(data, stripe, y, color);
-            }
-        }
->>>>>>> origin/norme_etc
     }
 }
 	draw_gates(data, pitch, h);

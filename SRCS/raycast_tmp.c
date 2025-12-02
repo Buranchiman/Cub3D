@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:57:36 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -128,11 +128,11 @@ static void	dda_loop(t_data *d, double *sdist, double *ddist, int *map,
 						? 0.0 : 1.0 / ddist[0]);
 			wall_x -= floor(wall_x);
 			tex_x = (int)(wall_x
-					* (double)d->texture[gate_tex].width);
+					* (double)d->tex[gate_tex].width);
 			if (tex_x < 0)
 				tex_x = 0;
-			if (tex_x >= d->texture[gate_tex].width)
-				tex_x = d->texture[gate_tex].width - 1;
+			if (tex_x >= d->tex[gate_tex].width)
+				tex_x = d->tex[gate_tex].width - 1;
 			if (d->gateCount[map[4]] < MAX_GATES_PER_COLUMN)
 			{
 				d->gateLayers[map[4]][d->gateCount[map[4]]].dist = gate_dist;
@@ -142,7 +142,7 @@ static void	dda_loop(t_data *d, double *sdist, double *ddist, int *map,
 		}
 		else if (tile == '1')
 		{
-			d->cardinal = fetch_texture(tile, map[0], map[1]);
+			d->cardinal = fetch_tex(tile, map[0], map[1]);
 			hit = 1;
 		}
 	}
@@ -179,14 +179,14 @@ static void	draw_column(t_data *d, int x, int h, int pitch,
 	y = 0;
 	while (y < draw_start)
 	{
-		if (d->sky_texture.pixels != NULL
-			&& d->sky_texture.width > 0 && d->sky_texture.height > 0)
+		if (d->sky_tex.pixels != NULL
+			&& d->sky_tex.width > 0 && d->sky_tex.height > 0)
 		{
-			tex_x = (int)((double)x * d->sky_texture.width
+			tex_x = (int)((double)x * d->sky_tex.width
 					/ (double)SCRN_W);
-			tex_y = (int)((double)y * d->sky_texture.height
+			tex_y = (int)((double)y * d->sky_tex.height
 					/ (double)SCRN_H);
-			color = d->sky_texture.pixels[tex_y * d->sky_texture.width
+			color = d->sky_tex.pixels[tex_y * d->sky_tex.width
 				+ tex_x];
 			put_px(d, x, y, color | 0xFF000000);
 		}
@@ -206,19 +206,19 @@ static void	draw_column(t_data *d, int x, int h, int pitch,
 	else
 		wall_x = d->player_pos.x + perp_dist * ray_dir_x;
 	wall_x -= floor(wall_x);
-	tex_x = (int)(wall_x * (double)d->texture[tex_num].width);
+	tex_x = (int)(wall_x * (double)d->tex[tex_num].width);
 	if ((d->cardinal == CARDEAST && ray_dir_x > 0.0)
 		|| (d->cardinal == CARDNORTH && ray_dir_y < 0.0))
-		tex_x = d->texture[tex_num].width - tex_x - 1;
-	step = (double)d->texture[tex_num].height / (double)line_h;
+		tex_x = d->tex[tex_num].width - tex_x - 1;
+	step = (double)d->tex[tex_num].height / (double)line_h;
 	tex_pos = (draw_start - pitch - h / 2 + line_h / 2) * step;
 	y = draw_start;
 	while (y < draw_end)
 	{
-		tex_y = (int)tex_pos & (d->texture[tex_num].height - 1);
+		tex_y = (int)tex_pos & (d->tex[tex_num].height - 1);
 		tex_pos += step;
-		color = d->texture[tex_num].pixels[tex_y
-			* d->texture[tex_num].width + tex_x];
+		color = d->tex[tex_num].pixels[tex_y
+			* d->tex[tex_num].width + tex_x];
 		put_px(d, x, y, color | 0xFF000000);
 		d->pixelDepth[y][x] = perp_dist;
 		y++;

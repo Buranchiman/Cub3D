@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:57:36 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,24 +75,24 @@ static void	draw_sprite_stripe(t_data *d, int stripe, int *b, double tr_y)
 	unsigned int	color;
 
 	tex_x = (int)(256 * (stripe - (-b[6] / 2 + b[0]))
-			* d->texture[10].width / b[6]) / 256;
+			* d->tex[10].width / b[6]) / 256;
 	if (tex_x < 0)
 		tex_x = 0;
-	if (tex_x >= d->texture[10].width)
-		tex_x = d->texture[10].width - 1;
+	if (tex_x >= d->tex[10].width)
+		tex_x = d->tex[10].width - 1;
 	if (!(tr_y > 0.0 && stripe >= 0 && stripe < SCRN_W))
 		return ;
 	y = b[1];
 	while (y < b[2])
 	{
 		dv = (y - b[7]) * 256 - SCRN_H * 128 + b[5] * 128;
-		tex_y = (dv * d->texture[10].height) / b[5] / 256;
+		tex_y = (dv * d->tex[10].height) / b[5] / 256;
 		if (tex_y < 0)
 			tex_y = 0;
-		if (tex_y >= d->texture[10].height)
-			tex_y = d->texture[10].height - 1;
-		color = d->texture[10].pixels[tex_y
-			* d->texture[10].width + tex_x];
+		if (tex_y >= d->tex[10].height)
+			tex_y = d->tex[10].height - 1;
+		color = d->tex[10].pixels[tex_y
+			* d->tex[10].width + tex_x];
 		if ((color & 0x00FFFFFF) != 0
 			&& tr_y < d->pixelDepth[y][stripe])
 		{

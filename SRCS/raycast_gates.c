@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:57:07 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 static void	draw_gate_column(t_data *d, int x, int h, int pitch)
 {
-	t_texture	*tex;
+	t_tex	*tex;
 	int			gi;
 	int			count;
 	double		dist;
@@ -28,7 +28,7 @@ static void	draw_gate_column(t_data *d, int x, int h, int pitch)
 	int			tex_y;
 	unsigned int	color;
 
-	tex = &d->texture[gate_tex];
+	tex = &d->tex[gate_tex];
 	count = d->gateCount[x];
 	gi = count - 1;
 	while (gi >= 0)
