@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/12/01 02:12:48 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 15:49:54 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,8 +99,14 @@ int	open_door(t_data *data, int i)
 {
 	char	*line;
 
-	if (data->tab_doors[i].lock == 0)
+	if (!data->keys.e)
 		return (0);
+	if (data->tab_doors[i].lock == 0 && data->keys.e)
+	{
+		data->tab_doors[i].lock = 1;
+		data->keys.e = 0;
+		return (printf("[The door is locked]\n"), 1);
+	}
 	if (data->tab_doors[i].lock == 1)
 		printf("[The door is locked]\n");
 	printf("[It's written on it: %s]\n", data->tab_doors[i].enigma);

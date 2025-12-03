@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:04:47 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/03 13:38:19 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,7 @@
 # define KEY_S 115
 # define KEY_A 97
 # define KEY_D 100
+# define KEY_E 101
 # define KEY_UP 65362
 # define KEY_DOWN 65364
 # define KEY_LEFT 65361
@@ -76,6 +77,7 @@ typedef struct s_keys {
 	int s;
 	int a;
 	int d;
+	int e;
 }				t_keys;
 
 typedef struct s_gate_layer

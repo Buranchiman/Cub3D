@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 19:58:20 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 15:46:21 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ void	update_player(t_data *d)
 	if (d->map[(int)tmp.y][(int)tmp.x] == 'D')
 	{
 		idx = door_index_at(d, (int)tmp.x, (int)tmp.y);
-		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
+		if (idx >= 0 && d->tab_doors)// && d->tab_doors[idx].lock)
 			open_door(d, idx);
 	}
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'

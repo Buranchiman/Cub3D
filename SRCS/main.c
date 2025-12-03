@@ -6,9 +6,14 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:21:34 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 15:32:24 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+//porte avec E
+//texture sol plafond (4 & 5 -> 14 & 15)
+//sprite anime mob
+//leaks?
 
 #include "../INCLUDE/cube.h"
 
@@ -43,6 +48,8 @@ int	on_keydown(int keycode, void *param)
 		d->keys.s = 1;
 	else if (keycode == KEY_D)
 		d->keys.d = 1;
+	else if (keycode == KEY_E)
+		d->keys.e = 1;
 	return (0);
 }
 
@@ -64,6 +71,8 @@ int	on_keyup(int keycode, void *param)
 		d->keys.s = 0;
 	else if (keycode == KEY_D)
 		d->keys.d = 0;
+	else if (keycode == KEY_E)
+		d->keys.e = 0;
 	return (0);
 }
 
