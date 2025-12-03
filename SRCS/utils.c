@@ -6,18 +6,20 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:21:19 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 17:36:35 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-double	get_time(void)
+unsigned long	get_time(void)
 {
 	struct timeval	tv;
+	unsigned long	time;
 
 	gettimeofday(&tv, NULL);
-	return (tv.tv_sec + tv.tv_usec / 1000000.0);
+	time = tv.tv_sec * 1000UL + tv.tv_usec / 1000UL;
+	return (time);
 }
 
 size_t	ft_tablen(char **tab)

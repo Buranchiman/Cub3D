@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 15:46:21 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 18:59:30 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -490,14 +490,19 @@ int	raycasting(t_data *data)
     if (drawStartX < 0) drawStartX = 0;
     int drawEndX = spriteWidth / 2 + spriteScreenX;
     if (drawEndX >= SCRN_W) drawEndX = SCRN_W - 1;
+	int tex;
 
+	if (data->monster_time % 2 == 0)
+		tex = 10;
+	else
+		tex = 13;
     // draw each vertical stripe of the sprite
     for (int stripe = drawStartX; stripe < drawEndX; stripe++)
     {
         int texX = (int)(256 * (stripe - (-spriteWidth / 2 + spriteScreenX))
-                    * data->tex[10].width / spriteWidth) / 256;
+                    * data->tex[tex].width / spriteWidth) / 256;
         if (texX < 0) texX = 0;
-        if (texX >= data->tex[10].width) texX = data->tex[10].width - 1;
+        if (texX >= data->tex[tex].width) texX = data->tex[tex].width - 1;
 
         if (transformY > 0 && stripe >= 0 && stripe < SCRN_W)
 	{
@@ -506,12 +511,12 @@ int	raycasting(t_data *data)
 			int d = (y - (pitch + vMoveScreen)) * 256
 					- SCRN_H * 128
 					+ spriteHeight * 128;
-			int texY = (d * data->tex[10].height) / spriteHeight / 256;
+			int texY = (d * data->tex[tex].height) / spriteHeight / 256;
 			if (texY < 0) texY = 0;
-			if (texY >= data->tex[10].height) texY = data->tex[10].height - 1;
+			if (texY >= data->tex[tex].height) texY = data->tex[tex].height - 1;
 
 			unsigned int color =
-				data->tex[10].pixels[texY * data->tex[10].width + texX];
+				data->tex[tex].pixels[texY * data->tex[tex].width + texX];
 
 			if ((color & 0x00FFFFFF) != 0) // non-transparent pixel
 			{
@@ -584,30 +589,48 @@ void	mouse_rotation(t_data *data)
 		data->cam.y = data->cam.x * s + data->cam.y * c;
 		data->cam.x = data->cam.x * c - data->cam.y * s;
 	}
+	update_player(data);
+}
+
+void	door_to_close(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while(i < data->doors_count)
+	{
+		if (data->tab_doors[i].to_closed == 1)
+		{
+			data->tab_doors[i].to_closed = 0;
+			data->tab_doors[i].lock = 1;
+		}
+		i++;
+	}
 }
 
 // compose minimap into the main image buffer, then blit once
 int	render_frame(void *param)
 {
-	t_data			*data;
-	double			now;
-	unsigned long	now_ms;
+	t_data					*data;
 
 	(void)param;
 	data = get_data();
-	now = get_time();
-	data->deltatime = now - data->lasttime;
-	data->lasttime = now;
-	now_ms = (unsigned long)(now * 1000.0);
-	if (now_ms - data->last_update >= 120UL)
+	data->monster_time = get_time();
+	data->deltatime = data->monster_time - data->lasttime;
+	data->lasttime = data->monster_time;
+	if (data->monster_time - data->last_update >= 250UL)
 	{
 		monsters_move(data);
-		data->last_update = now_ms;
+		data->last_update = data->monster_time;
+	}
+	if(data->last_update - data->door_time >= 3000UL)
+	{
+		door_to_close(data);
+		data->door_time = data->last_update;
 	}
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
 	mouse_rotation(data);
-	update_player(data);
 	raycasting(data);
 	display_minimap(data, 0, 0);
 	mlx_put_image_to_window(data->mlx_ptr,

@@ -6,11 +6,10 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 15:32:24 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 18:40:18 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-//porte avec E
 //texture sol plafond (4 & 5 -> 14 & 15)
 //sprite anime mob
 //leaks?
@@ -158,6 +157,8 @@ int	main(int arc, char **arv)
 	display_window(data, 0);
 	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
+	data->door_time = data->lasttime;
+	//data->monster_time = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
 	system("mpg123 --loop -1 -q lavanville.mp3 &");
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr,

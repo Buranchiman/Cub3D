@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 13:38:19 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 18:42:06 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -121,6 +121,7 @@ typedef struct s_doors
 {
 	t_point	pos;
 	int		lock;
+	int		to_closed;
 	char	*enigma;
 	char	*soluce;
 }				t_doors;
@@ -138,7 +139,9 @@ typedef struct s_data
 	t_point			direction;
 	t_img			*mlx_img;
 	t_keys			keys;
-	double			lasttime;
+	unsigned long	lasttime;
+	unsigned long	door_time;
+	unsigned long	monster_time;
 	double			deltatime;
 	void			*mlx_ptr;
 	void			*win_ptr;
@@ -161,11 +164,11 @@ typedef struct s_data
 }				t_data;
 
 //utils.c
-double	get_time(void);
-int		is_all_space_n_ones(char *string);
-void	ft_clean_exit(t_data *data, int option, char *msg);
-size_t	ft_tablen(char **tab);
-int		quit_with_int(t_data *data);
+unsigned long	get_time(void);
+int				is_all_space_n_ones(char *string);
+void			ft_clean_exit(t_data *data, int option, char *msg);
+size_t			ft_tablen(char **tab);
+int				quit_with_int(t_data *data);
 
 //checktexs.c
 int		import_tex(int index, int which, char *line);

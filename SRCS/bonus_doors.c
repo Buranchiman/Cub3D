@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/12/03 15:49:54 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/03 18:04:42 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,7 @@ void	init_enigma(t_data *data, int i)
 		data->tab_doors[i].soluce = "oO0OOo0Oo";
 	}
 	data->tab_doors[i].lock = 1;
+	data->tab_doors[i].to_closed = 0;
 }
 
 int	door_is_locked_at(t_data *data, int tx, int ty)
@@ -99,33 +100,28 @@ int	open_door(t_data *data, int i)
 {
 	char	*line;
 
-	if (!data->keys.e)
-		return (0);
 	if (data->tab_doors[i].lock == 0 && data->keys.e)
 	{
-		data->tab_doors[i].lock = 1;
-		data->keys.e = 0;
-		return (printf("[The door is locked]\n"), 1);
+		if (data->tab_doors[i].to_closed == 0)
+			printf("[The door closes slowly]\n");
+		data->tab_doors[i].to_closed = 1;
+		return (1);
 	}
-	if (data->tab_doors[i].lock == 1)
-		printf("[The door is locked]\n");
+	if (!data->keys.e)
+		return (0);
 	printf("[It's written on it: %s]\n", data->tab_doors[i].enigma);
 	line = get_next_line(0);
-	if (!line)
-		return (printf("[No input]\n"), 0);
 	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
 		line[ft_strlen(line) - 1] = '\0';
 	if (ft_strncmp(line, data->tab_doors[i].soluce, 100) == 0)
 	{
 		data->tab_doors[i].lock = 0;
 		printf("*An uncomfortable sound come from the door*\n");
-		free(line);
-		return (1);
+		return (free(line), 1);
 	}
 	else
 		printf("[The door doesn't move.]\n");
-	free(line);
-	return (0);
+	return (free(line), 0);
 }
 
 void	doors_init(t_data *data, int x, int y)
