@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/03 14:03:15 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,7 +133,7 @@ static void	dda_loop(t_data *d, double *sdist, double *ddist, int *map,
 				tex_x = 0;
 			if (tex_x >= d->tex[gate_tex].width)
 				tex_x = d->tex[gate_tex].width - 1;
-			if (d->gateCount[map[4]] < MAX_GATES_PER_COLUMN)
+			if (d->gateCount[map[4]] < data->doors_count)
 			{
 				d->gateLayers[map[4]][d->gateCount[map[4]]].dist = gate_dist;
 				d->gateLayers[map[4]][d->gateCount[map[4]]].texX = tex_x;

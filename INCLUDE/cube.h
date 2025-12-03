@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:04:47 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/03 16:21:50 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,9 @@
 # define SCRN_W 1900
 # define SCRN_H 1060
 # define CLOSEST 0.1 //closest you can get to a wall
+
+# define CEILING_COLOR 0xFF87CEEB
+# define FLOOR_COLOR 0xFF444444
 
 # define IMG_SIZE 64
 
@@ -123,14 +126,21 @@ typedef struct s_doors
 	char	*soluce;
 }				t_doors;
 
+// typedef struct s_raycast
+// {
+// 	t_gate_layer	gateLayers[SCRN_W][MAX_GATES_PER_COLUMN];
+// 	int				gateCount[SCRN_W];
+// 	double			pixelDepth[SCRN_H][SCRN_W];
+// 	double			zbuffer[SCRN_W];
+// }				t_raycast;
+
 typedef struct s_data
 {
 	char			**map;
 	char			*buffer;
-	int				held_key;
 	unsigned long	last_update;
 	int				cardinal;
-	t_tex		tex[NBR_TEXTURES];
+	t_tex			tex[NBR_TEXTURES];
 	t_point			player_pos;
 	t_point			cam;
 	t_point			direction;
@@ -145,7 +155,7 @@ typedef struct s_data
 	t_doors			*tab_doors;
 	int				doors_count;
 	char			*sky_path;
-	t_tex		sky;
+	t_tex			sky;
 	int				mouse_center_x;
 	int				mouse_center_y;
 	double			mouse_sens;     // radians per pixel
@@ -156,6 +166,20 @@ typedef struct s_data
 	int				gateCount[SCRN_W];
 	double			pixelDepth[SCRN_H][SCRN_W];
 	double			zbuffer[SCRN_W];
+	double			raydirx;
+	double			raydiry;
+	int				mapx;
+	int				mapy;
+	double			sidedistx;
+	double			sidedisty;
+	double			perpwalldist;
+	double			deltadistx;
+	double			deltadisty;
+	int				stepx;
+	int				stepy;
+	bool			side;
+	bool			hit;
+	int				lineheight;
 }				t_data;
 
 //utils.c

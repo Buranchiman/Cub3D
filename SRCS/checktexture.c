@@ -68,7 +68,7 @@ void	take_tex_out(char ***map, int end)
 
 int	read_texs(char ***map)
 {
-	int	i;
+	int		i;
 	t_data *data;
 
 	data = get_data();
