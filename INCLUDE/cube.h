@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 16:21:50 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:34:44 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -180,6 +180,16 @@ typedef struct s_data
 	bool			side;
 	bool			hit;
 	int				lineheight;
+	int				pitch;
+	//sprites variables
+	double			spritex;
+	double			spritey;
+	double			invdet;
+	double			transformx;
+	double			transformy;
+	int				spritescreenx;
+	double			vmove;
+	int				vmovescreen;
 }				t_data;
 
 //utils.c

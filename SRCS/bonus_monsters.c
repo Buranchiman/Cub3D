@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_monsters.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/14 19:01:28 by manon             #+#    #+#             */
-/*   Updated: 2025/12/02 15:44:21 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/04 16:29:20 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ int	monster_count(t_data *data, int x, int y)
 		}
 		y++;
 	}
+	printf("monster count is %d", get_data()->monster_count);
 	if (monsters_count > 0)
 	{
 		data->tab_m = ft_calloc(monsters_count, sizeof(*(data->tab_m)));

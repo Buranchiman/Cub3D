@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 15:58:50 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/04 16:13:04 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,6 @@ void	init_data(void)
 	data->direction.y = -1.0;
 	data->cam.x = 0.66;
 	data->cam.y = 0.0;
+	data->pitch = 100;
+	data->vmove = 0.3;
 }
