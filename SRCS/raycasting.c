@@ -3,241 +3,99 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/05 13:32:32 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/05 18:46:38 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-static inline void	put_px(t_data *d, int x, int y, unsigned int argb)
-{
-	char	*p;
+// void		calc_gate_area(t_data *d, t_tex *gatetex,
+// 	int x, double dist, int gi)
+// {
+// 	d->lineheight = (int)(SCRN_H / dist);
+// 	d->drawstart = -d->lineheight / 2 + SCRN_H / 2 + d->pitch;
+// 	if (d->drawstart < 0)
+// 		d->drawstart = 0;
+// 	d->drawend = d->lineheight / 2 + SCRN_H / 2 + d->pitch;
+// 	if (d->drawend >= SCRN_H)
+// 		d->drawend = SCRN_H - 1;
+// 	d->texx = d->gateLayers[x][gi].texX;
+// 	d->step = 1.0 * gatetex->height / d->lineheight;
+// 	d->texpos = (d->drawstart - d->pitch - SCRN_H
+// 			/ 2 + d->lineheight / 2) * d->step;
+// }
 
-	if ((unsigned)x >= (unsigned)SCRN_W
-		|| (unsigned)y >= (unsigned)SCRN_H)
-		return ;
-	p = d->mlx_img->addr + y * d->mlx_img->line_len + x * (d->mlx_img->bpp / 8);
-	*(unsigned int *)p = argb;
-}
+// void		draw_gates(t_data *d, t_tex *gatetex, int x, double dist)
+// {
+// 	int	y;
 
-static int	fetch_tex(int x, int y)
-{
-	t_data	*d;
-	int		idx;
+// 	y = d->drawstart;
+// 	while (y < d->drawend)
+// 	{
+// 		d->texy = (int)d->texpos;
+// 		d->texpos += d->step;
+// 		if (d->texy < 0)
+// 			d->texy = 0;
+// 		if (d->texy >= gatetex->height)
+// 			d->texy = gatetex->height - 1;
+// 		d->color = gatetex->pixels[d->texy * gatetex->width + d->texx];
+// 		// Treat pure black (RGB = 0) as transparent
+// 		if ((d->color & 0x00FFFFFF) != 0) // not transparent
+// 		{
+// 			// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
+// 			if (dist < d->pixelDepth[y][x])
+// 			{
+// 				put_px(d, x, y, d->color | 0xFF000000);
+// 				d->pixelDepth[y][x] = dist;
+// 			}
+// 		}
+// 		y++;
+// 	}
+// }
+// void	door_back_to_front(t_data  *d, int x, int count)
+// {
+// 	t_tex	*gatetex;
+// 	int		gi;
+// 	double	dist;
 
-	d = get_data();
-	if (d->map[d->mapy][d->mapx] == 'D')
-	{
-		idx = door_index_at(d, x, y);
-		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
-			return (11);
-		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
-			return (12);
-	}
-	return (d->cardinal);
-}
+// 	gi = count;
+// 	while (gi >= 0)
+// 	{
+// 		dist = d->gateLayers[x][gi].dist;
+// 		if (dist <= 0.0)
+// 		{
+// 			gi--;
+// 			continue ;
+// 		}
+// 		gatetex = &d->tex[d->gateLayers[x][gi].locked];
+// 		calc_gate_area(d, gatetex, x, dist, gi);
+// 		draw_gates(d, gatetex, x, dist);
+// 		gi--;
+// 	}
+// }
 
-void	rotate_player(t_data *d)
-{
-	double	old_dir;
-	double	old_plan;
-	double	rotspeed;
+// static void	handle_gates(t_data *d)
+// {
+// 	int		x;
+// 	int		count;
 
-	rotspeed = 3.0 * d->deltatime;
-	old_dir = d->direction.x;
-	old_plan = d->cam.x;
-	if (d->keys.left) //j'ai inverse les touches (peut-etre a investiguer plus en profondeur)
-	{
-		d->direction.x = d->direction.x * cos(-rotspeed)
-			- d->direction.y * sin(-rotspeed);
-		d->direction.y = old_dir * sin(-rotspeed)
-			+ d->direction.y * cos(-rotspeed);
-		d->cam.x = d->cam.x * cos(-rotspeed) - d->cam.y * sin(-rotspeed);
-		d->cam.y = old_plan * sin(-rotspeed) + d->cam.y * cos(-rotspeed);
-	}
-	if (d->keys.right)
-	{
-		d->direction.x = d->direction.x * cos(rotspeed)
-			- d->direction.y * sin(rotspeed);
-		d->direction.y = old_dir * sin(rotspeed)
-			+ d->direction.y * cos(rotspeed);
-		d->cam.x = d->cam.x * cos(rotspeed) - d->cam.y * sin(rotspeed);
-		d->cam.y = old_plan * sin(rotspeed) + d->cam.y * cos(rotspeed);
-	}
-}
-
-t_point	move_player(t_data *d, double movespeed)
-{
-	t_point	tmp;
-
-	tmp.x = d->player_pos.x;
-	tmp.y = d->player_pos.y;
-	if (d->keys.w)
-	{
-		d->player_pos.x += d->direction.x * movespeed;
-		d->player_pos.y += d->direction.y * movespeed;
-	}
-	if (d->keys.s)
-	{
-		d->player_pos.x -= d->direction.x * movespeed;
-		d->player_pos.y -= d->direction.y * movespeed;
-	}
-	if (d->keys.d)
-	{
-		d->player_pos.x += -d->direction.y * movespeed;
-		d->player_pos.y += d->direction.x * movespeed;
-	}
-	if (d->keys.a)
-	{
-		d->player_pos.x += d->direction.y * movespeed;
-		d->player_pos.y += -d->direction.x * movespeed;
-	}
-	return (tmp);
-}
-
-void	update_player(t_data *d)
-{
-	double	movespeed;
-	int		idx;
-	t_point	tmp;
-
-	movespeed = 2.0 * d->deltatime;
-	rotate_player(d);
-	tmp = move_player(d, movespeed);
-	if (d->map[(int)tmp.y][(int)tmp.x] == 'D')
-	{
-		idx = door_index_at(d, (int)tmp.x, (int)tmp.y);
-		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
-			open_door(d, idx);
-	}
-	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'
-	|| (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
- 		&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
-	{
-		d->player_pos.x = tmp.x;
-		d->player_pos.y = tmp.y;
-	}
-}
-
-/*
-// Treat pure black (RGB = 0) as transparent
-// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
-static void draw_gates2(t_data *d, int x, int drawStart, int drawEnd, int texX, double step, double texPos, double dist, t_tex *gateTex)
-{
-	int y;
-
-	y = drawStart;
-	while (y < drawEnd)
-    {
-        int d->texy = (int)texPos;
-        texPos += step;
-        if (d->texy < 0)
-			d->texy = 0;
-        if (d->texy >= gateTex->height)
-			d->texy = gateTex->height - 1;
-        unsigned int d->color = gateTex->pixels[d->texy * gateTex->width + texX];
-		if ((d->color & 0x00FFFFFF) != 0) // not transparent
-		{
-			if (dist < d->pixelDepth[y][x])
-			{
-				put_px(d, x, y, d->color | 0xFF000000);
-				d->pixelDepth[y][x] = dist;
-			}
-		}
-		y++;
-    }
-}
-
-// draw from far → near so closer gate overwrites farther
-static void draw_gates(t_data *d, int d->pitch, int SCRN_H)
-{
-	t_tex *gateTex ;
-
-	int x;
-
-	x= 0;
-    while (x < SCRN_W)
-    {
-		int count = d->gateCount[x];
-        if (count <= 0)
-			continue;
-		int gi = count - 1;
-        while (gi >= 0)
-        {
-            double dist = d->gateLayers[x][gi].dist;
-            if (dist <= 0.0)
-            	continue;
-			gateTex = &d->tex[d->gateLayers[x][gi].locked];
-            int lineHeight = (int)(SCRN_H / dist);
-            int drawStart = -lineHeight / 2 + SCRN_H / 2 + d->pitch;
-            if (drawStart < 0)
-				drawStart = 0;
-            int drawEnd = lineHeight / 2 + SCRN_H / 2 + d->pitch;
-            if (drawEnd >= SCRN_H)
-				drawEnd = SCRN_H - 1;
-            int texX = d->gateLayers[x][gi].texX;
-            double step = 1.0 * gateTex->height / lineHeight;
-            double texPos = (drawStart - d->pitch - SCRN_H / 2 + lineHeight / 2) * step;
-            draw_gates2(d, x, drawStart, drawEnd, texX, step, texPos, dist, gateTex);
-			gi--;
-        }
-		x++;
-    }
-}*/
-
-static void draw_gates(t_data *d)
-{
-	t_tex *gateTex ;
-
-
-    for (int x = 0; x < SCRN_W; ++x)
-    {
-        int count = d->gateCount[x];
-        if (count <= 0)
-            continue;
-        // draw from far → near so closer gate overwrites farther
-        for (int gi = count - 1; gi >= 0; --gi)
-        {
-            double dist = d->gateLayers[x][gi].dist;
-            if (dist <= 0.0)
-                continue;
-			gateTex = &d->tex[d->gateLayers[x][gi].locked];
-            int lineHeight = (int)(SCRN_H / dist);
-            int drawStart = -lineHeight / 2 + SCRN_H / 2 + d->pitch;
-            if (drawStart < 0)
-				drawStart = 0;
-            int drawEnd = lineHeight / 2 + SCRN_H / 2 + d->pitch;
-            if (drawEnd >= SCRN_H)
-				drawEnd = SCRN_H - 1;
-            int texX = d->gateLayers[x][gi].texX;
-            double step = 1.0 * gateTex->height / lineHeight;
-            double texPos = (drawStart - d->pitch - SCRN_H / 2 + lineHeight / 2) * step;
-            for (int y = drawStart; y < drawEnd; ++y)
-            {
-                d->texy = (int)texPos;
-                texPos += step;
-                if (d->texy < 0)
-					d->texy = 0;
-                if (d->texy >= gateTex->height)
-					d->texy = gateTex->height - 1;
-                d->color = gateTex->pixels[d->texy * gateTex->width + texX];
-                // Treat pure black (RGB = 0) as transparent
-				if ((d->color & 0x00FFFFFF) != 0) // not transparent
-				{
-					// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
-					if (dist < d->pixelDepth[y][x])
-					{
-						put_px(d, x, y, d->color | 0xFF000000);
-						d->pixelDepth[y][x] = dist;
-					}
-				}
-            }
-        }
-    }
-}
+// 	x = 0;
+// 	while (x < SCRN_W)
+// 	{
+// 		count = d->gateCount[x];
+// 		if (count <= 0)
+// 		{
+// 			x++;
+// 			continue ;
+// 		}
+// 		// draw from far → near so closer gate overwrites farther
+// 		door_back_to_front(d, x, count);
+// 		x++;
+// 	}
+// }
 
 void	first_calc(t_data *d, int x)
 {
@@ -307,23 +165,6 @@ void	get_wallside(t_data *d)
 	}
 }
 
-static void	assign_gate_value(int x, int gate_tex,
-		double gatedist, int texx_gate)
-{
-	t_data	*d;
-	int		gi;
-
-	d = get_data();
-	if (d->gateCount[x] < d->doors_count)
-	{
-		gi = d->gateCount[x];
-		d->gateLayers[x][gi].dist = gatedist;
-		d->gateLayers[x][gi].texX = texx_gate;
-		d->gateLayers[x][gi].locked = gate_tex;
-		d->gateCount[x]++;
-	}
-}
-
 void	hit_wall(t_data *d, int x)
 {
 	int		gate_tex;
@@ -362,9 +203,8 @@ void	put_sprite_pixels(t_data *d, int texx, int stripe)
 	while (y < d->drawendy)
 	{
 		d->pos = (y - (d->pitch + d->vmovescreen)) * 256
-				- SCRN_H * 128
-				+ d->spriteheight * 128;
-		d->texy = (d->pos * d->tex[10].height) / d->spriteheight / 256;
+			- SCRN_H * 128 + d->spriteh * 128;
+		d->texy = (d->pos * d->tex[10].height) / d->spriteh / 256;
 		if (d->texy < 0)
 			d->texy = 0;
 		if (d->texy >= d->tex[10].height)
@@ -388,34 +228,63 @@ void	drawing_sprites(t_data *d)
 {
 	int	stripe;
 	int	texx;
-	for (int stripe = d->drawstartx; stripe < d->drawendx; stripe++)
+
+	stripe = d->drawstartx;
+	while (stripe < d->drawendx)
 	{
-		int texX = (int)(256 * (stripe - (-d->spritewidth / 2 + d->spritescreenx))
-					* d->tex[10].width / d->spritewidth) / 256;
-		if (texX < 0) texX = 0;
-		if (texX >= d->tex[10].width) texX = d->tex[10].width - 1;
+		texx = (int)(256 * (stripe - (-d->spritewidth / 2 + d->spritescreenx))
+				* d->tex[10].width / d->spritewidth) / 256;
+		if (texx < 0)
+			texx = 0;
+		if (texx >= d->tex[10].width)
+			texx = d->tex[10].width - 1;
 		if (d->transformy > 0 && stripe >= 0 && stripe < SCRN_W)
 		{
-			put_sprite_pixels(d, texX, stripe);
+			put_sprite_pixels(d, texx, stripe);
 			// if sprite pixel is transparent: do nothing, don't change pixelDepth
 		}
+		stripe++;
 	}
+}
+
+void	calc_draw_area(t_data *d)
+{
+	// screen X
+	d->spritescreenx = (int)((SCRN_W / 2) * (1 + d->transformx / d->transformy));
+	// world-space vertical offset (feet height, tune 0.0–0.7)
+	d->vmovescreen = (int)(d->vmove / d->transformy);   // <-- NO + d->pitch here
+	// sprite dimensions (scale with distance)
+	d->spriteh = abs((int)(SCRN_H / d->transformy));
+	d->drawstarty = -d->spriteh / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
+	if (d->drawstarty < 0)
+		d->drawstarty = 0;
+	d->drawendy = d->spriteh / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
+	if (d->drawendy >= SCRN_H)
+		d->drawendy = SCRN_H - 1;
+	d->spritewidth = abs((int)(SCRN_H / d->transformy));
+	d->drawstartx = -d->spritewidth / 2 + d->spritescreenx;
+	if (d->drawstartx < 0)
+		d->drawstartx = 0;
+	d->drawendx = d->spritewidth / 2 + d->spritescreenx;
+	if (d->drawendx >= SCRN_W)
+		d->drawendx = SCRN_W - 1;
 }
 
 void	handle_sprites(t_data *d)
 {
-	int	i;
+	int			i;
+	t_monster	*m;
 
 	i = 0;
 	while (i < d->monster_count)
 	{
-		t_monster *m = &d->tab_m[i];
+		m = &d->tab_m[i];
 		// relative to player
 		d->spritex = m->pos.x - d->player_pos.x;
 		d->spritey = m->pos.y - d->player_pos.y;
 		// inverse determinant of cam matrix
 		d->invdet = 1.0 / (d->cam.x * d->direction.y
-							- d->direction.x * d->cam.y);
+				- d->direction.x * d->cam.y);
 		// transform to cam space
 		d->transformx = d->invdet * (d->direction.y * d->spritex - d->direction.x * d->spritey);
 		d->transformy = d->invdet * (-d->cam.y * d->spritex + d->cam.x * d->spritey);
@@ -424,161 +293,175 @@ void	handle_sprites(t_data *d)
 			i++;
 			continue ;
 		}
-		// screen X
-		d->spritescreenx = (int)((SCRN_W / 2) * (1 + d->transformx / d->transformy));
-		// world-space vertical offset (feet height, tune 0.0–0.7)
-		d->vmovescreen = (int)(d->vmove / d->transformy);   // <-- NO + d->pitch here
-		// sprite dimensions (scale with distance)
-		d->spriteheight = abs((int)(SCRN_H / d->transformy));
-		d->drawstarty = -d->spriteheight / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
-		if (d->drawstarty < 0) d->drawstarty = 0;
-		d->drawendy = d->spriteheight / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
-		if (d->drawendy >= SCRN_H) d->drawendy = SCRN_H - 1;
-		d->spritewidth = abs((int)(SCRN_H / d->transformy));
-		d->drawstartx = -d->spritewidth / 2 + d->spritescreenx;
-		if (d->drawstartx < 0) d->drawstartx = 0;
-		d->drawendx = d->spritewidth / 2 + d->spritescreenx;
-		if (d->drawendx >= SCRN_W) d->drawendx = SCRN_W - 1;
+		calc_draw_area(d);
 		// draw each vertical stripe of the sprite
 		drawing_sprites(d);
 		i++;
 	}
 }
 
+void	calc_wall_drawing_area(t_data *d)
+{
+	if (d->side == 0)
+		d->perpwalldist = (d->sidedistx - d->deltadistx);
+	else
+		d->perpwalldist = (d->sidedisty - d->deltadisty);
+	 //Calculate height of line to draw on screen
+	if (d->perpwalldist < 1e-6)
+		d->perpwalldist = 1e-6;
+	d->lineheight = (int)(SCRN_H / d->perpwalldist);
+	//calculate lowest and highest pixel to fill in current stripe
+	d->drawstart = -d->lineheight / 2 + SCRN_H / 2 + d->pitch;
+	if (d->drawstart < 0)
+		d->drawstart = 0;
+	d->drawend = d->lineheight / 2 + SCRN_H / 2 + d->pitch;
+	if (d->drawend >= SCRN_H)
+		d->drawend = SCRN_H - 1;
+}
+
+void	draw_walls(t_data *d, int x)
+{
+	int	y;
+
+	y = 0;
+	y = d->drawstart;
+	while (y < d->drawend)
+	{
+		// Cast the tex coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
+		d->texy = (int)d->texpos & (d->tex[d->cardinal].height - 1);
+		d->texpos += d->step;
+		d->color = d->tex[d->cardinal].pixels[d->texy
+			* d->tex[d->cardinal].width + d->texx];
+		// unsigned int d->color = 0xFF0000FF;
+		//make d->color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+		// if(d->side == 1) d->color = (d->color >> 1) & 8355711;
+		put_px(d, x, y, d->color | 0xFF000000);
+		d->pixelDepth[y][x] = d->perpwalldist;   // wall is at this distance
+		y++;
+	}
+	while (y < SCRN_H)
+	{
+		put_px(d, x, y, FLOOR_COLOR);
+		y++;
+	}
+}
+
+void	draw_ceiling(t_data *d, int x)
+{
+	int	y;
+
+	y = 0;
+	while (y < d->drawstart)
+	{
+		if (d->sky.pixels && d->sky.width > 0 && d->sky.height > 0)
+		{
+			d->texx = (int)((double)x * d->sky.width / (double)SCRN_W);
+			d->texy = (int)((double)y * d->sky.height / (double)SCRN_H);
+			d->color = d->sky.pixels[d->texy * d->sky.width + d->texx];
+			put_px(d, x, y, d->color | 0xFF000000);
+		}
+		else
+			put_px(d, x, y, CEILING_COLOR);
+		y++;
+	}
+}
+
+void	walls_final_cal(t_data *d, double wallx)
+{
+	 //x coordinate on the tex
+	d->texx = (int)(wallx * (double)d->tex[d->cardinal].width);
+	if (d->side == 0 && d->raydirx > 0)
+		d->texx = d->tex[d->cardinal].width - d->texx - 1;
+	if (d->side == 1 && d->raydiry < 0)
+		d->texx = d->tex[d->cardinal].width - d->texx - 1;
+	 // TODO: an integer-only bresenham or DDA like algorithm could make the tex coordinate stepping faster
+	// How much to increase the tex coordinate per screen pixel
+	d->step = 1.0 * d->tex[d->cardinal].height / d->lineheight;
+	// Starting tex coordinate
+	d->texpos = (d->drawstart - d->pitch - SCRN_H / 2 + d->lineheight / 2) * d->step;
+}
+
+void	perform_dda(t_data *d, int x)
+{
+	while (d->hit == 0)
+	{
+		//jump to next map square, either in x-direction, or in y-direction
+		get_wallside(d);
+		//Check if ray has d->hit a wall
+		if (d->map[d->mapy][d->mapx] == 'D') // transparent gate d->map[d->mapy][d->mapx]
+		{
+			hit_wall(d, x);
+			// DO NOT mark d->hit, this gate is not a blocking wall
+			continue;
+		}
+		else if (d->map[d->mapy][d->mapx] == '1')
+		{
+			// solid wall or door: stop ray here
+			d->cardinal = fetch_tex(d->mapx, d->mapy);
+			d->hit = 1;
+		}
+	}
+}
+
+void	reset_gates(t_data *d)
+{
+	int	i;
+	int	x;
+	int	y;
+
+	i = 0;
+	while (i < SCRN_W)
+	{
+		d->gateCount[i] = 0;
+		i++;
+	}
+	y = 0;
+	while (y < SCRN_H)
+	{
+		x = 0;
+		while (x < SCRN_W)
+		{
+			d->pixelDepth[y][x] = 1e30;
+			x++;
+		}
+		y++;
+	}
+}
 
 int	raycasting(t_data *d)
 {
 	int		x;
+	double	wallx; //where exactly the wall was d->hit
 
 	x = 0;
 	// reset gate counts for this frame
-	for (int i = 0; i < SCRN_W; ++i)
-		d->gateCount[i] = 0;
-	for (int y = 0; y < SCRN_H; ++y)
-    	for (int x2 = 0; x2 < SCRN_W; ++x2)
-        	d->pixelDepth[y][x2] = 1e30;
+	reset_gates(d);
 	while (x < SCRN_W)
 	{
 		first_calc(d, x);
-		 //calculate step and initial sideDist
+		 //calculate d->step and initial sideDist
 		//perform DDA
 		d->hit = 0;
 		step_calc(d);
-		while (d->hit == 0)
-		{
-			//jump to next map square, either in x-direction, or in y-direction
-			get_wallside(d);
-			//Check if ray has d->hit a wall
-			if (d->map[d->mapy][d->mapx] == 'D') // transparent gate d->map[d->mapy][d->mapx]
-			{
-				hit_wall(d, x);
-				// DO NOT mark d->hit, this gate is not a blocking wall
-				continue;
-			}
-			else if (d->map[d->mapy][d->mapx] == '1')
-			{
-				// solid wall or door: stop ray here
-				d->cardinal = fetch_tex(d->mapx, d->mapy);
-				d->hit = 1;
-			}
-		}
-		 //Calculate distance of perpendicular ray (Euclidean distance would give fisheye effect!)
-		if (d->side == 0)
-			d->perpwalldist = (d->sidedistx - d->deltadistx);
-		else
-			d->perpwalldist = (d->sidedisty - d->deltadisty);
-		 //Calculate height of line to draw on screen
-		 if (d->perpwalldist < 1e-6)
-		 	d->perpwalldist = 1e-6;
-		int lineHeight = (int)(SCRN_H / d->perpwalldist);
-		//calculate lowest and highest pixel to fill in current stripe
-		int drawStart = -lineHeight / 2 + SCRN_H / 2 + d->pitch;
-		if (drawStart < 0)
-			drawStart = 0;
-		int drawEnd = lineHeight / 2 + SCRN_H / 2 + d->pitch;
-		if (drawEnd >= SCRN_H)
-			drawEnd = SCRN_H - 1;
-		for (int y = 0; y < drawStart; ++y)
-		{
-			if (d->sky.pixels && d->sky.width > 0 && d->sky.height > 0)
-			{
-				int texX = (int)((double)x * d->sky.width / (double)SCRN_W);
-				d->texy = (int)((double)y * d->sky.height / (double)SCRN_H);
-				d->color = d->sky.pixels[d->texy * d->sky.width + texX];
-				put_px(d, x, y, d->color | 0xFF000000);
-			}
-			else
-				put_px(d, x, y, CEILING_COLOR);
-		}
-		 //texturing calculations
-		int	texNum = /*d->map[d->mapx][d->mapy]*/ d->cardinal ; //1 subtracted from it so that tex 0 can be used!
+		perform_dda(d, x);
+		calc_wall_drawing_area(d);
+		draw_ceiling(d, x);
 		 //calculate value of wallx
-		double	wallx; //where exactly the wall was d->hit
 		if (d->side == 0)
 			wallx = d->player_pos.y + d->perpwalldist * d->raydiry;
 		else
 			wallx = d->player_pos.x + d->perpwalldist * d->raydirx;
 		wallx -= floor((wallx));
 		 //x coordinate on the tex
-		int texX = (int)(wallx * (double)d->tex[texNum].width);
-		if (d->side == 0 && d->raydirx > 0)
-			texX = d->tex[texNum].width - texX - 1;
-		if (d->side == 1 && d->raydiry < 0)
-			texX = d->tex[texNum].width - texX - 1;
-		 // TODO: an integer-only bresenham or DDA like algorithm could make the tex coordinate stepping faster
-		// How much to increase the tex coordinate per screen pixel
-		double step = 1.0 * d->tex[texNum].height / lineHeight;
-		// Starting tex coordinate
-		double texPos = (drawStart - d->pitch - SCRN_H / 2 + lineHeight / 2) * step;
-		for(int y = drawStart; y < drawEnd; y++)
-		{
-			// Cast the tex coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
-			d->texy = (int)texPos & (d->tex[texNum].height - 1);
-			texPos += step;
-			d->color = d->tex[texNum].pixels[d->texy * d->tex[texNum].width + texX];
-			// unsigned int d->color = 0xFF0000FF;
-			//make d->color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			// if(d->side == 1) d->color = (d->color >> 1) & 8355711;
-			put_px(d, x, y, d->color | 0xFF000000);
-			d->pixelDepth[y][x] = d->perpwalldist;   // wall is at this distance
-		}
-		for (int y = drawEnd; y < SCRN_H; ++y)
-    		put_px(d, x, y, FLOOR_COLOR);
+		walls_final_cal(d, wallx);
+		draw_walls(d, x);
 		x++;
 	}
 	handle_sprites(d);
-	draw_gates(d);
+	handle_gates(d);
 	return (0);
 }
 
-// int	render_frame(void *param) ----->GRADIENT pour verifier que put_px marche
-// {
-//     t_data *d = get_data();
-
-//     // simple gradient to test drawing
-// 	(void)param;
-//     for (int y = 0; y < SCRN_H; ++y)
-//     {
-//         for (int x = 0; x < SCRN_W; ++x)
-//         {
-//             unsigned int r = (x * 255) / SCRN_W;
-//             unsigned int g = (y * 255) / SCRN_H;
-//             unsigned int b = 128;
-//             unsigned int d->color = (r << 16) | (g << 8) | b;
-
-//             // add opaque alpha in case your MLX uses ARGB
-//             d->color |= 0xFF000000;
-
-//             put_px(d, x, y, d->color);
-//         }
-//     }
-
-//     mlx_put_image_to_window(d->mlx_ptr, d->win_ptr, d->mlx_img->img, 0, 0);
-//     return 0;
-// }
-
-// convert to radians; DO NOT multiply by dt here (event accumulation already reflects real motion)
-// clamp huge flicks so it never spins too fast
 void	mouse_rotation(t_data *d)
 {
 	int		dx;

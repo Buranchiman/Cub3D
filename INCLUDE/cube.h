@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/05 11:25:12 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/05 18:45:29 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,6 +181,11 @@ typedef struct s_data
 	bool			hit;
 	int				lineheight;
 	int				pitch;
+	int				drawstart;
+	int				drawend;
+	int				texx;
+	double			step;
+	double			texpos;
 	//sprites variables
 	double			spritex;
 	double			spritey;
@@ -190,7 +195,7 @@ typedef struct s_data
 	int				spritescreenx;
 	double			vmove;
 	int				vmovescreen;
-	int				spriteheight;
+	int				spriteh;
 	int				drawstarty;
 	int				drawendy;
 	int				spritewidth;
@@ -251,24 +256,23 @@ int		open_door(t_data *data, int i);
 int		door_is_locked_at(t_data *data, int tx, int ty);
 int		door_index_at(t_data *data, int tx, int ty);
 
+//pixel_util.c
+void	put_px(t_data *d, int x, int y, unsigned int argb);
+int		fetch_tex(int x, int y);
+
+//player.c
+void	update_player(t_data *d);
+
+//gate.c
+void	assign_gate_value(int x, int gate_tex,
+			double gatedist, int texx_gate);
+void	calc_gate_area(t_data *d, t_tex *gatetex,
+			int x, double dist, int gi);
+void	draw_gates(t_data *d, t_tex *gatetex, int x, double dist);
+void	door_back_to_front(t_data *d, int x, int count);
+void	handle_gates(t_data *d);
+
 //main.c
 int		mouse_move(int x, int y, t_data *d);
-
-// /* pixel / tex utils */
-// void	put_px(t_data *d, int x, int y, unsigned int argb);
-// int		fetch_tex(char c, int x, int y);
-
-// /* player / raycasting */
-// void	update_player(t_data *d);
-// int		raycasting(t_data *data);
-
-// /* mouse */
-// void	mouse_rotation(t_data *data);
-
-// //draw_gate
-// void	draw_gates(t_data *data, int pitch, int h);
-
-// //draw_sprites
-// void	draw_sprites(t_data *d, int pitch);
 
 #endif
