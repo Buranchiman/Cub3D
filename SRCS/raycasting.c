@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/04 16:24:58 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/05 13:32:32 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,18 +132,18 @@ static void draw_gates2(t_data *d, int x, int drawStart, int drawEnd, int texX, 
 	y = drawStart;
 	while (y < drawEnd)
     {
-        int texY = (int)texPos;
+        int d->texy = (int)texPos;
         texPos += step;
-        if (texY < 0)
-			texY = 0;
-        if (texY >= gateTex->height)
-			texY = gateTex->height - 1;
-        unsigned int color = gateTex->pixels[texY * gateTex->width + texX];
-		if ((color & 0x00FFFFFF) != 0) // not transparent
+        if (d->texy < 0)
+			d->texy = 0;
+        if (d->texy >= gateTex->height)
+			d->texy = gateTex->height - 1;
+        unsigned int d->color = gateTex->pixels[d->texy * gateTex->width + texX];
+		if ((d->color & 0x00FFFFFF) != 0) // not transparent
 		{
 			if (dist < d->pixelDepth[y][x])
 			{
-				put_px(d, x, y, color | 0xFF000000);
+				put_px(d, x, y, d->color | 0xFF000000);
 				d->pixelDepth[y][x] = dist;
 			}
 		}
@@ -217,20 +217,20 @@ static void draw_gates(t_data *d)
             double texPos = (drawStart - d->pitch - SCRN_H / 2 + lineHeight / 2) * step;
             for (int y = drawStart; y < drawEnd; ++y)
             {
-                int texY = (int)texPos;
+                d->texy = (int)texPos;
                 texPos += step;
-                if (texY < 0)
-					texY = 0;
-                if (texY >= gateTex->height)
-					texY = gateTex->height - 1;
-                unsigned int color = gateTex->pixels[texY * gateTex->width + texX];
+                if (d->texy < 0)
+					d->texy = 0;
+                if (d->texy >= gateTex->height)
+					d->texy = gateTex->height - 1;
+                d->color = gateTex->pixels[d->texy * gateTex->width + texX];
                 // Treat pure black (RGB = 0) as transparent
-				if ((color & 0x00FFFFFF) != 0) // not transparent
+				if ((d->color & 0x00FFFFFF) != 0) // not transparent
 				{
 					// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
 					if (dist < d->pixelDepth[y][x])
 					{
-						put_px(d, x, y, color | 0xFF000000);
+						put_px(d, x, y, d->color | 0xFF000000);
 						d->pixelDepth[y][x] = dist;
 					}
 				}
@@ -354,12 +354,59 @@ void	hit_wall(t_data *d, int x)
 	assign_gate_value(x, gate_tex, gatedist, texx_gate);
 }
 
+void	put_sprite_pixels(t_data *d, int texx, int stripe)
+{
+	int	y;
+
+	y = 0;
+	while (y < d->drawendy)
+	{
+		d->pos = (y - (d->pitch + d->vmovescreen)) * 256
+				- SCRN_H * 128
+				+ d->spriteheight * 128;
+		d->texy = (d->pos * d->tex[10].height) / d->spriteheight / 256;
+		if (d->texy < 0)
+			d->texy = 0;
+		if (d->texy >= d->tex[10].height)
+			d->texy = d->tex[10].height - 1;
+		d->color = d->tex[10].pixels[d->texy * d->tex[10].width + texx];
+		if ((d->color & 0x00FFFFFF) != 0) // non-transparent pixel
+		{
+			// Only draw if sprite is in front of whatever is already there
+			if (d->transformy < d->pixelDepth[y][stripe])
+			{
+				put_px(d, stripe, y, d->color | 0xFF000000);
+				d->pixelDepth[y][stripe] = d->transformy;
+			}
+		}
+		y++;
+	// if sprite pixel is transparent: do nothing, don't change pixelDepth
+	}
+}
+
+void	drawing_sprites(t_data *d)
+{
+	int	stripe;
+	int	texx;
+	for (int stripe = d->drawstartx; stripe < d->drawendx; stripe++)
+	{
+		int texX = (int)(256 * (stripe - (-d->spritewidth / 2 + d->spritescreenx))
+					* d->tex[10].width / d->spritewidth) / 256;
+		if (texX < 0) texX = 0;
+		if (texX >= d->tex[10].width) texX = d->tex[10].width - 1;
+		if (d->transformy > 0 && stripe >= 0 && stripe < SCRN_W)
+		{
+			put_sprite_pixels(d, texX, stripe);
+			// if sprite pixel is transparent: do nothing, don't change pixelDepth
+		}
+	}
+}
+
 void	handle_sprites(t_data *d)
 {
 	int	i;
 
 	i = 0;
-	printf("monster count is %d", d->monster_count);
 	while (i < d->monster_count)
 	{
 		t_monster *m = &d->tab_m[i];
@@ -373,57 +420,31 @@ void	handle_sprites(t_data *d)
 		d->transformx = d->invdet * (d->direction.y * d->spritex - d->direction.x * d->spritey);
 		d->transformy = d->invdet * (-d->cam.y * d->spritex + d->cam.x * d->spritey);
 		if (d->transformy <= 0)
-			continue;
+		{
+			i++;
+			continue ;
+		}
 		// screen X
 		d->spritescreenx = (int)((SCRN_W / 2) * (1 + d->transformx / d->transformy));
 		// world-space vertical offset (feet height, tune 0.0–0.7)
 		d->vmovescreen = (int)(d->vmove / d->transformy);   // <-- NO + d->pitch here
 		// sprite dimensions (scale with distance)
-		int spriteHeight = abs((int)(SCRN_H / d->transformy));
-		int drawStartY = -spriteHeight / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
-		if (drawStartY < 0) drawStartY = 0;
-		int drawEndY = spriteHeight / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
-		if (drawEndY >= SCRN_H) drawEndY = SCRN_H - 1;
-		int spriteWidth = abs((int)(SCRN_H / d->transformy));
-		int drawStartX = -spriteWidth / 2 + d->spritescreenx;
-		if (drawStartX < 0) drawStartX = 0;
-		int drawEndX = spriteWidth / 2 + d->spritescreenx;
-		if (drawEndX >= SCRN_W) drawEndX = SCRN_W - 1;
+		d->spriteheight = abs((int)(SCRN_H / d->transformy));
+		d->drawstarty = -d->spriteheight / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
+		if (d->drawstarty < 0) d->drawstarty = 0;
+		d->drawendy = d->spriteheight / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
+		if (d->drawendy >= SCRN_H) d->drawendy = SCRN_H - 1;
+		d->spritewidth = abs((int)(SCRN_H / d->transformy));
+		d->drawstartx = -d->spritewidth / 2 + d->spritescreenx;
+		if (d->drawstartx < 0) d->drawstartx = 0;
+		d->drawendx = d->spritewidth / 2 + d->spritescreenx;
+		if (d->drawendx >= SCRN_W) d->drawendx = SCRN_W - 1;
 		// draw each vertical stripe of the sprite
-		for (int stripe = drawStartX; stripe < drawEndX; stripe++)
-		{
-			int texX = (int)(256 * (stripe - (-spriteWidth / 2 + d->spritescreenx))
-						* d->tex[10].width / spriteWidth) / 256;
-			if (texX < 0) texX = 0;
-			if (texX >= d->tex[10].width) texX = d->tex[10].width - 1;
-			if (d->transformy > 0 && stripe >= 0 && stripe < SCRN_W)
-			{
-				for (int y = drawStartY; y < drawEndY; y++)
-				{
-					int pos = (y - (d->pitch + d->vmovescreen)) * 256
-							- SCRN_H * 128
-							+ spriteHeight * 128;
-					int texY = (pos * d->tex[10].height) / spriteHeight / 256;
-					if (texY < 0) texY = 0;
-					if (texY >= d->tex[10].height) texY = d->tex[10].height - 1;
-					unsigned int color =
-						d->tex[10].pixels[texY * d->tex[10].width + texX];
-					if ((color & 0x00FFFFFF) != 0) // non-transparent pixel
-					{
-						// Only draw if sprite is in front of whatever is already there
-						if (d->transformy < d->pixelDepth[y][stripe])
-						{
-							put_px(d, stripe, y, color | 0xFF000000);
-							d->pixelDepth[y][stripe] = d->transformy;
-						}
-					}
-				// if sprite pixel is transparent: do nothing, don't change pixelDepth
-				}
-			}
-		}
+		drawing_sprites(d);
 		i++;
 	}
 }
+
 
 int	raycasting(t_data *d)
 {
@@ -482,9 +503,9 @@ int	raycasting(t_data *d)
 			if (d->sky.pixels && d->sky.width > 0 && d->sky.height > 0)
 			{
 				int texX = (int)((double)x * d->sky.width / (double)SCRN_W);
-				int texY = (int)((double)y * d->sky.height / (double)SCRN_H);
-				unsigned int color = d->sky.pixels[texY * d->sky.width + texX];
-				put_px(d, x, y, color | 0xFF000000);
+				d->texy = (int)((double)y * d->sky.height / (double)SCRN_H);
+				d->color = d->sky.pixels[d->texy * d->sky.width + texX];
+				put_px(d, x, y, d->color | 0xFF000000);
 			}
 			else
 				put_px(d, x, y, CEILING_COLOR);
@@ -511,15 +532,14 @@ int	raycasting(t_data *d)
 		double texPos = (drawStart - d->pitch - SCRN_H / 2 + lineHeight / 2) * step;
 		for(int y = drawStart; y < drawEnd; y++)
 		{
-			//ft_printf(1, "WTHHHHHH OHMAGAAAD Also tex path is %s\n", d->tex[texNum].path);
 			// Cast the tex coordinate to integer, and mask with (TEXHEIGHT - 1) in case of overflow
-			int texY = (int)texPos & (d->tex[texNum].height - 1);
+			d->texy = (int)texPos & (d->tex[texNum].height - 1);
 			texPos += step;
-			unsigned int color = d->tex[texNum].pixels[texY * d->tex[texNum].width + texX];
-			// unsigned int color = 0xFF0000FF;
-			//make color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
-			// if(d->side == 1) color = (color >> 1) & 8355711;
-			put_px(d, x, y, color | 0xFF000000);
+			d->color = d->tex[texNum].pixels[d->texy * d->tex[texNum].width + texX];
+			// unsigned int d->color = 0xFF0000FF;
+			//make d->color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
+			// if(d->side == 1) d->color = (d->color >> 1) & 8355711;
+			put_px(d, x, y, d->color | 0xFF000000);
 			d->pixelDepth[y][x] = d->perpwalldist;   // wall is at this distance
 		}
 		for (int y = drawEnd; y < SCRN_H; ++y)
@@ -544,12 +564,12 @@ int	raycasting(t_data *d)
 //             unsigned int r = (x * 255) / SCRN_W;
 //             unsigned int g = (y * 255) / SCRN_H;
 //             unsigned int b = 128;
-//             unsigned int color = (r << 16) | (g << 8) | b;
+//             unsigned int d->color = (r << 16) | (g << 8) | b;
 
 //             // add opaque alpha in case your MLX uses ARGB
-//             color |= 0xFF000000;
+//             d->color |= 0xFF000000;
 
-//             put_px(d, x, y, color);
+//             put_px(d, x, y, d->color);
 //         }
 //     }
 

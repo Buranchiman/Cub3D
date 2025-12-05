@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/04 16:34:44 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/05 11:25:12 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -190,6 +190,15 @@ typedef struct s_data
 	int				spritescreenx;
 	double			vmove;
 	int				vmovescreen;
+	int				spriteheight;
+	int				drawstarty;
+	int				drawendy;
+	int				spritewidth;
+	int				drawstartx;
+	int				drawendx;
+	int				pos;
+	int				texy;
+	unsigned int	color;
 }				t_data;
 
 //utils.c
