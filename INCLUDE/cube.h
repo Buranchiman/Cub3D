@@ -3,10 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
+<<<<<<< HEAD
 /*   Updated: 2025/12/08 15:10:37 by wivallee         ###   ########.fr       */
+=======
+/*   Updated: 2025/12/05 16:58:10 by manon            ###   ########.fr       */
+>>>>>>> origin/final_norm_branch
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +25,16 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 14
+# define NBR_TEXTURES 16
 
 // PATH TEXTURES
 # define GROUND_MINIMAP "TEXTURES/ground_map.xpm"
 # define WALL_MINIMAP "TEXTURES/wall_map.xpm"
 # define PLAYER_MINIMAP "TEXTURES/player_map.xpm"
-# define EAST "TEXTURES/east.xpm"
-# define NORTH "TEXTURES/north.xpm"
-# define SOUTH "TEXTURES/south.xpm"
-# define WEST "TEXTURES/west.xpm"
+# define EAST "TEXTURES/path_to_the_east_texture.xpm"
+# define NORTH "TEXTURES/path_to_the_north_texture.xpm"
+# define SOUTH "TEXTURES/path_to_the_south_texture.xpm"
+# define WEST "TEXTURES/path_to_the_west_texture.xpm"
 # define MONSTER "TEXTURES/monster.xpm"
 # define MONSTER2 "TEXTURES/monster2.xpm"
 # define DOOR_CLOSED "TEXTURES/door_closed.xpm"
@@ -45,6 +49,7 @@
 # define KEY_S 115
 # define KEY_A 97
 # define KEY_D 100
+# define KEY_E 101
 # define KEY_UP 65362
 # define KEY_DOWN 65364
 # define KEY_LEFT 65361
@@ -79,6 +84,7 @@ typedef struct s_keys {
 	int	s;
 	int	a;
 	int	d;
+	int	e;
 }				t_keys;
 
 typedef struct s_gate_layer
@@ -122,6 +128,7 @@ typedef struct s_doors
 {
 	t_point	pos;
 	int		lock;
+	int		to_closed;
 	char	*enigma;
 	char	*soluce;
 }				t_doors;
@@ -146,7 +153,9 @@ typedef struct s_data
 	t_point			direction;
 	t_img			*mlx_img;
 	t_keys			keys;
-	double			lasttime;
+	unsigned long	lasttime;
+	unsigned long	door_time;
+	unsigned long	monster_time;
 	double			deltatime;
 	void			*mlx_ptr;
 	void			*win_ptr;
@@ -204,14 +213,17 @@ typedef struct s_data
 	int				pos;
 	int				texy;
 	unsigned int	color;
+	//AAA
+	unsigned int	floor_color;
+	unsigned int	ceiling_color;
 }				t_data;
 
 //utils.c
-double	get_time(void);
-int		is_all_space_n_ones(char *string);
-void	ft_clean_exit(t_data *data, int option, char *msg);
-size_t	ft_tablen(char **tab);
-int		quit_with_int(t_data *data);
+unsigned long	get_time(void);
+int				is_all_space_n_ones(char *string);
+void			ft_clean_exit(t_data *data, int option, char *msg);
+size_t			ft_tablen(char **tab);
+int				quit_with_int(t_data *data);
 
 //checktexs.c
 int		import_tex(int index, int which, char *line);

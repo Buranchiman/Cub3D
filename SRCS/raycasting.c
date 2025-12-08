@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:07:45 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:22:03 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	draw_ceiling(t_data *d, int x)
 			put_px(d, x, y, d->color | 0xFF000000);
 		}
 		else
-			put_px(d, x, y, CEILING_COLOR);
+			put_px(d, x, y, d->ceiling_color);
 		y++;
 	}
 }

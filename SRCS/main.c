@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:21:34 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/08 15:22:09 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,8 @@ int	on_keydown(int keycode, void *param)
 		d->keys.s = 1;
 	else if (keycode == KEY_D)
 		d->keys.d = 1;
+	else if (keycode == KEY_E)
+		d->keys.e = 1;
 	return (0);
 }
 
@@ -64,6 +66,8 @@ int	on_keyup(int keycode, void *param)
 		d->keys.s = 0;
 	else if (keycode == KEY_D)
 		d->keys.d = 0;
+	else if (keycode == KEY_E)
+		d->keys.e = 0;
 	return (0);
 }
 
@@ -149,6 +153,8 @@ int	main(int arc, char **arv)
 	display_window(data, 0);
 	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
+	data->door_time = data->lasttime;
+	//data->monster_time = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
 	system("mpg123 --loop -1 -q lavanville.mp3 &");
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr,

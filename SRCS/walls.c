@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 14:59:50 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:07:45 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:21:41 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	draw_walls(t_data *d, int x)
 	}
 	while (y < SCRN_H)
 	{
-		put_px(d, x, y, FLOOR_COLOR);
+		put_px(d, x, y, d->floor_color);
 		y++;
 	}
 }

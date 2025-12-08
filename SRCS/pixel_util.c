@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/05 18:31:18 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:22:05 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ int	fetch_tex(int x, int y)
 	{
 		idx = door_index_at(d, x, y);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
-			return (11);
+			return (13);
 		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
-			return (12);
+			return (14);
 	}
 	return (d->cardinal);
 }
