@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:27:40 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,7 @@ void	display_other(t_data *data, int y, int x, int tex_idx)
 	screen_x = 1604 + x * 8;
 	screen_y = 764 + y * 8;
 	if (data->map[y][x] == '1')
-		tex_idx = 6;
+		tex_idx = 8;
 	draw_tex_on_img(data, &data->tex[tex_idx], screen_x, screen_y);
 	if (data->tab_m)
 	{
@@ -71,12 +71,12 @@ void	display_other(t_data *data, int y, int x, int tex_idx)
 		{
 			if ((int)data->tab_m[i].pos.x == x
 				&& (int)data->tab_m[i].pos.y == y)
-				draw_tex_on_img(data, &data->tex[7], screen_x, screen_y);
+				draw_tex_on_img(data, &data->tex[9], screen_x, screen_y);
 			i++;
 		}
 	}
 	if (y == (int)data->player_pos.y && x == (int)data->player_pos.x)
-		draw_tex_on_img(data, &data->tex[4], screen_x, screen_y);
+		draw_tex_on_img(data, &data->tex[6], screen_x, screen_y);
 }
 
 void	display_minimap(t_data *data, int x, int y)
@@ -91,14 +91,14 @@ void	display_minimap(t_data *data, int x, int y)
 		x = 0;
 		while (data->map[y][x])
 		{
-			tex_idx = 5;
+			tex_idx = 7;
 			if (data->map[y][x] == 'D')
 			{
 				idx = door_index_at(data, x, y);
 				if (idx >= 0 && data->tab_doors && data->tab_doors[idx].lock)
-					tex_idx = 8;
+					tex_idx = 10;
 				else
-					tex_idx = 9;
+					tex_idx = 11;
 			}
 			display_other(data, y, x, tex_idx);
 			x++;

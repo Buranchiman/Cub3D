@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 18:55:42 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/05 15:34:55 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,10 +75,10 @@ static void	draw_sprite_stripe(t_data *d, int stripe, int *b, double tr_y)
 	unsigned int	color;
 	int 			tex;
 
-	if (d->monster_time % 2 == 0)
-		tex = 10;
+	if (d->door_time % 2 == 0)
+		tex = 12;
 	else
-		tex = 13;
+		tex = 15;
 	tex_x = (int)(256 * (stripe - (-b[6] / 2 + b[0]))
 			* d->tex[tex].width / b[6]) / 256;
 	if (tex_x < 0)

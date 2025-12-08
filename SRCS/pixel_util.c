@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   pixel_util.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/05 15:34:56 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,9 @@ int	fetch_tex(char c, int x, int y)
 	{
 		idx = door_index_at(d, x, y);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
-			return (11);
-		if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
-			return (12);
+			return (13);
+		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
+			return (14);
 	}
 	return (d->cardinal);
 }

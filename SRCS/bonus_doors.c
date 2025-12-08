@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/12/03 18:04:42 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/05 21:01:29 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -109,7 +109,8 @@ int	open_door(t_data *data, int i)
 	}
 	if (!data->keys.e)
 		return (0);
-	printf("[It's written on it: %s]\n", data->tab_doors[i].enigma);
+	printf("\x1b[38;5;127m[It's written on it: %s]\033[0m\n",
+			data->tab_doors[i].enigma);
 	line = get_next_line(0);
 	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
 		line[ft_strlen(line) - 1] = '\0';

@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 18:42:06 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/05 16:58:10 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,16 +21,16 @@
 # include <math.h>
 # include <sys/time.h>
 
-# define NBR_TEXTURES 14
+# define NBR_TEXTURES 16
 
 // PATH TEXTURES
 # define GROUND_MINIMAP "TEXTURES/ground_map.xpm"
 # define WALL_MINIMAP "TEXTURES/wall_map.xpm"
 # define PLAYER_MINIMAP "TEXTURES/player_map.xpm"
-# define EAST "TEXTURES/east.xpm"
-# define NORTH "TEXTURES/north.xpm"
-# define SOUTH "TEXTURES/south.xpm"
-# define WEST "TEXTURES/west.xpm"
+# define EAST "TEXTURES/path_to_the_east_texture.xpm"
+# define NORTH "TEXTURES/path_to_the_north_texture.xpm"
+# define SOUTH "TEXTURES/path_to_the_south_texture.xpm"
+# define WEST "TEXTURES/path_to_the_west_texture.xpm"
 # define MONSTER "TEXTURES/monster.xpm"
 # define MONSTER2 "TEXTURES/monster2.xpm"
 # define DOOR_CLOSED "TEXTURES/door_closed.xpm"
@@ -150,7 +150,7 @@ typedef struct s_data
 	t_doors			*tab_doors;
 	int				doors_count;
 	char			*sky_path;
-	t_tex		sky;
+	t_tex			sky;
 	int				mouse_center_x;
 	int				mouse_center_y;
 	double			mouse_sens;     // radians per pixel
@@ -161,6 +161,9 @@ typedef struct s_data
 	int				gateCount[SCRN_W];
 	double			pixelDepth[SCRN_H][SCRN_W];
 	double			zbuffer[SCRN_W];
+	//AAA
+	unsigned int	floor_color;
+	unsigned int	ceiling_color;
 }				t_data;
 
 //utils.c

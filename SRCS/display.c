@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/02 16:04:46 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 14:44:29 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,24 +17,36 @@ void	fil_texs_tab(t_data *data)
 	int	i;
 
 	i = 0;
-	data->tex[0].path = ft_strdup(NORTH);
-	data->tex[1].path = ft_strdup(SOUTH);
-	data->tex[2].path = ft_strdup(WEST);
-	data->tex[3].path = ft_strdup(EAST);
-	data->tex[4].path = ft_strdup(PLAYER_MINIMAP);
-	data->tex[5].path = ft_strdup(GROUND_MINIMAP);
-	data->tex[6].path = ft_strdup(WALL_MINIMAP);
-	data->tex[7].path = ft_strdup(MONSTER_MAP);
-	data->tex[8].path = ft_strdup(DOOR_CLOSED_MAP);
-	data->tex[9].path = ft_strdup(DOOR_OPENED_MAP);
-	data->tex[10].path = ft_strdup(MONSTER);
-	data->tex[11].path = ft_strdup(DOOR_CLOSED);
-	data->tex[12].path = ft_strdup(DOOR_OPENED);
-	data->tex[13].path = ft_strdup(MONSTER2);
+	if (!data->tex[0].path)
+		data->tex[0].path = ft_strdup(NORTH);
+	if (!data->tex[1].path)
+		data->tex[1].path = ft_strdup(SOUTH);
+	if (!data->tex[2].path)
+		data->tex[2].path = ft_strdup(WEST);
+	if (!data->tex[3].path)
+		data->tex[3].path = ft_strdup(EAST);
+	data->tex[6].path = ft_strdup(PLAYER_MINIMAP);
+	data->tex[7].path = ft_strdup(GROUND_MINIMAP);
+	data->tex[8].path = ft_strdup(WALL_MINIMAP);
+	data->tex[9].path = ft_strdup(MONSTER_MAP);
+	data->tex[10].path = ft_strdup(DOOR_CLOSED_MAP);
+	data->tex[11].path = ft_strdup(DOOR_OPENED_MAP);
+	data->tex[12].path = ft_strdup(MONSTER);
+	data->tex[13].path = ft_strdup(DOOR_CLOSED);
+	data->tex[14].path = ft_strdup(DOOR_OPENED);
+	data->tex[15].path = ft_strdup(MONSTER2);
 	while (i < NBR_TEXTURES)
 	{
+		if (i == 4 || i == 5)
+		{
+			i++;
+			continue ;
+		}
 		if (!data->tex[i].path)
+		{
+			printf("failed to allocate tex path %d\n", i);	
 			ft_clean_exit(data, 1, "Failed to allocate tex path");
+		}
 		i++;
 	}
 }
@@ -95,11 +107,19 @@ void	display_window(t_data *data, int i)
 	fil_texs_tab(data);
 	while (i < NBR_TEXTURES)
 	{
+		if (i == 4 || i == 5)
+		{
+			i++;
+			continue ;
+		}
 		data->tex[i].ptr = init_img();
 		data->tex[i].ptr->img = mlx_xpm_file_to_image(data->mlx_ptr,
 				data->tex[i].path, &data->tex[i].width, &data->tex[i].height);
 		if (!data->tex[i].ptr->img)
+		{
+			printf("Failed to load texture from path: %s\n", data->tex[i].path);
 			ft_clean_exit(data, 1, "Failed to load tex");
+		}
 		data->tex[i].ptr->addr = mlx_get_data_addr(data->tex[i].ptr->img,
 				&data->tex[i].ptr->bpp, &data->tex[i].ptr->line_len,
 				&data->tex[i].ptr->endian);

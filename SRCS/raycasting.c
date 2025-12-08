@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 18:59:30 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/05 16:18:46 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ static int	fetch_tex(char c, int x, int y)
 	{
 		idx = door_index_at(d, x, y);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
-			return (11);
+			return (13);
 		else if (idx >= 0 && d->tab_doors && !d->tab_doors[idx].lock)
-			return (12);
+			return (14);
 	}
 	return (d->cardinal);
 }
@@ -252,8 +252,9 @@ int	raycasting(t_data *data)
 	h = SCRN_H;
 	w = SCRN_W;
 	x = 0;
-	unsigned int ceiling_color = 0xFF87CEEB;  // sky
-	unsigned int floor_color   = 0xFF444444;  // floor
+	//AAA
+	unsigned int ceiling_color = data->ceiling_color;
+	unsigned int floor_color   = data->floor_color;
 	// reset gate counts for this frame
 	for (int i = 0; i < SCRN_W; ++i)
 		data->gateCount[i] = 0;
@@ -339,9 +340,9 @@ int	raycasting(t_data *data)
 				int	gate_tex;
 
 				if (door_is_locked_at(data, mapX, mapY))
-					gate_tex = 11;
+					gate_tex = 13;
 				else
-					gate_tex = 12;
+					gate_tex = 14;
 				// distance to this gate
 				double gateDist = (side == 0)
 					? (sideDistX - deltaDistX)
@@ -493,9 +494,9 @@ int	raycasting(t_data *data)
 	int tex;
 
 	if (data->monster_time % 2 == 0)
-		tex = 10;
+		tex = 12;
 	else
-		tex = 13;
+		tex = 15;
     // draw each vertical stripe of the sprite
     for (int stripe = drawStartX; stripe < drawEndX; stripe++)
     {

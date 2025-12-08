@@ -6,13 +6,9 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/03 18:40:18 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/08 15:13:25 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
-
-//texture sol plafond (4 & 5 -> 14 & 15)
-//sprite anime mob
-//leaks?
 
 #include "../INCLUDE/cube.h"
 
