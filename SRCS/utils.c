@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 16:44:06 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 18:01:19 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,14 @@ void	free_data(t_data *data)
 			free(data->tex[i].pixels);
 		i++;
 	}
-	if (data->sky.ptr)
-		free_img(data->sky.ptr);
-	if (data->sky.path)
-		free(data->sky.path);
-	if (data->sky.pixels)
-		free(data->sky.pixels);
 	if (data->sky_path)
 		free(data->sky_path);
+	if (data->sky.path)
+		free(data->sky.path);
+	if (data->sky.ptr)
+		free_img(data->sky.ptr);
+	if (data->sky.pixels)
+		free(data->sky.pixels);
 	if (data->tab_m)
 		free(data->tab_m);
 	if (data->tab_doors)
@@ -102,6 +102,9 @@ void	free_data(t_data *data)
 
 void	ft_clean_exit(t_data *data, int option, char *msg)
 {
+	mlx_mouse_show(data->mlx_ptr, data->win_ptr);
+	mlx_do_key_autorepeaton(data->mlx_ptr);
+	mlx_loop_end(data->mlx_ptr);
 	free_data(data);
 	if (data->map)
 		ft_clear_tab(data->map);

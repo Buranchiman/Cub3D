@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 16:45:58 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:54:40 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -216,10 +216,10 @@ typedef struct s_data
 
 //utils.c
 double	get_time(void);
-int				is_all_space_n_ones(char *string);
-void			ft_clean_exit(t_data *data, int option, char *msg);
-size_t			ft_tablen(char **tab);
-int				quit_with_int(t_data *data);
+int		is_all_space_n_ones(char *string);
+void	ft_clean_exit(t_data *data, int option, char *msg);
+size_t	ft_tablen(char **tab);
+int		quit_with_int(t_data *data);
 
 //checktexs.c
 int		import_tex(int index, int which, char *line);
@@ -301,6 +301,11 @@ void	draw_walls(t_data *d, int x);
 void	first_calc(t_data *d, int x);
 void	step_calc(t_data *d);
 void	calc_wall_drawing_area(t_data *d);
+
+//mlx_hooks.c
+int		mouse_move(int x, int y, t_data *d);
+int		on_keydown(int keycode, void *param);
+int		on_keyup(int keycode, void *param);
 
 //main.c
 int		mouse_move(int x, int y, t_data *d);

@@ -15,6 +15,7 @@ SRCS	+=	display.c
 SRCS	+=	first_calcs.c
 SRCS	+=	gate.c
 SRCS	+=	minimap.c
+SRCS	+=	mlx_hooks.c
 SRCS	+=	parsing_utils.c
 SRCS	+=	pixel_util.c
 SRCS	+=	player.c

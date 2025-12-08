@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 17:01:32 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:12:00 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	mouse_rotation(t_data *d)
 	if (rot > d->max_rot_frame)
 		rot = d->max_rot_frame;
 	if (rot < -d->max_rot_frame)
-	rot = -d->max_rot_frame;
+		rot = -d->max_rot_frame;
 	if (rot != 0.0)
 	{
 		c = cos(rot);
