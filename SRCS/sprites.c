@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   sprites.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/08 15:01:49 by wivallee          #+#    #+#             */
+/*   Updated: 2025/12/08 15:07:45 by wivallee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../INCLUDE/cube.h"
 
 void	calc_sprite_draw_area(t_data *d)
@@ -41,14 +53,14 @@ void	put_sprite_pixels(t_data *d, int texx, int stripe)
 		if ((d->color & 0x00FFFFFF) != 0) // non-transparent pixel
 		{
 			// Only draw if sprite is in front of whatever is already there
-			if (d->transformy < d->pixelDepth[y][stripe])
+			if (d->transformy < d->pixeldepth[y][stripe])
 			{
 				put_px(d, stripe, y, d->color | 0xFF000000);
-				d->pixelDepth[y][stripe] = d->transformy;
+				d->pixeldepth[y][stripe] = d->transformy;
 			}
 		}
 		y++;
-	// if sprite pixel is transparent: do nothing, don't change pixelDepth
+	// if sprite pixel is transparent: do nothing, don't change pixeldepth
 	}
 }
 
@@ -69,7 +81,7 @@ void	drawing_sprites(t_data *d)
 		if (d->transformy > 0 && stripe >= 0 && stripe < SCRN_W)
 		{
 			put_sprite_pixels(d, texx, stripe);
-			// if sprite pixel is transparent: do nothing, don't change pixelDepth
+			// if sprite pixel is transparent: do nothing, don't change pixeldepth
 		}
 		stripe++;
 	}

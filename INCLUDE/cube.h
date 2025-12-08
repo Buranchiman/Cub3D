@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 11:50:28 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/08 15:10:37 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ typedef enum e_cardinal
 }			t_cardinal;
 
 typedef struct s_keys {
-	int left;
-	int right;
-	int w;
-	int s;
-	int a;
-	int d;
+	int	left;
+	int	right;
+	int	w;
+	int	s;
+	int	a;
+	int	d;
 }				t_keys;
 
 typedef struct s_gate_layer
@@ -128,9 +128,9 @@ typedef struct s_doors
 
 // typedef struct s_raycast
 // {
-// 	t_gate_layer	gateLayers[SCRN_W][MAX_GATES_PER_COLUMN];
-// 	int				gateCount[SCRN_W];
-// 	double			pixelDepth[SCRN_H][SCRN_W];
+// 	t_gate_layer	gatelayers[SCRN_W][MAX_GATES_PER_COLUMN];
+// 	int				gatecount[SCRN_W];
+// 	double			pixeldepth[SCRN_H][SCRN_W];
 // 	double			zbuffer[SCRN_W];
 // }				t_raycast;
 
@@ -162,9 +162,9 @@ typedef struct s_data
 	int				mouse_ready;    // 0 until first center
 	int				mouse_dx;        // accumulated horizontal delta (pixels) since last frame
 	double			max_rot_frame;   // hard cap per frame in radians (e.g. 0.06 ≈ 3.4°)
-	t_gate_layer	gateLayers[SCRN_W][MAX_GATES_PER_COLUMN];
-	int				gateCount[SCRN_W];
-	double			pixelDepth[SCRN_H][SCRN_W];
+	t_gate_layer	gatelayers[SCRN_W][MAX_GATES_PER_COLUMN];
+	int				gatecount[SCRN_W];
+	double			pixeldepth[SCRN_H][SCRN_W];
 	double			zbuffer[SCRN_W];
 	double			raydirx;
 	double			raydiry;
@@ -227,7 +227,7 @@ void	check_map(t_data *data, char **map);
 void	get_map(char *file_name);
 
 //data.c
-t_img	*init_img();
+t_img	*init_img(void);
 void	init_data(void);
 t_data	*get_data(void);
 
@@ -269,7 +269,7 @@ void	update_player(t_data *d);
 void	assign_gate_value(int x, int gate_tex,
 			double gatedist, int texx_gate);
 void	calc_gate_area(t_data *d, t_tex *gatetex,
-			int x, double dist, int gi);
+			int x, int gi);
 void	draw_gates(t_data *d, t_tex *gatetex, int x, double dist);
 void	door_back_to_front(t_data *d, int x, int count);
 void	handle_gates(t_data *d);

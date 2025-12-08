@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 11:50:55 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/08 15:07:45 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	reset_gates(t_data *d)
 	i = 0;
 	while (i < SCRN_W)
 	{
-		d->gateCount[i] = 0;
+		d->gatecount[i] = 0;
 		i++;
 	}
 	y = 0;
@@ -50,7 +50,7 @@ void	reset_gates(t_data *d)
 		x = 0;
 		while (x < SCRN_W)
 		{
-			d->pixelDepth[y][x] = 1e30;
+			d->pixeldepth[y][x] = 1e30;
 			x++;
 		}
 		y++;

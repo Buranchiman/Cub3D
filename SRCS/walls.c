@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   walls.c                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/08 14:59:50 by wivallee          #+#    #+#             */
+/*   Updated: 2025/12/08 15:07:45 by wivallee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../INCLUDE/cube.h"
 
 void	walls_final_calc(t_data *d, double wallx)
@@ -32,7 +44,7 @@ void	draw_walls(t_data *d, int x)
 		//make d->color darker for y-sides: R, G and B byte each divided through two with a "shift" and an "and"
 		// if(d->side == 1) d->color = (d->color >> 1) & 8355711;
 		put_px(d, x, y, d->color | 0xFF000000);
-		d->pixelDepth[y][x] = d->perpwalldist;   // wall is at this distance
+		d->pixeldepth[y][x] = d->perpwalldist;   // wall is at this distance
 		y++;
 	}
 	while (y < SCRN_H)

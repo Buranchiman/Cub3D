@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:21:19 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/08 15:00:34 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,9 +61,9 @@ void	free_img(t_img *img)
 }
 
 
-void free_data(t_data *data)
+void	free_data(t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
 	while (i < NBR_TEXTURES)
