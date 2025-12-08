@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:02:23 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:02:24 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:59:52 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,9 @@ void	hit_wall(t_data *d, int x)
 	int		texx_gate;
 
 	if (door_is_locked_at(d, d->mapx, d->mapy))
-		gate_tex = 11;
+		gate_tex = 13;
 	else
-		gate_tex = 12;
+		gate_tex = 14;
 	// distance to this gate
 	if (d->side == 0)
 		gatedist = d->sidedistx - d->deltadistx;

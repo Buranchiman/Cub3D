@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:22:03 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 15:46:27 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,31 +91,48 @@ int	raycasting(t_data *d)
 	return (0);
 }
 
+void	door_to_close(t_data *data)
+{
+	int	i;
+
+	i = 0;
+	while (i < data->doors_count)
+	{
+		if (data->tab_doors[i].to_closed == 1)
+		{
+			data->tab_doors[i].to_closed = 0;
+			data->tab_doors[i].lock = 1;
+		}
+		i++;
+	}
+}
+
 // compose minimap into the main image buffer, then blit once
 int	render_frame(void *param)
 {
-	t_data			*d;
-	double			now;
-	unsigned long	now_ms;
+	t_data					*data;
 
 	(void)param;
-	d = get_data();
-	now = get_time();
-	d->deltatime = now - d->lasttime;
-	d->lasttime = now;
-	now_ms = (unsigned long)(now * 1000.0);
-	if (now_ms - d->last_update >= 120UL)
+	data = get_data();
+	data->monster_time = get_time();
+	data->deltatime = data->monster_time - data->lasttime;
+	data->lasttime = data->monster_time;
+	if (data->monster_time - data->last_update >= 250UL)
 	{
-		monsters_move(d);
-		d->last_update = now_ms;
+		monsters_move(data);
+		data->last_update = data->monster_time;
 	}
-	if (d->deltatime > 0.05)
-		d->deltatime = 0.05;
-	mouse_rotation(d);
-	update_player(d);
-	raycasting(d);
-	display_minimap(d, 0, 0);
-	mlx_put_image_to_window(d->mlx_ptr,
-		d->win_ptr, d->mlx_img->img, 0, 0);
+	if (data->last_update - data->door_time >= 3000UL)
+	{
+		door_to_close(data);
+		data->door_time = data->last_update;
+	}
+	if (data->deltatime > 0.05)
+		data->deltatime = 0.05;
+	mouse_rotation(data);
+	raycasting(data);
+	display_minimap(data, 0, 0);
+	mlx_put_image_to_window(data->mlx_ptr,
+		data->win_ptr, data->mlx_img->img, 0, 0);
 	return (0);
 }

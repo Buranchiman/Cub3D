@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 11:40:12 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/08 16:09:54 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ void	mouse_rotation(t_data *d)
 		d->cam.y = d->cam.x * s + d->cam.y * c;
 		d->cam.x = d->cam.x * c - d->cam.y * s;
 	}
+	update_player(d);
 }
 
 static void	rotate_player(t_data *d)
@@ -103,6 +104,7 @@ void	update_player(t_data *d)
 	int		idx;
 	t_point	tmp;
 
+	printf("delta is %f\n", d->deltatime);
 	movespeed = 2.0 * d->deltatime;
 	rotate_player(d);
 	tmp = move_player(d, movespeed);

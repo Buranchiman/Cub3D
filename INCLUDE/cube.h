@@ -3,14 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-<<<<<<< HEAD
-/*   Updated: 2025/12/08 15:10:37 by wivallee         ###   ########.fr       */
-=======
-/*   Updated: 2025/12/05 16:58:10 by manon            ###   ########.fr       */
->>>>>>> origin/final_norm_branch
+/*   Updated: 2025/12/08 15:54:33 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -288,8 +284,8 @@ void	handle_gates(t_data *d);
 
 //sprites.c
 void	calc_sprite_draw_area(t_data *d);
-void	put_sprite_pixels(t_data *d, int texx, int stripe);
-void	drawing_sprites(t_data *d);
+void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx);
+void	drawing_sprites(t_data *d, int tex_idx);
 void	handle_sprites(t_data *d);
 
 //dda.c
