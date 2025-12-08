@@ -3,14 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/05 18:25:31 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 11:40:12 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
+
+void	mouse_rotation(t_data *d)
+{
+	int		dx;
+	double	rot;
+	double	c;
+	double	s;
+	double	old_dir;
+
+	dx = d->mouse_dx;
+	d->mouse_dx = 0;
+	rot = dx * d->mouse_sens;
+	if (rot > d->max_rot_frame)
+		rot = d->max_rot_frame;
+	if (rot < -d->max_rot_frame)
+	rot = -d->max_rot_frame;
+	if (rot != 0.0)
+	{
+		c = cos(rot);
+		s = sin(rot);
+		old_dir = d->direction.x;
+		d->direction.x = d->direction.x * c - d->direction.y * s;
+		d->direction.y = old_dir * s + d->direction.y * c;
+		d->cam.y = d->cam.x * s + d->cam.y * c;
+		d->cam.x = d->cam.x * c - d->cam.y * s;
+	}
+}
 
 static void	rotate_player(t_data *d)
 {

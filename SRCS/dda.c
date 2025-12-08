@@ -1,0 +1,78 @@
+#include "../INCLUDE/cube.h"
+
+void	get_wallside(t_data *d)
+{
+//jump to next map square, either in x-direction, or in y-direction
+	if (d->sidedistx < d->sidedisty)
+	{
+		d->sidedistx += d->deltadistx;
+		d->mapx += d->stepx;
+		d->side = 0;
+		if (d->stepx == 1)
+			d->cardinal = CARDEAST;
+		else
+			d->cardinal = CARDWEST;
+	}
+	else
+	{
+		d->sidedisty += d->deltadisty;
+		d->mapy += d->stepy;
+		d->side = 1;
+		if (d->stepy == 1)
+			d->cardinal = CARDNORTH;
+		else
+			d->cardinal = CARDSOUTH;
+	}
+}
+
+void	hit_wall(t_data *d, int x)
+{
+	int		gate_tex;
+	double	wallx;
+	double	gatedist;
+	int		texx_gate;
+
+	if (door_is_locked_at(d, d->mapx, d->mapy))
+		gate_tex = 11;
+	else
+		gate_tex = 12;
+	// distance to this gate
+	if (d->side == 0)
+		gatedist = d->sidedistx - d->deltadistx;
+	else
+		gatedist = d->sidedisty - d->deltadisty;
+	// compute where on the tex we d->hit (like walls)
+	if (d->side == 0)
+		wallx = d->player_pos.y + gatedist * d->raydiry;
+	else
+		wallx = d->player_pos.x + gatedist * d->raydirx;
+	wallx -= floor(wallx);
+	texx_gate = (int)(wallx * (double)d->tex[gate_tex].width);
+	if (texx_gate < 0) texx_gate = 0;
+	if (texx_gate >= d->tex[gate_tex].width)
+		texx_gate = d->tex[gate_tex].width - 1;
+	// store this gate layer for this column
+	assign_gate_value(x, gate_tex, gatedist, texx_gate);
+}
+
+void	perform_dda(t_data *d, int x)
+{
+	while (d->hit == 0)
+	{
+		//jump to next map square, either in x-direction, or in y-direction
+		get_wallside(d);
+		//Check if ray has d->hit a wall
+		if (d->map[d->mapy][d->mapx] == 'D') // transparent gate d->map[d->mapy][d->mapx]
+		{
+			hit_wall(d, x);
+			// DO NOT mark d->hit, this gate is not a blocking wall
+			continue;
+		}
+		else if (d->map[d->mapy][d->mapx] == '1')
+		{
+			// solid wall or door: stop ray here
+			d->cardinal = fetch_tex(d->mapx, d->mapy);
+			d->hit = 1;
+		}
+	}
+}
