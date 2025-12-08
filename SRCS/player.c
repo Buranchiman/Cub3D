@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 16:09:54 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 17:01:32 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,14 +104,13 @@ void	update_player(t_data *d)
 	int		idx;
 	t_point	tmp;
 
-	printf("delta is %f\n", d->deltatime);
 	movespeed = 2.0 * d->deltatime;
 	rotate_player(d);
 	tmp = move_player(d, movespeed);
 	if (d->map[(int)tmp.y][(int)tmp.x] == 'D')
 	{
 		idx = door_index_at(d, (int)tmp.x, (int)tmp.y);
-		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)
+		if (idx >= 0 && d->tab_doors)
 			open_door(d, idx);
 	}
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'

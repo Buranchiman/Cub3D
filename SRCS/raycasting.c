@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:46:27 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/08 16:56:04 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,12 +111,15 @@ void	door_to_close(t_data *data)
 int	render_frame(void *param)
 {
 	t_data					*data;
+	double					now;
 
 	(void)param;
 	data = get_data();
-	data->monster_time = get_time();
-	data->deltatime = data->monster_time - data->lasttime;
-	data->lasttime = data->monster_time;
+	now = get_time();
+	data->monster_time = (unsigned long)(now * 1000.0);
+	data->deltatime = now - data->lasttime;
+	data->lasttime = now;
+	//printf("delta time is %f\n", data->deltatime);
 	if (data->monster_time - data->last_update >= 250UL)
 	{
 		monsters_move(data);
@@ -124,6 +127,7 @@ int	render_frame(void *param)
 	}
 	if (data->last_update - data->door_time >= 3000UL)
 	{
+		//printf("entered door check\n");
 		door_to_close(data);
 		data->door_time = data->last_update;
 	}
