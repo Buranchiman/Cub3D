@@ -3,43 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_doors.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/12/09 18:24:09 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 21:04:38 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
-
-int	doors_count(t_data *data, int x, int y)
-{
-	int	doors_count;
-
-	doors_count = 0;
-	while (data->map[y])
-	{
-		x = 0;
-		while (data->map[y][x])
-		{
-			if (data->map[y][x] == 'D')
-				doors_count++;
-			x++;
-		}
-		y++;
-	}
-	if (doors_count <= 0)
-	{
-		data->tab_doors = NULL;
-		data->doors_count = 0;
-		return (0);
-	}
-	data->tab_doors = ft_calloc(doors_count, sizeof(*(data->tab_doors)));
-	if (!data->tab_doors)
-		ft_clean_exit(data, 1, "Malloc failed in doors_count");
-	data->doors_count = doors_count;
-	return (data->doors_count);
-}
 
 void	init_enigma(t_data *data, int i)
 {

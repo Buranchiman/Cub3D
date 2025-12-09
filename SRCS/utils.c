@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:46:56 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 00:48:35 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,4 +53,33 @@ int	quit_with_int(t_data *data)
 		data = get_data();
 	ft_clean_exit(data, 0, "See you soon👋");
 	return (0);
+}
+
+int	doors_count(t_data *data, int x, int y)
+{
+	int	doors_count;
+
+	doors_count = 0;
+	while (data->map[y])
+	{
+		x = 0;
+		while (data->map[y][x])
+		{
+			if (data->map[y][x] == 'D')
+				doors_count++;
+			x++;
+		}
+		y++;
+	}
+	if (doors_count <= 0)
+	{
+		data->tab_doors = NULL;
+		data->doors_count = 0;
+		return (0);
+	}
+	data->tab_doors = ft_calloc(doors_count, sizeof(*(data->tab_doors)));
+	if (!data->tab_doors)
+		ft_clean_exit(data, 1, "Malloc failed in doors_count");
+	data->doors_count = doors_count;
+	return (data->doors_count);
 }

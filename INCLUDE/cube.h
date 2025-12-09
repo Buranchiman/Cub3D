@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 19:40:23 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 21:07:57 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -209,9 +209,9 @@ typedef struct s_data
 }				t_data;
 
 //utils.c
+int		doors_count(t_data *data, int x, int y);
 double	get_time(void);
 int		is_all_space_n_ones(char *string);
-void	ft_clean_exit(t_data *data, int option, char *msg);
 size_t	ft_tablen(char **tab);
 int		quit_with_int(t_data *data);
 
@@ -249,8 +249,7 @@ int		vertical_walls(char *line);
 void	leak_check(char **map, int x, int y);
 
 //minimap.c
-void	display_window(t_data *data, int i);
-//void	display_window(t_data *data);
+void	display_window(t_data *data);
 void	display_minimap(t_data *data, int x, int y);
 
 //bonus_monsters.c

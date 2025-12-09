@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:37:15 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 21:00:10 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int	main(int arc, char **arv)
 	verif_param(arc, arv);
 	get_map(arv[1]);
 	data = get_data();
-	display_window(data, 0);
+	display_window(data);
 	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);

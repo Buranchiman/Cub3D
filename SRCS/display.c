@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/09 18:37:15 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 00:48:18 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,9 +14,6 @@
 
 void	fil_texs_tab(t_data *data)
 {
-	int	i;
-
-	i = 0;
 	if (!data->tex[0].path)
 		data->tex[0].path = ft_strdup(NORTH);
 	if (!data->tex[1].path)
@@ -35,21 +32,21 @@ void	fil_texs_tab(t_data *data)
 	data->tex[13].path = ft_strdup(DOOR_CLOSED);
 	data->tex[14].path = ft_strdup(DOOR_OPENED);
 	data->tex[15].path = ft_strdup(MONSTER2);
-	while (i < NBR_TEXTURES)
-	{
-		if (i == 4 || i == 5)
-		{
-			i++;
-			continue ;
-		}
-		if (!data->tex[i].path)
-		{
-			printf("failed to allocate tex path %d\n", i);
-			ft_clean_exit(data, 1, "Failed to allocate tex path");
-		}
-		i++;
-	}
 }
+	//while (i < NBR_TEXTURES)
+	//{
+	//	if (i == 4 || i == 5)
+	//	{
+	//		i++;
+	//		continue ;
+	//	}
+	//	if (!data->tex[i].path)
+	//	{
+	//		printf("failed to allocate tex path %d\n", i);
+	//		ft_clean_exit(data, 1, "Failed to allocate tex path");
+	//	}
+	//	i++;
+	//}
 
 int	init_pixels(t_tex *tex)
 {
@@ -95,16 +92,11 @@ void	display_sky(t_data *data)
 	}
 }
 
-void	display_window(t_data *data, int i)
+static void	display_textures(t_data *data)
 {
-	data->mlx = mlx_init();
-	if (!data->mlx)
-		ft_clean_exit(data, 1, "mlx init failed\n");
-	data->win_ptr = mlx_new_window(data->mlx, SCRN_W, SCRN_H,
-			"Where are the escape ?");
-	if (!data->win_ptr)
-		ft_clean_exit(data, 1, "Window creation failed\n");
-	fil_texs_tab(data);
+	int	i;
+
+	i = 0;
 	while (i < NBR_TEXTURES)
 	{
 		if (i == 4 || i == 5)
@@ -126,6 +118,19 @@ void	display_window(t_data *data, int i)
 		init_pixels(&data->tex[i]);
 		i++;
 	}
+}
+
+void	display_window(t_data *data)
+{
+	data->mlx = mlx_init();
+	if (!data->mlx)
+		ft_clean_exit(data, 1, "mlx init failed\n");
+	data->win_ptr = mlx_new_window(data->mlx, SCRN_W, SCRN_H,
+			"Where are the escape ?");
+	if (!data->win_ptr)
+		ft_clean_exit(data, 1, "Window creation failed\n");
+	fil_texs_tab(data);
+	display_textures(data);
 	if (data->sky_path)
 		display_sky(data);
 	mlx_mouse_move(data->mlx, data->win_ptr, SCRN_W / 2, SCRN_H / 2);
