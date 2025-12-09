@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:01:49 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:25:21 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 18:57:41 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,16 +15,16 @@
 void	calc_sprite_draw_area(t_data *d)
 {
 	d->spritescreenx = (int)((SCRN_W / 2)
-			* (1 + d->transformx / d->transformy));
-	d->vmovescreen = (int)(d->vmove / d->transformy);
-	d->spriteh = abs((int)(SCRN_H / d->transformy));
+			* (1 + d->transfx / d->transfy));
+	d->vmovescreen = (int)(d->vmove / d->transfy);
+	d->spriteh = abs((int)(SCRN_H / d->transfy));
 	d->drawstarty = -d->spriteh / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
 	if (d->drawstarty < 0)
 		d->drawstarty = 0;
 	d->drawendy = d->spriteh / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
 	if (d->drawendy >= SCRN_H)
 		d->drawendy = SCRN_H - 1;
-	d->spritewidth = abs((int)(SCRN_H / d->transformy));
+	d->spritewidth = abs((int)(SCRN_H / d->transfy));
 	d->drawstartx = -d->spritewidth / 2 + d->spritescreenx;
 	if (d->drawstartx < 0)
 		d->drawstartx = 0;
@@ -51,10 +51,10 @@ void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx)
 			* d->tex[tex_idx].width + texx];
 		if ((d->color & 0x00FFFFFF) != 0)
 		{
-			if (d->transformy < d->pixeldepth[y][stripe])
+			if (d->transfy < d->pixeldepth[y][stripe])
 			{
 				put_px(d, stripe, y, d->color | 0xFF000000);
-				d->pixeldepth[y][stripe] = d->transformy;
+				d->pixeldepth[y][stripe] = d->transfy;
 			}
 		}
 		y++;
@@ -75,7 +75,7 @@ void	drawing_sprites(t_data *d, int tex_idx)
 			texx = 0;
 		if (texx >= d->tex[tex_idx].width)
 			texx = d->tex[tex_idx].width - 1;
-		if (d->transformy > 0 && stripe >= 0 && stripe < SCRN_W)
+		if (d->transfy > 0 && stripe >= 0 && stripe < SCRN_W)
 		{
 			put_sprite_pixels(d, texx, stripe, tex_idx);
 		}
@@ -99,13 +99,10 @@ void	handle_sprites(t_data *d)
 		m = &d->tab_m[i];
 		d->spritex = m->pos.x - d->player_pos.x;
 		d->spritey = m->pos.y - d->player_pos.y;
-		d->invdet = 1.0 / (d->cam.x * d->direction.y
-				- d->direction.x * d->cam.y);
-		d->transformx = d->invdet * (d->direction.y
-				* d->spritex - d->direction.x * d->spritey);
-		d->transformy = d->invdet * (-d->cam.y
-				* d->spritex + d->cam.x * d->spritey);
-		if (d->transformy <= 0)
+		d->inv = 1.0 / (d->cam.x * d->direction.y - d->direction.x * d->cam.y);
+		d->transfx = d->inv * (d->direction.y * d->spritex - d->direction.x * d->spritey);
+		d->transfy = d->inv * (-d->cam.y * d->spritex + d->cam.x * d->spritey);
+		if (d->transfy <= 0)
 		{
 			i++;
 			continue ;

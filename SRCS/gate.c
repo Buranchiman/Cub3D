@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:41:06 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:25:58 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 19:01:24 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	assign_gate_value(int x, int gate_tex,
 	{
 		gi = d->gatecount[x];
 		d->gatelayers[x][gi].dist = gatedist;
-		d->gatelayers[x][gi].texX = texx_gate;
+		d->gatelayers[x][gi].texx = texx_gate;
 		d->gatelayers[x][gi].locked = gate_tex;
 		d->gatecount[x]++;
 	}
@@ -42,7 +42,7 @@ void	calc_gate_area(t_data *d, t_tex *gatetex,
 	d->drawend = d->lineheight / 2 + SCRN_H / 2 + d->pitch;
 	if (d->drawend >= SCRN_H)
 		d->drawend = SCRN_H - 1;
-	d->texx = d->gatelayers[x][gi].texX;
+	d->texx = d->gatelayers[x][gi].texx;
 	d->step = 1.0 * gatetex->height / d->lineheight;
 	d->texpos = (d->drawstart - d->pitch - SCRN_H
 			/ 2 + d->lineheight / 2) * d->step;

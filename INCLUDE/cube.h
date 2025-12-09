@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:46:28 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 19:01:58 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 # define MONSTER2 "TEXTURES/monster2.xpm"
 # define DOOR_CLOSED "TEXTURES/door_closed.xpm"
 # define DOOR_OPENED "TEXTURES/door_opened.xpm"
-# define MONSTER_MAP "TEXTURES/monster_map.xpm"//to rename i think
+# define MONSTER_MAP "TEXTURES/monster_map.xpm"
 # define DOOR_CLOSED_MAP "TEXTURES/door_closed_map.xpm"
 # define DOOR_OPENED_MAP "TEXTURES/door_opened_map.xpm"
 
@@ -56,7 +56,7 @@
 # define TEXHEIGHT 64
 # define SCRN_W 1900
 # define SCRN_H 1060
-# define CLOSEST 0.1 //closest you can get to a wall
+# define CLOSEST 0.1
 
 # define CEILING_COLOR 0xFF87CEEB
 # define FLOOR_COLOR 0xFF444444
@@ -73,7 +73,8 @@ typedef enum e_cardinal
 	CARDWEST,
 }			t_cardinal;
 
-typedef struct s_keys {
+typedef struct s_keys
+{
 	int	left;
 	int	right;
 	int	w;
@@ -85,19 +86,20 @@ typedef struct s_keys {
 
 typedef struct s_gate_layer
 {
-	double	dist;   // distance from player to this gate slice
-	int		texX;   // X coordinate on gate tex
+	double	dist;
+	int		texx;
 	int		locked;
 }				t_gate_layer;
 
 
-typedef struct s_img {
-	void	*img;      // MLX image handle
-	char	*addr;     // pointer to pixel data
-	int		bpp;      // bits per pixel (usually 32)
-	int		line_len; // bytes per row
-	int		endian;   // byte order flag (0 or 1)
-} t_img;
+typedef struct s_img
+{
+	void	*img;
+	char	*addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+}				t_img;
 
 typedef struct s_tex
 {
@@ -129,14 +131,6 @@ typedef struct s_doors
 	char	*soluce;
 }				t_doors;
 
-// typedef struct s_raycast
-// {
-// 	t_gate_layer	gatelayers[SCRN_W][MAX_GATES_PER_COLUMN];
-// 	int				gatecount[SCRN_W];
-// 	double			pixeldepth[SCRN_H][SCRN_W];
-// 	double			zbuffer[SCRN_W];
-// }				t_raycast;
-
 typedef struct s_data
 {
 	char			**map;
@@ -163,10 +157,10 @@ typedef struct s_data
 	t_tex			sky;
 	int				mouse_center_x;
 	int				mouse_center_y;
-	double			mouse_sens;     // radians per pixel
-	int				mouse_ready;    // 0 until first center
-	int				mouse_dx;        // accumulated horizontal delta (pixels) since last frame
-	double			max_rot_frame;   // hard cap per frame in radians (e.g. 0.06 ≈ 3.4°)
+	double			mouse_sens;
+	int				mouse_ready;
+	int				mouse_dx;
+	double			max_rot_frame;
 	t_gate_layer	gatelayers[SCRN_W][MAX_GATES_PER_COLUMN];
 	int				gatecount[SCRN_W];
 	double			pixeldepth[SCRN_H][SCRN_W];
@@ -194,9 +188,9 @@ typedef struct s_data
 	//sprites variables
 	double			spritex;
 	double			spritey;
-	double			invdet;
-	double			transformx;
-	double			transformy;
+	double			inv;
+	double			transfx;
+	double			transfy;
 	int				spritescreenx;
 	double			vmove;
 	int				vmovescreen;
