@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   first_calcs.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:01:32 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:01:32 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:26:39 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,11 +61,9 @@ void	calc_wall_drawing_area(t_data *d)
 		d->perpwalldist = (d->sidedistx - d->deltadistx);
 	else
 		d->perpwalldist = (d->sidedisty - d->deltadisty);
-	 //Calculate height of line to draw on screen
 	if (d->perpwalldist < 1e-6)
 		d->perpwalldist = 1e-6;
 	d->lineheight = (int)(SCRN_H / d->perpwalldist);
-	//calculate lowest and highest pixel to fill in current stripe
 	d->drawstart = -d->lineheight / 2 + SCRN_H / 2 + d->pitch;
 	if (d->drawstart < 0)
 		d->drawstart = 0;

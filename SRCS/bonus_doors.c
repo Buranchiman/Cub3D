@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   bonus_doors.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/12/08 17:12:05 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:24:09 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,7 +110,7 @@ int	open_door(t_data *data, int i)
 	if (!data->keys.e)
 		return (0);
 	printf("\x1b[38;5;127m[It's written on it: %s]\033[0m\n",
-			data->tab_doors[i].enigma);
+		data->tab_doors[i].enigma);
 	line = get_next_line(0);
 	if (ft_strlen(line) > 0 && line[ft_strlen(line) - 1] == '\n')
 		line[ft_strlen(line) - 1] = '\0';

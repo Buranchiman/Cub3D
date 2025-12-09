@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mlx_hooks.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 17:28:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 17:32:57 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:27:25 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,8 @@ int	mouse_move(int x, int y, t_data *d)
 	dx = x - cx;
 	if (dx != 0)
 	{
-		d->mouse_dx += dx;                    // accumulate for this frame
-		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);  // keep centered
+		d->mouse_dx += dx;
+		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);
 	}
 	return (0);
 }
@@ -61,8 +61,9 @@ int	on_keydown(int keycode, void *param)
 
 int	on_keyup(int keycode, void *param)
 {
-	t_data	*d = param;
+	t_data	*d;
 
+	d = param;
 	if (keycode == KEY_ESC)
 		ft_clean_exit(get_data(), 0, "See you soon👋");
 	if (keycode == KEY_LEFT)

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 17:32:27 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:28:23 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,53 +26,6 @@ void	verif_param(int argc, char **argv)
 	}
 }
 
-// int mouse_move(int x, int y, t_data *d)
-// {
-//     static int  first = 1;
-//     int         centerX = SCRN_W / 2;
-//     int         centerY = SCRN_H / 2;
-//     (void)y;
-
-//     if (first)
-//     {
-//         mlx_mouse_move(d->mlx_ptr, d->win_ptr, centerX, centerY);
-//         first = 0;
-//         return (0);
-//     }
-
-//     int delta_x = x - centerX;
-//     if (delta_x == 0)
-//         return (0);
-
-//     /* ----------------------------
-//        Sensitivity tuning
-//        Lower = slower turn
-//        Typical good range: 0.001 → 0.004
-//     ---------------------------- */
-//     double mouse_sens = 0.0025;
-
-//     /* fixed-time rotation (don’t scale by deltatime,
-//        MLX event frequency already depends on real time) */
-//     double rot = delta_x * mouse_sens;
-
-//     /* Clamp large flicks */
-//     if (rot > 0.1)  rot = 0.1;
-//     if (rot < -0.1) rot = -0.1;
-
-//     /* Rotate cam */
-//     double oldDirX = d->direction.x;
-//     d->direction.x = d->direction.x * cos(rot) - d->direction.y * sin(rot);
-//     d->direction.y = oldDirX * sin(rot) + d->direction.y * cos(rot);
-
-//     double oldPlaneX = d->cam.x;
-//     d->cam.x = d->cam.x * cos(rot) - d->cam.y * sin(rot);
-//     d->cam.y = oldPlaneX * sin(rot) + d->cam.y * cos(rot);
-
-//     mlx_mouse_move(d->mlx_ptr, d->win_ptr, centerX, centerY);
-//     return (0);
-// }
-
-
 int	main(int arc, char **arv)
 {
 	t_data	*data;
@@ -83,9 +36,7 @@ int	main(int arc, char **arv)
 	display_window(data, 0);
 	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
-	//data->monster_time = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
-	data->door_time = data->last_update;
 	system("mpg123 --loop -1 -q lavanville.mp3 &");
 	data->mlx_img->img = mlx_new_image(data->mlx_ptr,
 			SCRN_W, SCRN_H);

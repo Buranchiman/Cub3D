@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 17:54:40 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:34:48 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,8 +228,8 @@ int		get_texs(char *line);
 int		read_texs(char ***map);
 
 //checkmap.c
+void	set_direction(char c, t_data *data);
 void	read_all_file(char *file_name, t_data *data);
-int		get_player(char **map, int i, int j);
 void	check_borders(t_data *data, char **map, int pcount);
 void	check_map(t_data *data, char **map);
 void	get_map(char *file_name);
@@ -270,6 +270,7 @@ void	put_px(t_data *d, int x, int y, unsigned int argb);
 int		fetch_tex(int x, int y);
 
 //player.c
+int		get_player(char **map, int i, int j);
 void	mouse_rotation(t_data *d);
 void	update_player(t_data *d);
 

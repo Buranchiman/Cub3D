@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:01:49 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:55:27 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:25:21 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,9 @@
 
 void	calc_sprite_draw_area(t_data *d)
 {
-	// screen X
-	d->spritescreenx = (int)((SCRN_W / 2) * (1 + d->transformx / d->transformy));
-	// world-space vertical offset (feet height, tune 0.0–0.7)
-	d->vmovescreen = (int)(d->vmove / d->transformy);   // <-- NO + d->pitch here
-	// sprite dimensions (scale with distance)
+	d->spritescreenx = (int)((SCRN_W / 2)
+			* (1 + d->transformx / d->transformy));
+	d->vmovescreen = (int)(d->vmove / d->transformy);
 	d->spriteh = abs((int)(SCRN_H / d->transformy));
 	d->drawstarty = -d->spriteh / 2 + SCRN_H / 2 + d->pitch + d->vmovescreen;
 	if (d->drawstarty < 0)
@@ -49,10 +47,10 @@ void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx)
 			d->texy = 0;
 		if (d->texy >= d->tex[tex_idx].height)
 			d->texy = d->tex[tex_idx].height - 1;
-		d->color = d->tex[tex_idx].pixels[d->texy * d->tex[tex_idx].width + texx];
-		if ((d->color & 0x00FFFFFF) != 0) // non-transparent pixel
+		d->color = d->tex[tex_idx].pixels[d->texy
+			* d->tex[tex_idx].width + texx];
+		if ((d->color & 0x00FFFFFF) != 0)
 		{
-			// Only draw if sprite is in front of whatever is already there
 			if (d->transformy < d->pixeldepth[y][stripe])
 			{
 				put_px(d, stripe, y, d->color | 0xFF000000);
@@ -60,7 +58,6 @@ void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx)
 			}
 		}
 		y++;
-	// if sprite pixel is transparent: do nothing, don't change pixeldepth
 	}
 }
 
@@ -81,7 +78,6 @@ void	drawing_sprites(t_data *d, int tex_idx)
 		if (d->transformy > 0 && stripe >= 0 && stripe < SCRN_W)
 		{
 			put_sprite_pixels(d, texx, stripe, tex_idx);
-			// if sprite pixel is transparent: do nothing, don't change pixeldepth
 		}
 		stripe++;
 	}
@@ -101,22 +97,20 @@ void	handle_sprites(t_data *d)
 	while (i < d->monster_count)
 	{
 		m = &d->tab_m[i];
-		// relative to player
 		d->spritex = m->pos.x - d->player_pos.x;
 		d->spritey = m->pos.y - d->player_pos.y;
-		// inverse determinant of cam matrix
 		d->invdet = 1.0 / (d->cam.x * d->direction.y
 				- d->direction.x * d->cam.y);
-		// transform to cam space
-		d->transformx = d->invdet * (d->direction.y * d->spritex - d->direction.x * d->spritey);
-		d->transformy = d->invdet * (-d->cam.y * d->spritex + d->cam.x * d->spritey);
+		d->transformx = d->invdet * (d->direction.y
+				* d->spritex - d->direction.x * d->spritey);
+		d->transformy = d->invdet * (-d->cam.y
+				* d->spritex + d->cam.x * d->spritey);
 		if (d->transformy <= 0)
 		{
 			i++;
 			continue ;
 		}
 		calc_sprite_draw_area(d);
-		// draw each vertical stripe of the sprite
 		drawing_sprites(d, tex_idx);
 		i++;
 	}

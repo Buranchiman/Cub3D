@@ -95,8 +95,8 @@ void	take_tex_out(char ***map, int end)
 int	read_texs(char ***map)
 {
 	int		i;
-	t_data *data;
-	int c;
+	t_data	*data;
+	int		c;
 
 	data = get_data();
 	i = 0;
@@ -108,12 +108,9 @@ int	read_texs(char ***map)
 		i++;
 	}
 	take_tex_out(map, i);
-	//AAA
 	if (data->tex[4].path)
 	{
 		c = parse_rgb(data->tex[4].path);
-		//if (c == -1)
-		//	ft_clean_exit(data, 1, "Invalid ceiling color");
 		data->ceiling_color = c;
 	}
 	else if (!data->sky_path)
@@ -125,21 +122,9 @@ int	read_texs(char ***map)
 	if (data->tex[5].path)
 	{
 		c = parse_rgb(data->tex[5].path);
-		//if (c == -1)
-		//	ft_clean_exit(data, 1, "Invalid floor color");
 		data->floor_color = c;
 	}
 	else
 		data->floor_color = 0x444444;
 	return (0);
 }
-
-//	take_tex_out(map, i);
-//	if (!data->tex[4].path && !data->sky_path)
-//	{
-//		data->sky_path = ft_strdup("TEXTURES/spirale.xpm");
-//		if (!data->sky_path)
-//			ft_clean_exit(data, 1, "malloc failed for sky fallback path");
-//	}
-//	return (0);
-//}

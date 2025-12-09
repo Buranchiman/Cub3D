@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:06:11 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:23:01 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,10 +44,10 @@ void	init_data(void)
 	data->mouse_center_x = SCRN_W / 2;
 	data->mouse_center_y = SCRN_H / 2;
 	data->mouse_dx = 0;
-	data->mouse_sens = 0.0015;   // tune 0.0010–0.0030
-	data->max_rot_frame = 0.06;  // per frame cap; try 0.04–0.08
+	data->mouse_sens = 0.0015;
+	data->max_rot_frame = 0.06;
 	data->mouse_ready = 0;
-	data->direction.x = 0.0; //le perso regarde au nord par defaut c'est pour la norme
+	data->direction.x = 0.0;
 	data->direction.y = -1.0;
 	data->cam.x = 0.66;
 	data->cam.y = 0.0;

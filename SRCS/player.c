@@ -3,14 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 17:12:00 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:32:38 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
+
+int	get_player(char **map, int i, int j)
+{
+	t_data	*data;
+	char	c;
+
+	data = get_data();
+	c = map[j][i];
+	if (ft_strchr("NSWE", c))
+	{
+		data->player_pos.x = i + 0.5;
+		data->player_pos.y = j + 0.5;
+		map[j][i] = '0';
+		set_direction(c, data);
+		return (1);
+	}
+	return (0);
+}
 
 void	mouse_rotation(t_data *d)
 {
@@ -49,7 +67,7 @@ static void	rotate_player(t_data *d)
 	rotspeed = 3.0 * d->deltatime;
 	old_dir = d->direction.x;
 	old_plan = d->cam.x;
-	if (d->keys.left) //j'ai inverse les touches (peut-etre a investiguer plus en profondeur)
+	if (d->keys.left)
 	{
 		d->direction.x = d->direction.x * cos(-rotspeed)
 			- d->direction.y * sin(-rotspeed);
@@ -115,7 +133,7 @@ void	update_player(t_data *d)
 	}
 	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'
 	|| (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
- 		&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y))) //peut-etre a modifier si ca ram comme ne pas "rollback" mais modifier directement le tmp et si c'est bon l'assigner
+			&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y)))
 	{
 		d->player_pos.x = tmp.x;
 		d->player_pos.y = tmp.y;

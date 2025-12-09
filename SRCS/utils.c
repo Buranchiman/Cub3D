@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:03:29 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 18:01:19 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:24:38 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,16 +19,6 @@ double	get_time(void)
 	gettimeofday(&tv, NULL);
 	return (tv.tv_sec + tv.tv_usec / 1000000.0);
 }
-
-// unsigned long	get_time(void)
-// {
-// 	struct timeval	tv;
-// 	unsigned long	time;
-
-// 	gettimeofday(&tv, NULL);
-// 	time = tv.tv_sec * 1000UL + tv.tv_usec / 1000UL;
-// 	return (time);
-// }
 
 size_t	ft_tablen(char **tab)
 {
@@ -69,7 +59,6 @@ void	free_img(t_img *img)
 		free (img);
 	}
 }
-
 
 void	free_data(t_data *data)
 {

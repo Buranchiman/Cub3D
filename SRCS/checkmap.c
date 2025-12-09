@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkmap.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/02 16:00:05 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:33:35 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	read_all_file(char *file_name, t_data *data)
 	}
 }
 
-static void	set_direction(char c, t_data *data)
+void	set_direction(char c, t_data *data)
 {
 	if (c == 'S')
 	{
@@ -56,24 +56,6 @@ static void	set_direction(char c, t_data *data)
 		data->cam.x = 0.0;
 		data->cam.y = -0.66;
 	}
-}
-
-int	get_player(char **map, int i, int j)
-{
-	t_data	*data;
-	char	c;
-
-	data = get_data();
-	c = map[j][i];
-	if (ft_strchr("NSWE", c))
-	{
-		data->player_pos.x = i + 0.5;
-		data->player_pos.y = j + 0.5;
-		map[j][i] = '0';
-		set_direction(c, data);
-		return (1);
-	}
-	return (0);
 }
 
 void	check_borders(t_data *data, char **map, int pcount)

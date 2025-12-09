@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gate.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:41:06 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 15:07:45 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:25:58 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,10 +62,8 @@ void	draw_gates(t_data *d, t_tex *gatetex, int x, double dist)
 		if (d->texy >= gatetex->height)
 			d->texy = gatetex->height - 1;
 		d->color = gatetex->pixels[d->texy * gatetex->width + d->texx];
-		// Treat pure black (RGB = 0) as transparent
-		if ((d->color & 0x00FFFFFF) != 0) // not transparent
+		if ((d->color & 0x00FFFFFF) != 0)
 		{
-			// GATE SHOULD ONLY DRAW IF IT IS CLOSER THAN THE SPRITE
 			if (dist < d->pixeldepth[y][x])
 			{
 				put_px(d, x, y, d->color | 0xFF000000);
@@ -112,7 +110,6 @@ void	handle_gates(t_data *d)
 			x++;
 			continue ;
 		}
-		// draw from far → near so closer gate overwrites farther
 		door_back_to_front(d, x, count);
 		x++;
 	}

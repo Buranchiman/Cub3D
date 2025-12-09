@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/08 17:12:01 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:28:02 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,28 +60,23 @@ void	reset_gates(t_data *d)
 int	raycasting(t_data *d)
 {
 	int		x;
-	double	wallx; //where exactly the wall was d->hit
+	double	wallx;
 
 	x = 0;
-	// reset gate counts for this frame
 	reset_gates(d);
 	while (x < SCRN_W)
 	{
 		first_calc(d, x);
-		 //calculate d->step and initial sideDist
-		//perform DDA
 		d->hit = 0;
 		step_calc(d);
 		perform_dda(d, x);
 		calc_wall_drawing_area(d);
 		draw_ceiling(d, x);
-		 //calculate value of wallx
 		if (d->side == 0)
 			wallx = d->player_pos.y + d->perpwalldist * d->raydiry;
 		else
 			wallx = d->player_pos.x + d->perpwalldist * d->raydirx;
 		wallx -= floor((wallx));
-		 //x coordinate on the tex
 		walls_final_calc(d, wallx);
 		draw_walls(d, x);
 		x++;
@@ -113,13 +108,11 @@ int	render_frame(void *param)
 	t_data					*data;
 	double					now;
 
-	(void)param;
-	data = get_data();
+	data = param;
 	now = get_time();
 	data->monster_time = (unsigned long)(now * 1000.0);
 	data->deltatime = now - data->lasttime;
 	data->lasttime = now;
-	//printf("delta time is %f\n", data->deltatime);
 	if (data->monster_time - data->last_update >= 250UL)
 	{
 		monsters_move(data);
@@ -127,7 +120,6 @@ int	render_frame(void *param)
 	}
 	if (data->last_update - data->door_time >= 3000UL)
 	{
-		//printf("entered door check\n");
 		door_to_close(data);
 		data->door_time = data->last_update;
 	}
