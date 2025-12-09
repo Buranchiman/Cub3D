@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:34:48 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 18:46:28 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -153,7 +153,7 @@ typedef struct s_data
 	unsigned long	door_time;
 	unsigned long	monster_time;
 	double			deltatime;
-	void			*mlx_ptr;
+	void			*mlx;
 	void			*win_ptr;
 	t_monster		*tab_m;
 	int				monster_count;
@@ -233,6 +233,12 @@ void	read_all_file(char *file_name, t_data *data);
 void	check_borders(t_data *data, char **map, int pcount);
 void	check_map(t_data *data, char **map);
 void	get_map(char *file_name);
+
+//cleanup.c
+void	take_tex_out(char ***map, int end);
+void	free_img(t_img *img);
+void	free_data(t_data *data);
+void	ft_clean_exit(t_data *data, int option, char *msg);
 
 //data.c
 t_img	*init_img(void);

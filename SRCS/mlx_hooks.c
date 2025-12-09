@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 17:28:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:27:25 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 18:37:15 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ int	mouse_move(int x, int y, t_data *d)
 	cy = SCRN_H / 2;
 	if (first)
 	{
-		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);
+		mlx_mouse_move(d->mlx, d->win_ptr, cx, cy);
 		first = 0;
 		return (0);
 	}
@@ -32,7 +32,7 @@ int	mouse_move(int x, int y, t_data *d)
 	if (dx != 0)
 	{
 		d->mouse_dx += dx;
-		mlx_mouse_move(d->mlx_ptr, d->win_ptr, cx, cy);
+		mlx_mouse_move(d->mlx, d->win_ptr, cx, cy);
 	}
 	return (0);
 }

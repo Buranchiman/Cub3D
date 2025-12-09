@@ -9,6 +9,7 @@ PATH_SRCS	=	SRCS/
 
 SRCS	+=	checkmap.c
 SRCS	+=	checktexture.c
+SRCS	+=	cleanup.c
 SRCS	+=	data.c
 SRCS	+=	dda.c
 SRCS	+=	display.c

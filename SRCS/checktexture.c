@@ -51,7 +51,6 @@ int	get_texs(char *line)
 	return (1);
 }
 
-//AAA
 static int	parse_rgb(char *line)
 {
 	char	**rgb;
@@ -77,37 +76,10 @@ static int	parse_rgb(char *line)
 	return (color);
 }
 
-void	take_tex_out(char ***map, int end)
+void	handle_sky_and_ground(t_data *data)
 {
-	int		i;
-	char	**temp;
+	int	c;
 
-	i = 0;
-	temp = *map;
-	while (i < end)
-	{
-		free(temp[i]);
-		i++;
-	}
-	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
-}
-
-int	read_texs(char ***map)
-{
-	int		i;
-	t_data	*data;
-	int		c;
-
-	data = get_data();
-	i = 0;
-	while ((*map)[i] && (*map)[i][0] != '1' && (*map)[i][0] != ' '
-		&& (*map)[i][0] != '0')
-	{
-		if (get_texs((*map)[i]))
-			return (1);
-		i++;
-	}
-	take_tex_out(map, i);
 	if (data->tex[4].path)
 	{
 		c = parse_rgb(data->tex[4].path);
@@ -126,5 +98,23 @@ int	read_texs(char ***map)
 	}
 	else
 		data->floor_color = 0x444444;
+}
+
+int	read_texs(char ***map)
+{
+	int		i;
+	t_data	*data;
+
+	data = get_data();
+	i = 0;
+	while ((*map)[i] && (*map)[i][0] != '1' && (*map)[i][0] != ' '
+		&& (*map)[i][0] != '0')
+	{
+		if (get_texs((*map)[i]))
+			return (1);
+		i++;
+	}
+	take_tex_out(map, i);
+	handle_sky_and_ground(data);
 	return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:28:02 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 18:37:36 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	door_to_close(t_data *data)
 	}
 }
 
-// compose minimap into the main image buffer, then blit once
 int	render_frame(void *param)
 {
 	t_data					*data;
@@ -128,7 +127,6 @@ int	render_frame(void *param)
 	mouse_rotation(data);
 	raycasting(data);
 	display_minimap(data, 0, 0);
-	mlx_put_image_to_window(data->mlx_ptr,
-		data->win_ptr, data->mlx_img->img, 0, 0);
+	mlx_put_image_to_window(data->mlx, data->win_ptr, data->mlx_img->img, 0, 0);
 	return (0);
 }

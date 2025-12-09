@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/08 15:16:42 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/09 18:37:15 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	display_sky(t_data *data)
 {
 	data->sky.path = ft_strdup(data->sky_path);
 	data->sky.ptr = init_img();
-	data->sky.ptr->img = mlx_xpm_file_to_image(data->mlx_ptr,
+	data->sky.ptr->img = mlx_xpm_file_to_image(data->mlx,
 			data->sky.path, &data->sky.width, &data->sky.height);
 	if (data->sky.ptr->img)
 	{
@@ -97,10 +97,10 @@ void	display_sky(t_data *data)
 
 void	display_window(t_data *data, int i)
 {
-	data->mlx_ptr = mlx_init();
-	if (!data->mlx_ptr)
+	data->mlx = mlx_init();
+	if (!data->mlx)
 		ft_clean_exit(data, 1, "mlx init failed\n");
-	data->win_ptr = mlx_new_window(data->mlx_ptr, SCRN_W, SCRN_H,
+	data->win_ptr = mlx_new_window(data->mlx, SCRN_W, SCRN_H,
 			"Where are the escape ?");
 	if (!data->win_ptr)
 		ft_clean_exit(data, 1, "Window creation failed\n");
@@ -113,7 +113,7 @@ void	display_window(t_data *data, int i)
 			continue ;
 		}
 		data->tex[i].ptr = init_img();
-		data->tex[i].ptr->img = mlx_xpm_file_to_image(data->mlx_ptr,
+		data->tex[i].ptr->img = mlx_xpm_file_to_image(data->mlx,
 				data->tex[i].path, &data->tex[i].width, &data->tex[i].height);
 		if (!data->tex[i].ptr->img)
 		{
@@ -128,6 +128,6 @@ void	display_window(t_data *data, int i)
 	}
 	if (data->sky_path)
 		display_sky(data);
-	mlx_mouse_move(data->mlx_ptr, data->win_ptr, SCRN_W / 2, SCRN_H / 2);
-	mlx_mouse_hide(data->mlx_ptr, data->win_ptr);
+	mlx_mouse_move(data->mlx, data->win_ptr, SCRN_W / 2, SCRN_H / 2);
+	mlx_mouse_hide(data->mlx, data->win_ptr);
 }

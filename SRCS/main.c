@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:28:23 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 18:37:15 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int	main(int arc, char **arv)
 	data->lasttime = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
 	system("mpg123 --loop -1 -q lavanville.mp3 &");
-	data->mlx_img->img = mlx_new_image(data->mlx_ptr,
+	data->mlx_img->img = mlx_new_image(data->mlx,
 			SCRN_W, SCRN_H);
 	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img,
 			&data->mlx_img->bpp, &data->mlx_img->line_len,
@@ -47,8 +47,8 @@ int	main(int arc, char **arv)
 	mlx_hook(data->win_ptr, 3, 1L << 1, on_keyup, data);
 	mlx_hook(data->win_ptr, 6, 1L << 6, mouse_move, data);
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
-	mlx_loop_hook(data->mlx_ptr, render_frame, data);
-	mlx_loop(data->mlx_ptr);
+	mlx_loop_hook(data->mlx, render_frame, data);
+	mlx_loop(data->mlx);
 	ft_clean_exit(data, 0, NULL);
 	return (0);
 }
