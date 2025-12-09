@@ -6,7 +6,7 @@
 /*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:01:49 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:57:41 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/09 19:43:16 by chillichien      ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,6 +83,14 @@ void	drawing_sprites(t_data *d, int tex_idx)
 	}
 }
 
+static int	chose_tex(t_data *d)
+{
+	if (d->monster_time % 2 == 0)
+		return (12);
+	else
+		return (15);
+}
+
 void	handle_sprites(t_data *d)
 {
 	int			i;
@@ -90,17 +98,15 @@ void	handle_sprites(t_data *d)
 	int			tex_idx;
 
 	i = 0;
-	if (d->monster_time % 2 == 0)
-		tex_idx = 12;
-	else
-		tex_idx = 15;
+	tex_idx = chose_tex(d);
 	while (i < d->monster_count)
 	{
 		m = &d->tab_m[i];
 		d->spritex = m->pos.x - d->player_pos.x;
 		d->spritey = m->pos.y - d->player_pos.y;
 		d->inv = 1.0 / (d->cam.x * d->direction.y - d->direction.x * d->cam.y);
-		d->transfx = d->inv * (d->direction.y * d->spritex - d->direction.x * d->spritey);
+		d->transfx = d->inv * (d->direction.y
+				* d->spritex - d->direction.x * d->spritey);
 		d->transfy = d->inv * (-d->cam.y * d->spritex + d->cam.x * d->spritey);
 		if (d->transfy <= 0)
 		{

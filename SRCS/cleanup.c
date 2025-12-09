@@ -15,6 +15,13 @@ void	take_tex_out(char ***map, int end)
 	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
 }
 
+static void	end_mlx_loops(t_data *data)
+{
+	mlx_mouse_show(data->mlx, data->win_ptr);
+	mlx_do_key_autorepeaton(data->mlx);
+	mlx_loop_end(data->mlx);
+}
+
 void	free_img(t_img *img)
 {
 	t_data	*d;
@@ -59,9 +66,7 @@ void	free_data(t_data *data)
 
 void	ft_clean_exit(t_data *data, int option, char *msg)
 {
-	mlx_mouse_show(data->mlx, data->win_ptr);
-	mlx_do_key_autorepeaton(data->mlx);
-	mlx_loop_end(data->mlx);
+	end_mlx_loops(data);
 	free_data(data);
 	if (data->map)
 		ft_clear_tab(data->map);
