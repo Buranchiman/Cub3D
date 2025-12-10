@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 21:07:57 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:38:27 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -291,7 +291,8 @@ void	handle_sprites(t_data *d);
 //dda.c
 void	get_wallside(t_data *d);
 void	hit_wall(t_data *d, int x);
-void	perform_dda(t_data *d, int x);
+void	perform_dda(t_data *d);
+//void	perform_dda(t_data *d, int x);
 
 //walls.c
 void	walls_final_calc(t_data *d, double wallx);

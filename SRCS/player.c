@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:32:38 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 15:42:58 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,21 +119,12 @@ static t_point	move_player(t_data *d, double movespeed)
 void	update_player(t_data *d)
 {
 	double	movespeed;
-	int		idx;
 	t_point	tmp;
 
 	movespeed = 2.0 * d->deltatime;
 	rotate_player(d);
 	tmp = move_player(d, movespeed);
-	if (d->map[(int)tmp.y][(int)tmp.x] == 'D')
-	{
-		idx = door_index_at(d, (int)tmp.x, (int)tmp.y);
-		if (idx >= 0 && d->tab_doors)
-			open_door(d, idx);
-	}
-	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1'
-	|| (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == 'D'
-			&& door_is_locked_at(d, (int)tmp.x, (int)tmp.y)))
+	if (d->map[(int)d->player_pos.y][(int)d->player_pos.x] == '1')
 	{
 		d->player_pos.x = tmp.x;
 		d->player_pos.y = tmp.y;

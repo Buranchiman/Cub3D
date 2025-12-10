@@ -25,8 +25,27 @@ SRCS	+=	sprites.c
 SRCS	+=	utils.c
 SRCS	+=	walls.c
 SRCS	+=	main.c
-SRCS	+=	bonus_monsters.c
-SRCS	+=	bonus_doors.c
+
+BONUS	+=	checkmap.c
+BONUS	+=	checktexture.c
+BONUS	+=	cleanup.c
+BONUS	+=	data.c
+BONUS	+=	dda.c
+BONUS	+=	display.c
+BONUS	+=	first_calcs.c
+BONUS	+=	gate.c
+BONUS	+=	minimap.c
+BONUS	+=	mlx_hooks.c
+BONUS	+=	parsing_utils.c
+BONUS	+=	pixel_util.c
+BONUS	+=	player.c
+BONUS	+=	raycasting.c
+BONUS	+=	sprites.c
+BONUS	+=	utils.c
+BONUS	+=	walls.c
+BONUS	+=	main_bonus.c
+BONUS	+=	bonus_monsters.c
+BONUS	+=	bonus_doors.c
 
 vpath	%.c	$(PATH_SRCS)
 

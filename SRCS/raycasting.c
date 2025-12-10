@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:37:36 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 17:40:36 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	raycasting(t_data *d)
 		first_calc(d, x);
 		d->hit = 0;
 		step_calc(d);
-		perform_dda(d, x);
+		perform_dda(d);
 		calc_wall_drawing_area(d);
 		draw_ceiling(d, x);
 		if (d->side == 0)
@@ -112,16 +112,6 @@ int	render_frame(void *param)
 	data->monster_time = (unsigned long)(now * 1000.0);
 	data->deltatime = now - data->lasttime;
 	data->lasttime = now;
-	if (data->monster_time - data->last_update >= 250UL)
-	{
-		monsters_move(data);
-		data->last_update = data->monster_time;
-	}
-	if (data->last_update - data->door_time >= 3000UL)
-	{
-		door_to_close(data);
-		data->door_time = data->last_update;
-	}
 	if (data->deltatime > 0.05)
 		data->deltatime = 0.05;
 	mouse_rotation(data);

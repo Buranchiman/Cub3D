@@ -1,0 +1,117 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   checkmap.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
+/*   Updated: 2025/12/09 18:33:35 by chillichien      ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../INCLUDE/cube.h"
+
+void	read_all_file(char *file_name, t_data *data)
+{
+	int		fd;
+	char	buffer[1025];
+	int		bytes_read;
+
+	fd = open(file_name, O_RDONLY);
+	if (fd == -1)
+		ft_clean_exit(data, 1, "Cannot get fd");
+	bytes_read = 1;
+	data->buffer = NULL;
+	while (bytes_read > 0)
+	{
+		ft_bzero(buffer, 1025);
+		bytes_read = read(fd, buffer, 1024);
+		data->buffer = ft_strjoinfree(data->buffer, buffer);
+		if (bytes_read == -1 || data->buffer == NULL)
+			ft_clean_exit(data, 1, "Fail in read or strjoin");
+	}
+}
+
+void	set_direction(char c, t_data *data)
+{
+	if (c == 'S')
+	{
+		data->direction.x = 0.0;
+		data->direction.y = 1.0;
+		data->cam.x = -0.66;
+		data->cam.y = 0.0;
+	}
+	else if (c == 'E')
+	{
+		data->direction.x = 1.0;
+		data->direction.y = 0.0;
+		data->cam.x = 0.0;
+		data->cam.y = 0.66;
+	}
+	else if (c == 'W')
+	{
+		data->direction.x = -1.0;
+		data->direction.y = 0.0;
+		data->cam.x = 0.0;
+		data->cam.y = -0.66;
+	}
+}
+
+void	check_borders(t_data *data, char **map, int pcount)
+{
+	int	j;
+	int	i;
+
+	if (!is_all_space_n_ones(map[0]))
+		ft_clean_exit(data, 1, "Missing outside wall (top)");
+	j = 1;
+	while (map[j])
+	{
+		if (vertical_walls(map[j]))
+			ft_clean_exit(data, 1, "Missing outside wall (vertical)");
+		i = 0;
+		while (map[j][i])
+		{
+			if (!ft_strchr("01NSWE MD", map[j][i]))
+				ft_clean_exit(data, 1, "Map char unvalid");
+			pcount += get_player(map, i, j);
+			leak_check(map, i, j);
+			i++;
+		}
+		j++;
+	}
+	if (!is_all_space_n_ones(map[j - 1]))
+		ft_clean_exit(data, 1, "Missing outside wall (bottom)");
+	if (pcount != 1)
+		ft_clean_exit(data, 1, "Incorrect number of player starting point");
+}
+
+void	check_map(t_data *data, char **map)
+{
+	int	pcount;
+
+	pcount = 0;
+	check_borders(data, map, pcount);
+}
+
+void	get_map(char *file_name)
+{
+	t_data	*data;
+
+	init_data();
+	data = get_data();
+	read_all_file(file_name, data);
+	if (data->buffer && *data->buffer)
+		data->map = ft_split(data->buffer, '\n');
+	if (!data->map)
+	{
+		perror("Error\n");
+		free(data->buffer);
+		exit(EXIT_FAILURE);
+	}
+	read_texs(&data->map);
+	check_map(data, data->map);
+	monster_init(data, 0, 0);
+	doors_init(data, 0, 0);
+}

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minimap.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/05 19:02:35 by manon             #+#    #+#             */
-/*   Updated: 2025/12/08 17:12:09 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/10 17:40:17 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ void	display_other(t_data *data, int y, int x, int tex_idx)
 void	display_minimap(t_data *data, int x, int y)
 {
 	int	tex_idx;
-	int	idx;
 
 	if (!data || !data->mlx_img || !data->mlx_img->addr)
 		return ;
@@ -92,14 +91,6 @@ void	display_minimap(t_data *data, int x, int y)
 		while (data->map[y][x])
 		{
 			tex_idx = 7;
-			if (data->map[y][x] == 'D')
-			{
-				idx = door_index_at(data, x, y);
-				if (idx >= 0 && data->tab_doors && data->tab_doors[idx].lock)
-					tex_idx = 10;
-				else
-					tex_idx = 11;
-			}
 			display_other(data, y, x, tex_idx);
 			x++;
 		}
