@@ -49,9 +49,9 @@ BONUS	+=	bonus_doors.c
 
 vpath	%.c	$(PATH_SRCS)
 
-PATH_SRCS_BONUS	=	srcs_bonus/
+PATH_SRCS_BONUS	=	BONUS/
 
-SRCS_BONUS	+=	main_bonus.c
+SRCS_BONUS	=	$(BONUS)
 
 vpath	%.c	$(PATH_SRCS_BONUS)
 
@@ -98,12 +98,12 @@ $(OBJS):	$(PATH_OBJS)/%.o:%.c Makefile
 
 bonus:	$(NAME_BONUS)
 
-$(NAME_BONUS):	$(OBJS)	$(OBJS_BONUS)
-	$(CC)	$(CFLAGS)	$(OBJS)	$(OBJS_BONUS) -o	$(NAME_BONUS) $(INCLUDE)	$(LIBFT)	 $(MLX) $(MLX_FLAGS)
+$(NAME_BONUS):	$(LIBFT) $(MLX) $(OBJS_BONUS)
+	$(CC)	$(CFLAGS)	$(OBJS_BONUS) -o	$(NAME_BONUS) $(INCLUDE)	$(LIBFT)	 $(MLX) $(MLX_FLAGS)
 
-$(OBJS_BONUS):	$(PATH_OBJS_BONUS)/%.o:%.c Makefile
+$(OBJS_BONUS):	$(PATH_OBJS_BONUS)/%.o:$(PATH_SRCS_BONUS)%.c Makefile
 	mkdir	-p	$(PATH_OBJS_BONUS)
-	$(CC)	$(CFLAGS)	-c	$<	-o	$@	$(INCLUDE)
+	$(CC)	$(CFLAGS) -D BONUS_BUILD	-c	$<	-o	$@	$(INCLUDE)
 
 clean:
 	rm	-rf	$(PATH_OBJS)

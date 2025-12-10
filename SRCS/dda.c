@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:02:23 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 15:49:43 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/10 18:10:04 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,8 +36,9 @@ void	get_wallside(t_data *d)
 	}
 }
 
-void	perform_dda(t_data *d)
+void	perform_dda(t_data *d, int x)
 {
+	(void)x;
 	while (d->hit == 0)
 	{
 		get_wallside(d);

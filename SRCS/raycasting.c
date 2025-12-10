@@ -6,7 +6,7 @@
 /*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 17:40:36 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/10 18:10:23 by manon            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,7 @@ int	raycasting(t_data *d)
 		first_calc(d, x);
 		d->hit = 0;
 		step_calc(d);
-		perform_dda(d);
+		perform_dda(d, 0);
 		calc_wall_drawing_area(d);
 		draw_ceiling(d, x);
 		if (d->side == 0)
