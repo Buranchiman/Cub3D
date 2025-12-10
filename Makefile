@@ -21,6 +21,7 @@ SRCS	+=	parsing_utils.c
 SRCS	+=	pixel_util.c
 SRCS	+=	player.c
 SRCS	+=	raycasting.c
+SRCS	+=	render.c
 SRCS	+=	sprites.c
 SRCS	+=	utils.c
 SRCS	+=	walls.c

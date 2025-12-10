@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   walls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 14:59:50 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:20:19 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 16:57:43 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-void	walls_final_calc(t_data *d, double wallx)
+void	walls_final_calc(t_data *d, t_ray *r, double wallx)
 {
-	d->texx = (int)(wallx * (double)d->tex[d->cardinal].width);
-	if (d->side == 0 && d->raydirx > 0)
-		d->texx = d->tex[d->cardinal].width - d->texx - 1;
-	if (d->side == 1 && d->raydiry < 0)
-		d->texx = d->tex[d->cardinal].width - d->texx - 1;
-	d->step = 1.0 * d->tex[d->cardinal].height / d->lineheight;
-	d->texpos = (d->drawstart - d->pitch
-			- SCRN_H / 2 + d->lineheight / 2) * d->step;
+	r->texx = (int)(wallx * (double)d->tex[d->cardinal].width);
+	if (r->side == 0 && r->raydirx > 0)
+		r->texx = d->tex[d->cardinal].width - r->texx - 1;
+	if (r->side == 1 && r->raydiry < 0)
+		r->texx = d->tex[d->cardinal].width - r->texx - 1;
+	r->step = 1.0 * d->tex[d->cardinal].height / r->lineheight;
+	r->texpos = (r->drawstart - d->pitch
+			- SCRN_H / 2 + r->lineheight / 2) * r->step;
 }
 
-void	draw_walls(t_data *d, int x)
+void	draw_walls(t_data *d, t_ray *r, int x)
 {
 	int	y;
 
 	y = 0;
-	y = d->drawstart;
-	while (y < d->drawend)
+	y = r->drawstart;
+	while (y < r->drawend)
 	{
-		d->texy = (int)d->texpos & (d->tex[d->cardinal].height - 1);
-		d->texpos += d->step;
-		d->color = d->tex[d->cardinal].pixels[d->texy
-			* d->tex[d->cardinal].width + d->texx];
+		r->texy = (int)r->texpos & (d->tex[d->cardinal].height - 1);
+		r->texpos += r->step;
+		d->color = d->tex[d->cardinal].pixels[r->texy
+			* d->tex[d->cardinal].width + r->texx];
 		put_px(d, x, y, d->color | 0xFF000000);
-		d->pixeldepth[y][x] = d->perpwalldist;
+		d->pixeldepth[y][x] = r->perpwalldist;
 		y++;
 	}
 	while (y < SCRN_H)

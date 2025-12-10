@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   display.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/10 00:48:18 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/10 16:57:25 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,20 +33,6 @@ void	fil_texs_tab(t_data *data)
 	data->tex[14].path = ft_strdup(DOOR_OPENED);
 	data->tex[15].path = ft_strdup(MONSTER2);
 }
-	//while (i < NBR_TEXTURES)
-	//{
-	//	if (i == 4 || i == 5)
-	//	{
-	//		i++;
-	//		continue ;
-	//	}
-	//	if (!data->tex[i].path)
-	//	{
-	//		printf("failed to allocate tex path %d\n", i);
-	//		ft_clean_exit(data, 1, "Failed to allocate tex path");
-	//	}
-	//	i++;
-	//}
 
 int	init_pixels(t_tex *tex)
 {
@@ -134,5 +120,6 @@ void	display_window(t_data *data)
 	if (data->sky_path)
 		display_sky(data);
 	mlx_mouse_move(data->mlx, data->win_ptr, SCRN_W / 2, SCRN_H / 2);
-	mlx_mouse_hide(data->mlx, data->win_ptr);
 }
+
+//mlx_mouse_hide(data->mlx, data->win_ptr);

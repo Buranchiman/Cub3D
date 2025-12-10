@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cube.h                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 21:07:57 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/10 17:55:58 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,6 @@ typedef struct s_gate_layer
 	int		locked;
 }				t_gate_layer;
 
-
 typedef struct s_img
 {
 	void	*img;
@@ -109,6 +108,22 @@ typedef struct s_tex
 	t_img		*ptr;
 	uint32_t	*pixels;
 }				t_tex;
+
+typedef struct s_gate_ctx
+{
+	int		x;
+	int		gi;
+	double	dist;
+	t_tex	*tex;
+}	t_gate_ctx;
+
+typedef struct s_spx
+{
+	int		stripe;
+	int		texx;
+	int		tex_idx;
+}	t_spx;
+
 
 typedef struct s_point
 {
@@ -130,6 +145,42 @@ typedef struct s_doors
 	char	*enigma;
 	char	*soluce;
 }				t_doors;
+
+typedef struct s_ray
+{
+	// ray direction
+	double	raydirx;
+	double	raydiry;
+
+	// DDA
+	double	deltadistx;
+	double	deltadisty;
+	double	sidedistx;
+	double	sidedisty;
+	int		stepx;
+	int		stepy;
+
+	// map stepping
+	int		mapx;
+	int		mapy;
+	int		side;
+	int		hit;
+
+	// projection
+	double	perpwalldist;
+	int		lineheight;
+	int		drawstart;
+	int		drawend;
+
+	// texture indices
+	int		texx;
+	int		texy;     // <-- yes, per column (vertical tex sampling)
+	double	step;
+	double	texpos;
+	double	wallx;
+	int		cardinal;   // since the wall orientation can change per-ray
+}	t_ray;
+
 
 typedef struct s_data
 {
@@ -165,27 +216,7 @@ typedef struct s_data
 	int				gatecount[SCRN_W];
 	double			pixeldepth[SCRN_H][SCRN_W];
 	double			zbuffer[SCRN_W];
-	double			raydirx;
-	double			raydiry;
-	int				mapx;
-	int				mapy;
-	double			sidedistx;
-	double			sidedisty;
-	double			perpwalldist;
-	double			deltadistx;
-	double			deltadisty;
-	int				stepx;
-	int				stepy;
-	bool			side;
-	bool			hit;
-	int				lineheight;
 	int				pitch;
-	int				drawstart;
-	int				drawend;
-	int				texx;
-	double			step;
-	double			texpos;
-	//sprites variables
 	double			spritex;
 	double			spritey;
 	double			inv;
@@ -201,9 +232,7 @@ typedef struct s_data
 	int				drawstartx;
 	int				drawendx;
 	int				pos;
-	int				texy;
 	unsigned int	color;
-	//AAA
 	unsigned int	floor_color;
 	unsigned int	ceiling_color;
 }				t_data;
@@ -235,6 +264,7 @@ void	free_data(t_data *data);
 void	ft_clean_exit(t_data *data, int option, char *msg);
 
 //data.c
+t_ray	*get_ray(void);
 t_img	*init_img(void);
 void	init_data(void);
 t_data	*get_data(void);
@@ -242,7 +272,6 @@ t_data	*get_data(void);
 //raycasting.c
 int		raycasting(t_data *data);
 int		render_frame(void *param);
-void	calc_draw_area(t_data *d);
 
 //parsing_utils.c
 int		vertical_walls(char *line);
@@ -276,36 +305,34 @@ void	update_player(t_data *d);
 //gate.c
 void	assign_gate_value(int x, int gate_tex,
 			double gatedist, int texx_gate);
-void	calc_gate_area(t_data *d, t_tex *gatetex,
-			int x, int gi);
-void	draw_gates(t_data *d, t_tex *gatetex, int x, double dist);
-void	door_back_to_front(t_data *d, int x, int count);
-void	handle_gates(t_data *d);
+void	handle_gates(t_data *d, t_ray *r);
 
 //sprites.c
 void	calc_sprite_draw_area(t_data *d);
-void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx);
-void	drawing_sprites(t_data *d, int tex_idx);
-void	handle_sprites(t_data *d);
+void	handle_sprites(t_data *d, t_ray *r);
 
 //dda.c
-void	get_wallside(t_data *d);
-void	hit_wall(t_data *d, int x);
-void	perform_dda(t_data *d, int x);
+void	get_wallside(t_ray *r, t_data *d);
+void	hit_wall(t_ray *r, t_data *d, int x);
+void	perform_dda(t_ray *r, t_data *d, int x);
 
 //walls.c
-void	walls_final_calc(t_data *d, double wallx);
-void	draw_walls(t_data *d, int x);
+void	walls_final_calc(t_data *d, t_ray *r, double wallx);
+void	draw_walls(t_data *d, t_ray *r, int x);
 
 //first_calcs.c
-void	first_calc(t_data *d, int x);
-void	step_calc(t_data *d);
-void	calc_wall_drawing_area(t_data *d);
+void	first_calc(t_ray *r, t_data *d, int x);
+void	step_calc(t_ray *r, t_data *d);
+void	calc_wall_drawing_area(t_ray *r, t_data *d);
 
 //mlx_hooks.c
 int		mouse_move(int x, int y, t_data *d);
 int		on_keydown(int keycode, void *param);
 int		on_keyup(int keycode, void *param);
+
+//render.c
+void	door_to_close(t_data *data);
+int		render_frame(void *param);
 
 //main.c
 int		mouse_move(int x, int y, t_data *d);

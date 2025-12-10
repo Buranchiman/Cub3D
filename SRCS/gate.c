@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   gate.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:41:06 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 19:01:24 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 17:51:57 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,74 +29,128 @@ void	assign_gate_value(int x, int gate_tex,
 	}
 }
 
-void	calc_gate_area(t_data *d, t_tex *gatetex,
-	int x, int gi)
+static void	calc_gate_area(t_data *d, t_ray *r, t_gate_ctx *g)
 {
-	double	dist;
-
-	dist = d->gatelayers[x][gi].dist;
-	d->lineheight = (int)(SCRN_H / dist);
-	d->drawstart = -d->lineheight / 2 + SCRN_H / 2 + d->pitch;
-	if (d->drawstart < 0)
-		d->drawstart = 0;
-	d->drawend = d->lineheight / 2 + SCRN_H / 2 + d->pitch;
-	if (d->drawend >= SCRN_H)
-		d->drawend = SCRN_H - 1;
-	d->texx = d->gatelayers[x][gi].texx;
-	d->step = 1.0 * gatetex->height / d->lineheight;
-	d->texpos = (d->drawstart - d->pitch - SCRN_H
-			/ 2 + d->lineheight / 2) * d->step;
+	r->lineheight = (int)(SCRN_H / g->dist);
+	r->drawstart = -r->lineheight / 2 + SCRN_H / 2 + d->pitch;
+	if (r->drawstart < 0)
+		r->drawstart = 0;
+	r->drawend = r->lineheight / 2 + SCRN_H / 2 + d->pitch;
+	if (r->drawend >= SCRN_H)
+		r->drawend = SCRN_H - 1;
+	r->texx = d->gatelayers[g->x][g->gi].texx;
+	r->step = 1.0 * g->tex->height / r->lineheight;
+	r->texpos = (r->drawstart - d->pitch
+			- SCRN_H / 2 + r->lineheight / 2) * r->step;
 }
 
-void	draw_gates(t_data *d, t_tex *gatetex, int x, double dist)
+// void	calc_gate_area(t_data *d, t_tex *gatetex,
+// 	int x, int gi, t_ray *r)
+// {
+// 	double	dist;
+
+// 	dist = d->gatelayers[x][gi].dist;
+// 	r->lineheight = (int)(SCRN_H / dist);
+// 	r->drawstart = -r->lineheight / 2 + SCRN_H / 2 + d->pitch;
+// 	if (r->drawstart < 0)
+// 		r->drawstart = 0;
+// 	r->drawend = r->lineheight / 2 + SCRN_H / 2 + d->pitch;
+// 	if (r->drawend >= SCRN_H)
+// 		r->drawend = SCRN_H - 1;
+// 	r->texx = d->gatelayers[x][gi].texx;
+// 	r->step = 1.0 * gatetex->height / r->lineheight;
+// 	r->texpos = (r->drawstart - d->pitch - SCRN_H
+// 			/ 2 + r->lineheight / 2) * r->step;
+// }
+
+static void	draw_gates(t_data *d, t_ray *r, t_gate_ctx *g)
 {
 	int	y;
 
-	y = d->drawstart;
-	while (y < d->drawend)
+	y = r->drawstart;
+	while (y < r->drawend)
 	{
-		d->texy = (int)d->texpos;
-		d->texpos += d->step;
-		if (d->texy < 0)
-			d->texy = 0;
-		if (d->texy >= gatetex->height)
-			d->texy = gatetex->height - 1;
-		d->color = gatetex->pixels[d->texy * gatetex->width + d->texx];
-		if ((d->color & 0x00FFFFFF) != 0)
+		r->texy = (int)r->texpos;
+		r->texpos += r->step;
+		if (r->texy < 0)
+			r->texy = 0;
+		if (r->texy >= g->tex->height)
+			r->texy = g->tex->height - 1;
+		d->color = g->tex->pixels[r->texy * g->tex->width + r->texx];
+		if ((d->color & 0x00FFFFFF) != 0 && g->dist < d->pixeldepth[y][g->x])
 		{
-			if (dist < d->pixeldepth[y][x])
-			{
-				put_px(d, x, y, d->color | 0xFF000000);
-				d->pixeldepth[y][x] = dist;
-			}
+			put_px(d, g->x, y, d->color | 0xFF000000);
+			d->pixeldepth[y][g->x] = g->dist;
 		}
 		y++;
 	}
 }
 
-void	door_back_to_front(t_data *d, int x, int count)
-{
-	t_tex	*gatetex;
-	int		gi;
-	double	dist;
+// void	draw_gates(t_data *d, t_tex *gatetex, int x, double dist, t_ray *r)
+// {
+// 	int	y;
 
-	gi = count;
-	while (gi >= 0)
+// 	y = r->drawstart;
+// 	while (y < r->drawend)
+// 	{
+// 		r->texy = (int)r->texpos;
+// 		r->texpos += r->step;
+// 		if (r->texy < 0)
+// 			r->texy = 0;
+// 		if (r->texy >= gatetex->height)
+// 			r->texy = gatetex->height - 1;
+// 		d->color = gatetex->pixels[r->texy * gatetex->width + r->texx];
+// 		if ((d->color & 0x00FFFFFF) != 0)
+// 		{
+// 			if (dist < d->pixeldepth[y][x])
+// 			{
+// 				put_px(d, x, y, d->color | 0xFF000000);
+// 				d->pixeldepth[y][x] = dist;
+// 			}
+// 		}
+// 		y++;
+// 	}
+// }
+
+static void	door_back_to_front(t_data *d, t_ray *r, int x, int count)
+{
+	t_gate_ctx	g;
+
+	g.x = x;
+	while (--count >= 0)
 	{
-		dist = d->gatelayers[x][gi].dist;
-		if (dist <= 0.0)
-		{
-			gi--;
+		g.gi = count;
+		g.dist = d->gatelayers[x][count].dist;
+		if (g.dist <= 0.0)
 			continue ;
-		}
-		gatetex = &d->tex[d->gatelayers[x][gi].locked];
-		calc_gate_area(d, gatetex, x, gi);
-		draw_gates(d, gatetex, x, dist);
-		gi--;
+		g.tex = &d->tex[d->gatelayers[x][count].locked];
+		calc_gate_area(d, r, &g);
+		draw_gates(d, r, &g);
 	}
 }
 
-void	handle_gates(t_data *d)
+// void	door_back_to_front(t_data *d, int x, int count, t_ray *r)
+// {
+// 	t_tex	*gatetex;
+// 	int		gi;
+// 	double	dist;
+
+// 	gi = count;
+// 	while (gi >= 0)
+// 	{
+// 		dist = d->gatelayers[x][gi].dist;
+// 		if (dist <= 0.0)
+// 		{
+// 			gi--;
+// 			continue ;
+// 		}
+// 		gatetex = &d->tex[d->gatelayers[x][gi].locked];
+// 		calc_gate_area(d, gatetex, x, gi, r);
+// 		draw_gates(d, gatetex, x, dist, r);
+// 		gi--;
+// 	}
+
+void	handle_gates(t_data *d, t_ray *r)
 {
 	int		x;
 	int		count;
@@ -110,7 +164,7 @@ void	handle_gates(t_data *d)
 			x++;
 			continue ;
 		}
-		door_back_to_front(d, x, count);
+		door_back_to_front(d, r, x, count);
 		x++;
 	}
 }

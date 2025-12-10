@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   data.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:23:01 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 16:57:22 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,29 @@ t_img	*init_img(void)
 	img->endian = 0;
 	return (img);
 }
+
+// void	set_ray(t_ray *ray)
+// {
+// 	ray->raydirx = 0;
+// 	ray->raydiry = 0;
+// 	ray->mapx = 0;
+// 	ray->mapy = 0;
+// 	ray->sidedistx = 0;
+// 	ray->sidedisty = 0;
+// 	ray->deltadistx = 0;
+// 	ray->deltadisty = 0;
+// 	ray->stepx = 0;
+// 	ray->stepy = 0;
+// 	ray->hit = 0;
+// 	ray->side = 0;
+// 	ray->perpwalldist = 0;
+// 	ray->lineheight = 0;
+// 	ray->drawstart = 0;
+// 	ray->drawend = 0;
+// 	ray->texx = 0;
+// 	ray->step = 0;
+// 	ray->texpos = 0;
+// }
 
 void	init_data(void)
 {

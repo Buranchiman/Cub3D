@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   player.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:32:38 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 17:17:27 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,9 +34,8 @@ void	mouse_rotation(t_data *d)
 {
 	int		dx;
 	double	rot;
-	double	c;
-	double	s;
 	double	old_dir;
+	double	old_cam_x;
 
 	dx = d->mouse_dx;
 	d->mouse_dx = 0;
@@ -47,13 +46,12 @@ void	mouse_rotation(t_data *d)
 		rot = -d->max_rot_frame;
 	if (rot != 0.0)
 	{
-		c = cos(rot);
-		s = sin(rot);
+		old_cam_x = d->cam.x;
 		old_dir = d->direction.x;
-		d->direction.x = d->direction.x * c - d->direction.y * s;
-		d->direction.y = old_dir * s + d->direction.y * c;
-		d->cam.y = d->cam.x * s + d->cam.y * c;
-		d->cam.x = d->cam.x * c - d->cam.y * s;
+		d->direction.x = d->direction.x * cos(rot) - d->direction.y * sin(rot);
+		d->direction.y = old_dir * sin(rot) + d->direction.y * cos(rot);
+		d->cam.x = d->cam.x * cos(rot) - d->cam.y * sin(rot);
+		d->cam.y = old_cam_x * sin(rot) + d->cam.y * cos(rot);
 	}
 	update_player(d);
 }

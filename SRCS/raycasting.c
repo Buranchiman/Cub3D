@@ -3,27 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:37:36 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 17:35:22 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
 
-void	draw_ceiling(t_data *d, int x)
+void	draw_ceiling(t_data *d, int x, t_ray *r, int drawstart)
 {
 	int	y;
 
 	y = 0;
-	while (y < d->drawstart)
+	while (y < drawstart)
 	{
 		if (d->sky.pixels && d->sky.width > 0 && d->sky.height > 0)
 		{
-			d->texx = (int)((double)x * d->sky.width / (double)SCRN_W);
-			d->texy = (int)((double)y * d->sky.height / (double)SCRN_H);
-			d->color = d->sky.pixels[d->texy * d->sky.width + d->texx];
+			r->texx = (int)((double)x * d->sky.width / (double)SCRN_W);
+			r->texy = (int)((double)y * d->sky.height / (double)SCRN_H);
+			d->color = d->sky.pixels[r->texy * d->sky.width + r->texx];
 			put_px(d, x, y, d->color | 0xFF000000);
 		}
 		else
@@ -57,76 +57,41 @@ void	reset_gates(t_data *d)
 	}
 }
 
+double	calc_wallx(t_data *d, t_ray r)
+{
+	double	tmp;
+
+	if (r.side == 0)
+		tmp = d->player_pos.y + r.perpwalldist * r.raydiry;
+	else
+		tmp = d->player_pos.x + r.perpwalldist * r.raydirx;
+	tmp -= floor((tmp));
+	return (tmp);
+}
+
 int	raycasting(t_data *d)
 {
 	int		x;
 	double	wallx;
+	t_ray	r;
 
 	x = 0;
 	reset_gates(d);
+	ft_bzero(&r, sizeof(t_ray));
 	while (x < SCRN_W)
 	{
-		first_calc(d, x);
-		d->hit = 0;
-		step_calc(d);
-		perform_dda(d, x);
-		calc_wall_drawing_area(d);
-		draw_ceiling(d, x);
-		if (d->side == 0)
-			wallx = d->player_pos.y + d->perpwalldist * d->raydiry;
-		else
-			wallx = d->player_pos.x + d->perpwalldist * d->raydirx;
-		wallx -= floor((wallx));
-		walls_final_calc(d, wallx);
-		draw_walls(d, x);
+		first_calc(&r, d, x);
+		r.hit = 0;
+		step_calc(&r, d);
+		perform_dda(&r, d, x);
+		calc_wall_drawing_area(&r, d);
+		draw_ceiling(d, x, &r, r.drawstart);
+		wallx = calc_wallx(d, r);
+		walls_final_calc(d, &r, wallx);
+		draw_walls(d, &r, x);
 		x++;
 	}
-	handle_sprites(d);
-	handle_gates(d);
-	return (0);
-}
-
-void	door_to_close(t_data *data)
-{
-	int	i;
-
-	i = 0;
-	while (i < data->doors_count)
-	{
-		if (data->tab_doors[i].to_closed == 1)
-		{
-			data->tab_doors[i].to_closed = 0;
-			data->tab_doors[i].lock = 1;
-		}
-		i++;
-	}
-}
-
-int	render_frame(void *param)
-{
-	t_data					*data;
-	double					now;
-
-	data = param;
-	now = get_time();
-	data->monster_time = (unsigned long)(now * 1000.0);
-	data->deltatime = now - data->lasttime;
-	data->lasttime = now;
-	if (data->monster_time - data->last_update >= 250UL)
-	{
-		monsters_move(data);
-		data->last_update = data->monster_time;
-	}
-	if (data->last_update - data->door_time >= 3000UL)
-	{
-		door_to_close(data);
-		data->door_time = data->last_update;
-	}
-	if (data->deltatime > 0.05)
-		data->deltatime = 0.05;
-	mouse_rotation(data);
-	raycasting(data);
-	display_minimap(data, 0, 0);
-	mlx_put_image_to_window(data->mlx, data->win_ptr, data->mlx_img->img, 0, 0);
+	handle_sprites(d, &r);
+	handle_gates(d, &r);
 	return (0);
 }

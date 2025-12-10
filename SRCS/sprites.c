@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   sprites.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:01:49 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 19:43:16 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/10 17:56:59 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ void	calc_sprite_draw_area(t_data *d)
 		d->drawendx = SCRN_W - 1;
 }
 
-void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx)
+static void	spx_put_pixels(t_data *d, t_ray *r, t_spx *s)
 {
 	int	y;
 
@@ -42,44 +42,43 @@ void	put_sprite_pixels(t_data *d, int texx, int stripe, int tex_idx)
 	{
 		d->pos = (y - (d->pitch + d->vmovescreen)) * 256
 			- SCRN_H * 128 + d->spriteh * 128;
-		d->texy = (d->pos * d->tex[tex_idx].height) / d->spriteh / 256;
-		if (d->texy < 0)
-			d->texy = 0;
-		if (d->texy >= d->tex[tex_idx].height)
-			d->texy = d->tex[tex_idx].height - 1;
-		d->color = d->tex[tex_idx].pixels[d->texy
-			* d->tex[tex_idx].width + texx];
-		if ((d->color & 0x00FFFFFF) != 0)
+		r->texy = (d->pos * d->tex[s->tex_idx].height)
+			/ d->spriteh / 256;
+		if (r->texy < 0)
+			r->texy = 0;
+		if (r->texy >= d->tex[s->tex_idx].height)
+			r->texy = d->tex[s->tex_idx].height - 1;
+		d->color = d->tex[s->tex_idx].pixels[r->texy
+			* d->tex[s->tex_idx].width + s->texx];
+		if ((d->color & 0x00FFFFFF) != 0
+			&& d->transfy < d->pixeldepth[y][s->stripe])
 		{
-			if (d->transfy < d->pixeldepth[y][stripe])
-			{
-				put_px(d, stripe, y, d->color | 0xFF000000);
-				d->pixeldepth[y][stripe] = d->transfy;
-			}
+			put_px(d, s->stripe, y, d->color | 0xFF000000);
+			d->pixeldepth[y][s->stripe] = d->transfy;
 		}
 		y++;
 	}
 }
 
-void	drawing_sprites(t_data *d, int tex_idx)
+void	drawing_sprites(t_data *d, int tex_idx, t_ray *r)
 {
-	int	stripe;
-	int	texx;
+	t_spx	s;
 
-	stripe = d->drawstartx;
-	while (stripe < d->drawendx)
+	s.tex_idx = tex_idx;
+	s.stripe = d->drawstartx;
+	while (s.stripe < d->drawendx)
 	{
-		texx = (int)(256 * (stripe - (-d->spritewidth / 2 + d->spritescreenx))
+		s.texx = (int)(256 * (s.stripe
+					- (-d->spritewidth / 2 + d->spritescreenx))
 				* d->tex[tex_idx].width / d->spritewidth) / 256;
-		if (texx < 0)
-			texx = 0;
-		if (texx >= d->tex[tex_idx].width)
-			texx = d->tex[tex_idx].width - 1;
-		if (d->transfy > 0 && stripe >= 0 && stripe < SCRN_W)
-		{
-			put_sprite_pixels(d, texx, stripe, tex_idx);
-		}
-		stripe++;
+		if (s.texx < 0)
+			s.texx = 0;
+		if (s.texx >= d->tex[tex_idx].width)
+			s.texx = d->tex[tex_idx].width - 1;
+		if (d->transfy > 0
+			&& s.stripe >= 0 && s.stripe < SCRN_W)
+			spx_put_pixels(d, r, &s);
+		s.stripe++;
 	}
 }
 
@@ -91,7 +90,7 @@ static int	chose_tex(t_data *d)
 		return (15);
 }
 
-void	handle_sprites(t_data *d)
+void	handle_sprites(t_data *d, t_ray *r)
 {
 	int			i;
 	t_monster	*m;
@@ -114,7 +113,7 @@ void	handle_sprites(t_data *d)
 			continue ;
 		}
 		calc_sprite_draw_area(d);
-		drawing_sprites(d, tex_idx);
+		drawing_sprites(d, tex_idx, r);
 		i++;
 	}
 }
