@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   checkmap.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:33:35 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/11 14:36:32 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,6 +107,7 @@ void	get_map(char *file_name)
 	if (!data->map)
 	{
 		perror("Error\n");
+		free(data->mlx_img);
 		free(data->buffer);
 		exit(EXIT_FAILURE);
 	}

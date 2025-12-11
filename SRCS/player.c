@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/05 18:23:40 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:22:29 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:31:16 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,32 +28,6 @@ int	get_player(char **map, int i, int j)
 		return (1);
 	}
 	return (0);
-}
-
-void	mouse_rotation(t_data *d)
-{
-	int		dx;
-	double	rot;
-	double	old_dir;
-	double	old_cam_x;
-
-	dx = d->mouse_dx;
-	d->mouse_dx = 0;
-	rot = dx * d->mouse_sens;
-	if (rot > d->max_rot_frame)
-		rot = d->max_rot_frame;
-	if (rot < -d->max_rot_frame)
-		rot = -d->max_rot_frame;
-	if (rot != 0.0)
-	{
-		old_cam_x = d->cam.x;
-		old_dir = d->direction.x;
-		d->direction.x = d->direction.x * cos(rot) - d->direction.y * sin(rot);
-		d->direction.y = old_dir * sin(rot) + d->direction.y * cos(rot);
-		d->cam.x = d->cam.x * cos(rot) - d->cam.y * sin(rot);
-		d->cam.y = old_cam_x * sin(rot) + d->cam.y * cos(rot);
-	}
-	update_player(d);
 }
 
 static void	rotate_player(t_data *d)

@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:21:44 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:30:07 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,6 @@ int	main(int arc, char **arv)
 			&data->mlx_img->endian);
 	mlx_hook(data->win_ptr, 2, 1L << 0, on_keydown, data);
 	mlx_hook(data->win_ptr, 3, 1L << 1, on_keyup, data);
-	mlx_hook(data->win_ptr, 6, 1L << 6, mouse_move, data);
 	mlx_hook(data->win_ptr, 17, 0L, quit_with_int, data);
 	mlx_loop_hook(data->mlx, render_frame, data);
 	mlx_loop(data->mlx);

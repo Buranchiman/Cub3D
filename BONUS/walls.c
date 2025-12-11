@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   walls.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 14:59:50 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:20:19 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/11 14:37:40 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	walls_final_calc(t_data *d, double wallx)
 {
 	d->texx = (int)(wallx * (double)d->tex[d->cardinal].width);
-	if (d->side == 0 && d->raydirx > 0)
+	if (r->side == 0 && d->raydirx > 0)
 		d->texx = d->tex[d->cardinal].width - d->texx - 1;
-	if (d->side == 1 && d->raydiry < 0)
+	if (r->side == 1 && d->raydiry < 0)
 		d->texx = d->tex[d->cardinal].width - d->texx - 1;
 	d->step = 1.0 * d->tex[d->cardinal].height / d->lineheight;
 	d->texpos = (d->drawstart - d->pitch

@@ -6,36 +6,11 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 17:28:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:30 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:30:39 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../INCLUDE/cube.h"
-
-int	mouse_move(int x, int y, t_data *d)
-{
-	static int	first = 1;
-	int			cx;
-	int			cy;
-	int			dx;
-
-	(void)y;
-	cx = SCRN_W / 2;
-	cy = SCRN_H / 2;
-	if (first)
-	{
-		mlx_mouse_move(d->mlx, d->win_ptr, cx, cy);
-		first = 0;
-		return (0);
-	}
-	dx = x - cx;
-	if (dx != 0)
-	{
-		d->mouse_dx += dx;
-		mlx_mouse_move(d->mlx, d->win_ptr, cx, cy);
-	}
-	return (0);
-}
 
 int	on_keydown(int keycode, void *param)
 {

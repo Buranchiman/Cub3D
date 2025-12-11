@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   raycasting.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: chillichien <chillichien@student.42.fr>    +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/10 12:10:34 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/09 18:37:36 by chillichien      ###   ########.fr       */
+/*   Updated: 2025/12/11 14:37:40 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,12 +67,12 @@ int	raycasting(t_data *d)
 	while (x < SCRN_W)
 	{
 		first_calc(d, x);
-		d->hit = 0;
+		r->hit = 0;
 		step_calc(d);
 		perform_dda(d, x);
 		calc_wall_drawing_area(d);
 		draw_ceiling(d, x);
-		if (d->side == 0)
+		if (r->side == 0)
 			wallx = d->player_pos.y + d->perpwalldist * d->raydiry;
 		else
 			wallx = d->player_pos.x + d->perpwalldist * d->raydirx;
