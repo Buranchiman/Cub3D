@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:02:23 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:27:19 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 15:44:24 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,9 +30,9 @@ void	get_wallside(t_ray *r, t_data *d)
 		r->mapy += r->stepy;
 		r->side = 1;
 		if (r->stepy == 1)
-			d->cardinal = CARDNORTH;
-		else
 			d->cardinal = CARDSOUTH;
+		else
+			d->cardinal = CARDNORTH;
 	}
 }
 
