@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:25 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:46:14 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ int	init_pixels(t_tex *tex)
 	return (0);
 }
 
+//ft_printf(1, "failed to init sky tex pixels");
+
 void	display_sky(t_data *data)
 {
 	data->sky.path = ft_strdup(data->sky_path);
@@ -68,10 +70,11 @@ void	display_sky(t_data *data)
 				&data->sky.ptr->bpp, &data->sky.ptr->line_len,
 				&data->sky.ptr->endian);
 		if (init_pixels(&data->sky))
-			ft_printf(1, "failed to init sky tex pixels");
+			ft_clean_exit(data, 1, "failed sky pixels init\n");
 	}
 	else
 	{
+		ft_clean_exit(data, 1, "unable to load sky fallback\n");
 		ft_printf(1, "unable to load sky fallback '%s'", data->sky_path);
 		free(data->sky.path);
 		data->sky.path = NULL;
@@ -112,7 +115,7 @@ void	display_window(t_data *data)
 	if (!data->mlx)
 		ft_clean_exit(data, 1, "mlx init failed\n");
 	data->win_ptr = mlx_new_window(data->mlx, SCRN_W, SCRN_H,
-			"Where are the escape ?");
+			"mWhere are the escape ?");
 	if (!data->win_ptr)
 		ft_clean_exit(data, 1, "Window creation failed\n");
 	fil_texs_tab(data);

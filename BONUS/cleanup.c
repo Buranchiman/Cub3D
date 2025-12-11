@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cleanup.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: manon <manon@student.42.fr>                +#+  +:+       +#+        */
+/*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 20:49:33 by manon             #+#    #+#             */
-/*   Updated: 2025/12/09 20:49:58 by manon            ###   ########.fr       */
+/*   Updated: 2025/12/11 16:13:28 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ void	take_tex_out(char ***map, int end)
 	ft_memmove(*map, &temp[i], (ft_tablen(&temp[i]) + 1) * sizeof(char *));
 }
 
-static void	end_mlx_loops(t_data *data)
-{
-	mlx_mouse_show(data->mlx, data->win_ptr);
-	mlx_do_key_autorepeaton(data->mlx);
-	mlx_loop_end(data->mlx);
-}
+// static void	end_mlx_loops(t_data *data)
+// {
+// 	mlx_mouse_show(data->mlx, data->win_ptr);
+// 	mlx_do_key_autorepeaton(data->mlx);
+// 	mlx_loop_end(data->mlx);
+// }
 
 void	free_img(t_img *img)
 {
@@ -76,9 +76,10 @@ void	free_data(t_data *data)
 		free(data->tab_doors);
 }
 
+//	end_mlx_loops(data);
+
 void	ft_clean_exit(t_data *data, int option, char *msg)
 {
-	end_mlx_loops(data);
 	free_data(data);
 	if (data->map)
 		ft_clear_tab(data->map);

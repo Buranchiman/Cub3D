@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:25 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:32:34 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,7 +68,7 @@ void	display_sky(t_data *data)
 				&data->sky.ptr->bpp, &data->sky.ptr->line_len,
 				&data->sky.ptr->endian);
 		if (init_pixels(&data->sky))
-			ft_printf(1, "failed to init sky tex pixels");
+			ft_clean_exit(data, 1, "failed sky init\n");
 	}
 	else
 	{

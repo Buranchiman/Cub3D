@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 16:42:04 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:22 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 16:12:46 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ t_img	*init_img(void)
 	t_img	*img;
 
 	img = ft_calloc(1, sizeof(t_img));
+	if (!img)
+		return (NULL);
 	img->img = NULL;
 	img->addr = NULL;
 	img->bpp = 0;
@@ -64,6 +66,8 @@ void	init_data(void)
 	data->player_pos.x = -1;
 	data->player_pos.y = -1;
 	data->mlx_img = init_img();
+	if (!data->mlx_img)
+		ft_clean_exit(data, 1, "Error\nMalloc\n");
 	data->mouse_center_x = SCRN_W / 2;
 	data->mouse_center_y = SCRN_H / 2;
 	data->mouse_dx = 0;
