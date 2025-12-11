@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:20 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:21:12 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	check_borders(t_data *data, char **map, int pcount)
 		i = 0;
 		while (map[j][i])
 		{
-			if (!ft_strchr("01NSWE MD", map[j][i]))
+			if (!ft_strchr("01NSWE ", map[j][i]))
 				ft_clean_exit(data, 1, "Map char unvalid");
 			pcount += get_player(map, i, j);
 			leak_check(map, i, j);
@@ -113,6 +113,4 @@ void	get_map(char *file_name)
 	}
 	read_texs(&data->map);
 	check_map(data, data->map);
-	monster_init(data, 0, 0);
-	doors_init(data, 0, 0);
 }

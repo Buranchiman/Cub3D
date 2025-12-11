@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/17 13:32:18 by manon             #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:17 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:19:55 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,13 +24,21 @@ void	init_enigma(t_data *data, int i)
 		data->tab_doors[i].enigma = "T - S = R | S + S = R | S + S + S = ?";
 		data->tab_doors[i].soluce = "T";
 	}
+	else if (i == 2)
+	{
+		data->tab_doors[i].enigma = "42 in binary?";
+		data->tab_doors[i].soluce = "101010";
+	}
+	else if (i == 3)
+	{
+		data->tab_doors[i].enigma = "A | K | U | ?";
+		data->tab_doors[i].soluce = "_";
+	}
 	else
 	{
 		data->tab_doors[i].enigma = "The code is oO0OOo0Oo";
 		data->tab_doors[i].soluce = "oO0OOo0Oo";
 	}
-	data->tab_doors[i].lock = 1;
-	data->tab_doors[i].to_closed = 0;
 }
 
 int	door_is_locked_at(t_data *data, int tx, int ty)
@@ -103,8 +111,6 @@ void	doors_init(t_data *data, int x, int y)
 	i = 0;
 	if (!doors_count(data, 0, 0))
 		return ;
-	if (!data->tab_doors)
-		ft_clean_exit(data, 1, "tab_doors NULL in doors_init");
 	while (data->map[y])
 	{
 		x = 0;
@@ -117,6 +123,8 @@ void	doors_init(t_data *data, int x, int y)
 				data->tab_doors[i].pos.x = x;
 				data->tab_doors[i].pos.y = y;
 				init_enigma(data, i);
+				data->tab_doors[i].lock = 1;
+				data->tab_doors[i].to_closed = 0;
 				i++;
 			}
 			x++;

@@ -26,14 +26,33 @@ SRCS	+=	sprites.c
 SRCS	+=	utils.c
 SRCS	+=	walls.c
 SRCS	+=	main.c
-SRCS	+=	bonus_monsters.c
-SRCS	+=	bonus_doors.c
+
+BONUS	+=	checkmap.c
+BONUS	+=	checktexture.c
+BONUS	+=	cleanup.c
+BONUS	+=	data.c
+BONUS	+=	dda.c
+BONUS	+=	display.c
+BONUS	+=	first_calcs.c
+BONUS	+=	gate.c
+BONUS	+=	minimap.c
+BONUS	+=	mlx_hooks.c
+BONUS	+=	parsing_utils.c
+BONUS	+=	pixel_util.c
+BONUS	+=	player.c
+BONUS	+=	raycasting.c
+BONUS	+=	sprites.c
+BONUS	+=	utils.c
+BONUS	+=	walls.c
+BONUS	+=	main_bonus.c
+BONUS	+=	bonus_monsters.c
+BONUS	+=	bonus_doors.c
 
 vpath	%.c	$(PATH_SRCS)
 
-PATH_SRCS_BONUS	=	srcs_bonus/
+PATH_SRCS_BONUS	=	BONUS/
 
-SRCS_BONUS	+=	main_bonus.c
+SRCS_BONUS	=	$(BONUS)
 
 vpath	%.c	$(PATH_SRCS_BONUS)
 
@@ -80,12 +99,12 @@ $(OBJS):	$(PATH_OBJS)/%.o:%.c Makefile
 
 bonus:	$(NAME_BONUS)
 
-$(NAME_BONUS):	$(OBJS)	$(OBJS_BONUS)
-	$(CC)	$(CFLAGS)	$(OBJS)	$(OBJS_BONUS) -o	$(NAME_BONUS) $(INCLUDE)	$(LIBFT)	 $(MLX) $(MLX_FLAGS)
+$(NAME_BONUS):	$(LIBFT) $(MLX) $(OBJS_BONUS)
+	$(CC)	$(CFLAGS)	$(OBJS_BONUS) -o	$(NAME_BONUS) $(INCLUDE)	$(LIBFT)	 $(MLX) $(MLX_FLAGS)
 
-$(OBJS_BONUS):	$(PATH_OBJS_BONUS)/%.o:%.c Makefile
+$(OBJS_BONUS):	$(PATH_OBJS_BONUS)/%.o:$(PATH_SRCS_BONUS)%.c Makefile
 	mkdir	-p	$(PATH_OBJS_BONUS)
-	$(CC)	$(CFLAGS)	-c	$<	-o	$@	$(INCLUDE)
+	$(CC)	$(CFLAGS) -D BONUS_BUILD	-c	$<	-o	$@	$(INCLUDE)
 
 clean:
 	rm	-rf	$(PATH_OBJS)
