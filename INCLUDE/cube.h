@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:20:52 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 14:49:17 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,7 +124,6 @@ typedef struct s_spx
 	int		tex_idx;
 }	t_spx;
 
-
 typedef struct s_point
 {
 	double	x;
@@ -148,39 +147,29 @@ typedef struct s_doors
 
 typedef struct s_ray
 {
-	// ray direction
 	double	raydirx;
 	double	raydiry;
-
-	// DDA
 	double	deltadistx;
 	double	deltadisty;
 	double	sidedistx;
 	double	sidedisty;
 	int		stepx;
 	int		stepy;
-
-	// map stepping
 	int		mapx;
 	int		mapy;
 	int		side;
 	int		hit;
-
-	// projection
 	double	perpwalldist;
 	int		lineheight;
 	int		drawstart;
 	int		drawend;
-
-	// texture indices
 	int		texx;
-	int		texy;     // <-- yes, per column (vertical tex sampling)
+	int		texy;
 	double	step;
 	double	texpos;
 	double	wallx;
-	int		cardinal;   // since the wall orientation can change per-ray
+	int		cardinal;
 }	t_ray;
-
 
 typedef struct s_data
 {

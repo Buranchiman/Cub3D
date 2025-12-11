@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/02 18:00:00 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:25:27 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:57:33 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	fetch_tex(int x, int y)
 	int		idx;
 
 	d = get_data();
-	if (d->map[r->mapy][r->mapx] == 'D')
+	if (d->map[y][x] == 'D')
 	{
 		idx = door_index_at(d, x, y);
 		if (idx >= 0 && d->tab_doors && d->tab_doors[idx].lock)

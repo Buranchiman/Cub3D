@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 15:02:23 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:41:14 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/10 16:57:23 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,16 @@ void	get_wallside(t_ray *r, t_data *d)
 	else
 	{
 		r->sidedisty += r->deltadisty;
-		r->mapy += d->stepy;
+		r->mapy += r->stepy;
 		r->side = 1;
-		if (d->stepy == 1)
+		if (r->stepy == 1)
 			d->cardinal = CARDNORTH;
 		else
 			d->cardinal = CARDSOUTH;
 	}
 }
 
-void	hit_wall(t_data *d, int x)
+void	hit_wall(t_ray *r, t_data *d, int x)
 {
 	int		gate_tex;
 	double	wallx;
@@ -52,9 +52,9 @@ void	hit_wall(t_data *d, int x)
 	else
 		gatedist = r->sidedisty - r->deltadisty;
 	if (r->side == 0)
-		wallx = d->player_pos.y + gatedist * d->raydiry;
+		wallx = d->player_pos.y + gatedist * r->raydiry;
 	else
-		wallx = d->player_pos.x + gatedist * d->raydirx;
+		wallx = d->player_pos.x + gatedist * r->raydirx;
 	wallx -= floor(wallx);
 	texx_gate = (int)(wallx * (double)d->tex[gate_tex].width);
 	if (texx_gate < 0)
@@ -64,14 +64,14 @@ void	hit_wall(t_data *d, int x)
 	assign_gate_value(x, gate_tex, gatedist, texx_gate);
 }
 
-void	perform_dda(t_data *d, int x)
+void	perform_dda(t_ray *r, t_data *d, int x)
 {
 	while (r->hit == 0)
 	{
-		get_wallside(d);
+		get_wallside(r, d);
 		if (d->map[r->mapy][r->mapx] == 'D')
 		{
-			hit_wall(d, x);
+			hit_wall(r, d, x);
 		}
 		else if (d->map[r->mapy][r->mapx] == '1')
 		{

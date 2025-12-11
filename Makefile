@@ -41,6 +41,7 @@ BONUS	+=	parsing_utils.c
 BONUS	+=	pixel_util.c
 BONUS	+=	player.c
 BONUS	+=	raycasting.c
+BONUS	+=	render.c
 BONUS	+=	sprites.c
 BONUS	+=	utils.c
 BONUS	+=	walls.c
