@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/08 14:59:50 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:43 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/11 15:50:38 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,9 @@
 void	walls_final_calc(t_data *d, t_ray *r, double wallx)
 {
 	r->texx = (int)(wallx * (double)d->tex[d->cardinal].width);
-	if (r->side == 0 && r->raydirx > 0)
+	if (r->side == 0 && r->raydirx < 0)
 		r->texx = d->tex[d->cardinal].width - r->texx - 1;
-	if (r->side == 1 && r->raydiry < 0)
+	if (r->side == 1 && r->raydiry > 0)
 		r->texx = d->tex[d->cardinal].width - r->texx - 1;
 	r->step = 1.0 * d->tex[d->cardinal].height / r->lineheight;
 	r->texpos = (r->drawstart - d->pitch
