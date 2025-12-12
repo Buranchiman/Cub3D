@@ -1,0 +1,12 @@
+NO      ./TEXTURES/north.xpm
+SO ./TEXTURES/south.xpm
+
+WE ./TEXTURES/west.xpm
+
+EA ./TEXTURES/east.xpm
+
+F 220,100,0
+
+
+
+C 225,30,0

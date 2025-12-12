@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:30:07 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/12 14:31:08 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,8 @@ int	main(int arc, char **arv)
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
 	data->mlx_img->img = mlx_new_image(data->mlx,
 			SCRN_W, SCRN_H);
+	if (!data->mlx_img->img)
+		ft_clean_exit(data, 1, "Error\nMalloc on img");
 	data->mlx_img->addr = mlx_get_data_addr(data->mlx_img->img,
 			&data->mlx_img->bpp, &data->mlx_img->line_len,
 			&data->mlx_img->endian);

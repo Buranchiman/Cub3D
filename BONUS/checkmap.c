@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:32:30 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/10 16:57:20 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/12 14:31:27 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,8 +68,6 @@ void	check_borders(t_data *data, char **map, int pcount)
 	j = 1;
 	while (map[j])
 	{
-		if (vertical_walls(map[j]))
-			ft_clean_exit(data, 1, "Missing outside wall (vertical)");
 		i = 0;
 		while (map[j][i])
 		{
@@ -79,6 +77,8 @@ void	check_borders(t_data *data, char **map, int pcount)
 			leak_check(map, i, j);
 			i++;
 		}
+		if (vertical_walls(map[j]))
+			ft_clean_exit(data, 1, "Missing outside wall (vertical)");
 		j++;
 	}
 	if (!is_all_space_n_ones(map[j - 1]))
@@ -92,6 +92,8 @@ void	check_map(t_data *data, char **map)
 	int	pcount;
 
 	pcount = 0;
+	if (!data->map || !data->map[0])
+		ft_clean_exit(data, 1, "Error\nMap is empty");
 	check_borders(data, map, pcount);
 }
 

@@ -36,18 +36,20 @@ int	import_tex(int index, int which, char *line)
 
 int	get_texs(char *line)
 {
-	if (!ft_strncmp(line, "NO ", 3))
-		return (import_tex(3, 0, line));
-	else if (!ft_strncmp(line, "SO ", 3))
-		return (import_tex(3, 1, line));
-	else if (!ft_strncmp(line, "EA ", 3))
-		return (import_tex(3, 2, line));
-	else if (!ft_strncmp(line, "WE ", 3))
-		return (import_tex(3, 3, line));
-	else if (!ft_strncmp(line, "C ", 2))
-		return (import_tex(2, 4, line));
-	else if (!ft_strncmp(line, "F ", 2))
-		return (import_tex(2, 5, line));
+	if (!ft_strncmp(line, "NO", 2))
+		return (import_tex(2, 0, line));
+	else if (!ft_strncmp(line, "SO", 2))
+		return (import_tex(2, 1, line));
+	else if (!ft_strncmp(line, "EA", 2))
+		return (import_tex(2, 2, line));
+	else if (!ft_strncmp(line, "WE", 2))
+		return (import_tex(2, 3, line));
+	else if (!ft_strncmp(line, "C", 1))
+		return (import_tex(1, 4, line));
+	else if (!ft_strncmp(line, "F", 1))
+		return (import_tex(1, 5, line));
+	else if (!ft_strncmp(line, "\n", 1))
+		return (0);
 	return (1);
 }
 
@@ -64,14 +66,16 @@ static int	parse_rgb(char *line)
 	{
 		if (rgb)
 			ft_clear_tab(rgb);
-		return (-1);
+		ft_clean_exit(get_data(), 1,
+			"Error\nUnvalid ceiling or floor color");
 	}
 	r = ft_atoi(rgb[0]);
 	g = ft_atoi(rgb[1]);
 	b = ft_atoi(rgb[2]);
 	ft_clear_tab(rgb);
 	if (r < 0 || r > 255 || g < 0 || g > 255 || b < 0 || b > 255)
-		return (-1);
+		ft_clean_exit(get_data(), 1,
+			"Error\nUnvalid ceiling or floor color");
 	color = 0xFF000000 | (r << 16) | (g << 8) | b;
 	return (color);
 }
@@ -111,7 +115,7 @@ int	read_texs(char ***map)
 		&& (*map)[i][0] != '0')
 	{
 		if (get_texs((*map)[i]))
-			return (1);
+			ft_clean_exit(data, 1, "unvalid elem before map");
 		i++;
 	}
 	take_tex_out(map, i);
