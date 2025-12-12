@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/01 02:21:55 by manon             #+#    #+#             */
-/*   Updated: 2025/12/12 14:31:06 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/12 14:43:04 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,23 @@
 void	fil_texs_tab(t_data *data)
 {
 	if (!data->tex[0].path)
-		data->tex[0].path = ft_strdup(NORTH);
+		data->tex[0].path = try_strdup(NORTH);
 	if (!data->tex[1].path)
-		data->tex[1].path = ft_strdup(SOUTH);
+		data->tex[1].path = try_strdup(SOUTH);
 	if (!data->tex[2].path)
-		data->tex[2].path = ft_strdup(WEST);
+		data->tex[2].path = try_strdup(WEST);
 	if (!data->tex[3].path)
-		data->tex[3].path = ft_strdup(EAST);
-	data->tex[6].path = ft_strdup(PLAYER_MINIMAP);
-	data->tex[7].path = ft_strdup(GROUND_MINIMAP);
-	data->tex[8].path = ft_strdup(WALL_MINIMAP);
-	data->tex[9].path = ft_strdup(MONSTER_MAP);
-	data->tex[10].path = ft_strdup(DOOR_CLOSED_MAP);
-	data->tex[11].path = ft_strdup(DOOR_OPENED_MAP);
-	data->tex[12].path = ft_strdup(MONSTER);
-	data->tex[13].path = ft_strdup(DOOR_CLOSED);
-	data->tex[14].path = ft_strdup(DOOR_OPENED);
-	data->tex[15].path = ft_strdup(MONSTER2);
+		data->tex[3].path = try_strdup(EAST);
+	data->tex[6].path = try_strdup(PLAYER_MINIMAP);
+	data->tex[7].path = try_strdup(GROUND_MINIMAP);
+	data->tex[8].path = try_strdup(WALL_MINIMAP);
+	data->tex[9].path = try_strdup(MONSTER_MAP);
+	data->tex[10].path = try_strdup(DOOR_CLOSED_MAP);
+	data->tex[11].path = try_strdup(DOOR_OPENED_MAP);
+	data->tex[12].path = try_strdup(MONSTER);
+	data->tex[13].path = try_strdup(DOOR_CLOSED);
+	data->tex[14].path = try_strdup(DOOR_OPENED);
+	data->tex[15].path = try_strdup(MONSTER2);
 }
 
 int	init_pixels(t_tex *tex)
@@ -58,7 +58,7 @@ int	init_pixels(t_tex *tex)
 
 void	display_sky(t_data *data)
 {
-	data->sky.path = ft_strdup(data->sky_path);
+	data->sky.path = try_strdup(data->sky_path);
 	data->sky.ptr = init_img();
 	data->sky.ptr->img = mlx_xpm_file_to_image(data->mlx,
 			data->sky.path, &data->sky.width, &data->sky.height);

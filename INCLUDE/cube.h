@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 12:38:11 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/11 14:49:17 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/12 14:40:10 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -251,6 +251,7 @@ void	take_tex_out(char ***map, int end);
 void	free_img(t_img *img);
 void	free_data(t_data *data);
 void	ft_clean_exit(t_data *data, int option, char *msg);
+char	*try_strdup(char *s);
 
 //data.c
 t_ray	*get_ray(void);

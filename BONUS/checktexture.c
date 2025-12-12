@@ -91,7 +91,7 @@ void	handle_sky_and_ground(t_data *data)
 	}
 	else if (!data->sky_path)
 	{
-		data->sky_path = ft_strdup("TEXTURES/spirale.xpm");
+		data->sky_path = try_strdup("TEXTURES/spirale.xpm");
 		if (!data->sky_path)
 			ft_clean_exit(data, 1, "malloc failed for sky fallback path");
 	}

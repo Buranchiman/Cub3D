@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/12/09 20:49:33 by manon             #+#    #+#             */
-/*   Updated: 2025/12/12 14:30:54 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/12 14:39:43 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,4 +100,16 @@ void	ft_clean_exit(t_data *data, int option, char *msg)
 	if (option == 1)
 		exit(EXIT_FAILURE);
 	exit(EXIT_SUCCESS);
+}
+
+char	*try_strdup(char *s)
+{
+	char	*tmp;
+
+	tmp = ft_strdup(s);
+	if (!tmp)
+	{
+		ft_clean_exit(get_data(), 1, "Error\nMalloc error on ft_strdup");
+	}
+	return (tmp);
 }

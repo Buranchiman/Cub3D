@@ -6,7 +6,7 @@
 /*   By: wivallee <wivallee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/04 13:07:09 by wivallee          #+#    #+#             */
-/*   Updated: 2025/12/12 14:31:39 by wivallee         ###   ########.fr       */
+/*   Updated: 2025/12/12 14:53:45 by wivallee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	main(int arc, char **arv)
 	display_minimap(data, 0, 0);
 	data->lasttime = get_time();
 	data->last_update = (unsigned long)(data->lasttime * 1000.0);
-	system("./BONUS/mpg123-1.33.3/src/mpg123 --loop -1 -q lavanville.mp3 &");
+	system("./BONUS/mpg123-1.33.3/src/mpg123 --loop -1 -q ./BONUS/music.mp3 &");
 	data->mlx_img->img = mlx_new_image(data->mlx,
 			SCRN_W, SCRN_H);
 	if (!data->mlx_img->img)
